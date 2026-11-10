@@ -1,0 +1,197 @@
+<!-- Navegación lateral -->
+<aside class="barra-lateral">
+  <a class="marca" routerLink="/inicio" aria-label="Vanabby, página principal">
+    <strong>VANABBY</strong>
+    <small>Repostería</small>
+  </a>
+  <nav class="navegacion-principal" aria-label="Navegación principal">
+    <a class="enlace-inicio" routerLink="/inicio" aria-current="page">
+      <i class="bi bi-house-door" aria-hidden="true"></i>
+      <span>Inicio</span>
+    </a>
+  </nav>
+</aside>
+
+<div class="estructura-principal">
+  <!-- Encabezado de la aplicación -->
+  <header class="barra-superior">
+    <section class="perfil-usuario" aria-label="Sesión actual">
+      <i class="bi bi-person-circle icono-perfil" aria-hidden="true"></i>
+      <p class="datos-usuario">
+        <strong>P. M. Ramírez</strong>
+        <small>Administrador</small>
+      </p>
+    </section>
+    <time class="fecha-actual">{{ hoy | fechaCorta }}</time>
+    <a class="cerrar-sesion" href="/login" aria-label="Cerrar sesión" title="Cerrar sesión" (click)="cerrarSesion($event)">
+      <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+    </a>
+  </header>
+
+  <main class="contenido-principal container-fluid">
+    <!-- Bienvenida -->
+    <section class="bienvenida" aria-labelledby="titulo-bienvenida">
+      <h1 id="titulo-bienvenida">¡Hola Pablo Mata Ramírez!</h1>
+      <p>Panel de Control</p>
+    </section>
+
+    <!-- Carrusel de módulos -->
+    <section class="seccion-modulos" aria-label="Módulos del sistema">
+      <div #carrusel id="carrusel-modulos" class="carousel slide">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <nav class="cuadricula-modulos" aria-label="Primer grupo de módulos">
+            <a routerLink="/productos" class="tarjeta-modulo modulo-productos">
+              <i class="bi bi-gift" aria-hidden="true"></i>
+              <span>Productos</span>
+            </a>
+            <a routerLink="/clientes" class="tarjeta-modulo modulo-clientes">
+              <i class="bi bi-people-fill" aria-hidden="true"></i>
+              <span>Clientes</span>
+            </a>
+            <a routerLink="/pagos" class="tarjeta-modulo modulo-pagos">
+              <i class="bi bi-cash-stack" aria-hidden="true"></i>
+              <span>Pagos</span>
+            </a>
+            <a routerLink="/envios" class="tarjeta-modulo modulo-envios">
+              <i class="bi bi-truck" aria-hidden="true"></i>
+              <span>Envíos</span>
+            </a>
+            </nav>
+          </div>
+          <div class="carousel-item">
+            <nav class="cuadricula-modulos" aria-label="Segundo grupo de módulos">
+            <a routerLink="/almacen" class="tarjeta-modulo modulo-almacen">
+              <i class="bi bi-box-seam" aria-hidden="true"></i>
+              <span>Almacén</span>
+            </a>
+            <a routerLink="/compras" class="tarjeta-modulo modulo-compras">
+              <i class="bi bi-cart3" aria-hidden="true"></i>
+              <span>Compras</span>
+            </a>
+            <a routerLink="/monitoreo" class="tarjeta-modulo modulo-monitoreo">
+              <i class="bi bi-bar-chart-line" aria-hidden="true"></i>
+              <span>Monitoreo</span>
+            </a>
+            <a routerLink="/pedidos" class="tarjeta-modulo modulo-pedidos">
+              <i class="bi bi-clipboard-check" aria-hidden="true"></i>
+              <span>Pedidos</span>
+            </a>
+            </nav>
+          </div>
+        </div>
+
+        <button class="carousel-control-prev control-carrusel" type="button" aria-label="Módulos anteriores" (click)="prev()">
+          <i class="bi bi-chevron-left" aria-hidden="true"></i>
+        </button>
+        <button class="carousel-control-next control-carrusel" type="button" aria-label="Módulos siguientes" (click)="next()">
+          <i class="bi bi-chevron-right" aria-hidden="true"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- Productos destacados -->
+    <section class="seccion-destacados" aria-labelledby="titulo-destacados">
+      <header class="encabezado-destacados">
+        <h2 id="titulo-destacados">Productos Destacados</h2>
+        <a href="#" class="ver-mas" (click)="pendiente($event)">Ver más</a>
+      </header>
+      <div class="row row-cols-1 row-cols-md-3 g-3">
+          <article class="col">
+            <figure class="tarjeta-producto">
+              <img src="img/red-velvet.jpg" alt="Porción de pastel Red Velvet" class="imagen-producto">
+              <button class="btn boton-agregar-rapido" type="button" aria-label="Agregar Red Velvet al pedido" title="Agregar al pedido" (click)="agregarPedido('red-velvet')">+</button>
+              <button class="btn boton-vista-rapida" type="button" (click)="abrirDetalle('red-velvet')">
+                Vista rápida
+                <i class="bi bi-arrow-right" aria-hidden="true"></i>
+              </button>
+              <figcaption class="datos-producto">
+                <span>Red Velvet</span>
+                <span class="precio-producto">$480</span>
+              </figcaption>
+            </figure>
+          </article>
+
+          <article class="col">
+            <figure class="tarjeta-producto">
+              <img src="img/chocolate-cupcake.jpg" alt="Cupcake de chocolate" class="imagen-producto">
+              <button class="btn boton-agregar-rapido" type="button" aria-label="Agregar Chocolate Cupcake al pedido" title="Agregar al pedido" (click)="agregarPedido('chocolate-cupcake')">+</button>
+              <button class="btn boton-vista-rapida" type="button" (click)="abrirDetalle('chocolate-cupcake')">
+                Vista rápida
+                <i class="bi bi-arrow-right" aria-hidden="true"></i>
+              </button>
+              <figcaption class="datos-producto">
+                <span>Chocolate Cupcake</span>
+                <span class="precio-producto">$550</span>
+              </figcaption>
+            </figure>
+          </article>
+
+          <article class="col">
+            <figure class="tarjeta-producto">
+              <img src="img/fruit-tarte.jpg" alt="Tarta decorada con frutas" class="imagen-producto">
+              <button class="btn boton-agregar-rapido" type="button" aria-label="Agregar Fruit Tarte al pedido" title="Agregar al pedido" (click)="agregarPedido('fruit-tarte')">+</button>
+              <button class="btn boton-vista-rapida" type="button" (click)="abrirDetalle('fruit-tarte')">
+                Vista rápida
+                <i class="bi bi-arrow-right" aria-hidden="true"></i>
+              </button>
+              <figcaption class="datos-producto">
+                <span>Fruit Tarte</span>
+                <span class="precio-producto">$600</span>
+              </figcaption>
+            </figure>
+          </article>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Ventana de detalles del producto -->
+<div #modalProducto class="modal fade" id="modal-producto" tabindex="-1" aria-labelledby="titulo-modal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <section class="modal-content modal-detalles">
+      <header class="modal-header">
+        <h2 id="titulo-modal" class="modal-title">DETALLES DEL PRODUCTO</h2>
+        <button type="button" class="btn-close cerrar-modal" aria-label="Cerrar" (click)="modal?.hide()"></button>
+      </header>
+
+      <div class="modal-body">
+        <div class="resumen-producto">
+          <img id="detalle-imagen" [src]="detalle().imagen" [alt]="detalle().nombre" class="imagen-detalle">
+          <section class="informacion-producto" aria-labelledby="detalle-nombre">
+            <h3 id="detalle-nombre">{{ detalle().nombre }}</h3>
+            <dl class="filas-informacion">
+              <div><dt>Estado del Producto:</dt><dd>{{ detalle().estado }}</dd></div>
+              <div><dt>Precio Total:</dt><dd>{{ precio(detalle().precio) }}</dd></div>
+              <div><dt>Cantidad:</dt><dd>{{ detalle().cantidad }}</dd></div>
+            </dl>
+          </section>
+        </div>
+
+        <section class="especificaciones" aria-labelledby="titulo-especificaciones">
+          <h3 id="titulo-especificaciones">Especificaciones</h3>
+          <dl class="filas-informacion">
+            <div><dt>Tamaño:</dt><dd>{{ detalle().tamano }}</dd></div>
+            <div><dt>Bizcocho:</dt><dd>{{ detalle().bizcocho }}</dd></div>
+            <div><dt>Relleno:</dt><dd>{{ detalle().relleno }}</dd></div>
+          </dl>
+        </section>
+      </div>
+
+      <footer class="modal-footer">
+        <button type="button" class="btn boton-pedido" (click)="agregarDesdeDetalle()">Agregar Pedido</button>
+      </footer>
+    </section>
+  </div>
+</div>
+
+<!-- Notificación provisional -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div #toastPedido class="toast" role="status" aria-live="polite" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="me-auto">Pedido</strong>
+      <button type="button" class="btn-close" aria-label="Cerrar" (click)="toast?.hide()"></button>
+    </div>
+    <div class="toast-body">{{ mensaje() }}</div>
+  </div>
+</div>

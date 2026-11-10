@@ -1,0 +1,69 @@
+/* ===== Pedidos ===== */
+.tabla-card { padding: 0; overflow: hidden; }
+.tabla-head { display: flex; justify-content: space-between; align-items: center; padding: 16px 18px 10px; gap: 10px; flex-wrap: wrap; }
+.tabla-head h2 { margin: 0; display: flex; align-items: center; gap: 8px; }
+.tabla-head__tools { display: flex; gap: 12px; align-items: center; }
+.mini-select { border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; background: #fff; }
+.tabla-foot { display: flex; justify-content: space-between; padding: 12px 18px; }
+#tbodyPedidos tr:nth-child(odd) td { background: #fbf9f4; }
+.ped-id { font-weight: 700; color: #5a3fc0; display: block; }
+.ped-cliente { font-size: 12px; }
+.fecha-mod small { display: block; color: var(--muted); }
+.acciones { display: flex; gap: 6px; }
+
+/* selects tipo "pill" para estado y prioridad */
+.pill-select {
+  appearance: none; -webkit-appearance: none; border: none; border-radius: 999px;
+  padding: 5px 24px 5px 12px; font-size: 11px; font-weight: 600; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23666' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 8px center;
+}
+.est-entregado { background-color: var(--green); color: var(--green-text); }
+.est-reparto { background-color: var(--blue); color: var(--blue-text); }
+.est-preparacion { background-color: var(--orange); color: var(--orange-text); }
+.est-pendiente { background-color: #fff3b8; color: #8a6d00; }
+.est-cancelado { background-color: var(--red); color: var(--red-text); }
+.pri-urgente { background-color: #fcd0e0; color: #b3124f; }
+.pri-normal { background-color: var(--orange); color: var(--orange-text); }
+.pri-no-urgente { background-color: var(--green); color: var(--green-text); }
+.pill-select:disabled { opacity: .7; cursor: not-allowed; }
+
+/* Registrar pedido */
+.sec { font-size: 13px; margin: 14px 0 8px; display: flex; justify-content: space-between; align-items: center; }
+.entrega { display: grid; grid-template-columns: 2fr 1.2fr 1fr 1fr; gap: 10px; }
+.agregar-prod { display: grid; grid-template-columns: 1fr 80px auto; gap: 8px; margin-bottom: 6px; }
+.agregar-prod select, .agregar-prod input { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; }
+.items { list-style: none; display: flex; flex-direction: column; gap: 6px; margin: 8px 0; }
+.items li { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.items .n { background: var(--lilac); border-radius: 6px; width: 22px; height: 22px; display: grid; place-items: center; font-size: 11px; font-weight: 700; }
+.items .desc { flex: 1; }
+.items .quitar { color: var(--red-text); font-size: 14px; }
+.linea-envio { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+.total-box { background: #e3f4ea; color: var(--green-text); border-radius: 10px; padding: 10px 14px; display: flex; justify-content: space-between; font-size: 15px; }
+.radios { display: flex; flex-direction: column; gap: 8px; font-size: 13px; margin-top: 6px; }
+
+/* Comprobante / ticket */
+.ticket { font-size: 13px; }
+.ticket h2 { text-align: center; font-size: 20px; letter-spacing: 1px; margin: 0; }
+.ticket .sub { text-align: center; color: var(--muted); font-size: 11px; margin-bottom: 10px; }
+.ticket hr { border: none; border-top: 1px solid var(--line); margin: 10px 0; }
+.ticket .fila { display: flex; justify-content: space-between; padding: 2px 0; }
+.ticket .total { font-weight: 800; font-size: 16px; }
+.ticket .qr { text-align: center; margin-top: 12px; }
+.ticket .qr small { display: block; color: var(--muted); font-size: 10px; }
+
+@media (max-width: 760px) {
+  .entrega { grid-template-columns: 1fr 1fr; }
+  .tabla-card { overflow-x: auto; }
+}
+
+/* Ajustes según mockups */
+.modal--rel { position: relative; }
+.cerrar-x { position: absolute; top: 10px; right: 12px; width: 28px; height: 28px; border-radius: 50%; font-size: 18px; color: var(--muted); z-index: 2; }
+.cerrar-x:hover { background: var(--lilac-soft); }
+.modal-icon.alerta-roja { background: #fde0e0; }
+.acciones .btn-icon:disabled { opacity: .4; cursor: not-allowed; }
+
+/* Íconos de línea según mockups */
+.sec .bi { margin-right: 4px; }
+.btn .bi { margin-right: 2px; }

@@ -1,0 +1,394 @@
+:root {
+    --morado: #673ab7;
+    --morado-oscuro: #552d9f;
+    --lila: #eee7f9;
+    --fondo: #faf9f7;
+}
+
+body {
+    background: var(--fondo);
+    color: #292633;
+    font-size: 14px;
+}
+
+/* Estructura principal */
+
+.menu-lateral {
+    width: 100px;
+    background: #f5f4f9;
+    z-index: 1020;
+}
+
+.marca {
+    color: #77717e;
+}
+
+.marca strong {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.marca small {
+    font-size: 10px;
+}
+
+.enlace-menu {
+    background: #edebf3;
+    color: #292633;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.enlace-menu:hover {
+    color: var(--morado);
+    background: var(--lila);
+}
+
+.estructura-principal {
+    min-height: 100vh;
+    margin-left: 100px;
+}
+
+.barra-superior {
+    min-height: 84px;
+}
+
+.datos-usuario {
+    line-height: 1.3;
+}
+
+.datos-usuario small {
+    font-size: 12px;
+}
+
+.bienvenida {
+    background: var(--lila);
+}
+
+/* Botones y colores */
+
+.boton-morado {
+    color: white;
+    background: var(--morado);
+    border-color: var(--morado);
+}
+
+.boton-morado:hover,
+.boton-morado:focus-visible {
+    color: white;
+    background: var(--morado-oscuro);
+    border-color: var(--morado-oscuro);
+}
+
+.texto-morado,
+.precio-destacado {
+    color: var(--morado);
+}
+
+.precio-destacado {
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.icono-lila {
+    display: inline-grid;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    color: var(--morado);
+    background: var(--lila);
+    border-radius: 12px;
+}
+
+.etiqueta-lila {
+    color: var(--morado);
+    background: var(--lila);
+    font-weight: 500;
+}
+
+.btn-success-subtle {
+    color: #21865a;
+    background: #d9f2e3;
+}
+
+.btn-warning-subtle {
+    color: #986a17;
+    background: #fff0c8;
+}
+
+.btn-danger-subtle {
+    color: #b45c48;
+    background: #fbe5df;
+}
+
+.btn-success-subtle:hover,
+.btn-warning-subtle:hover,
+.btn-danger-subtle:hover {
+    filter: brightness(0.96);
+}
+
+/* Filtros */
+
+.filtro {
+    width: 175px;
+}
+
+.busqueda {
+    width: 200px;
+}
+
+/* Catálogo */
+
+.tarjeta-producto {
+    overflow: hidden;
+    border: 1px solid #eeeced;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(40, 30, 50, 0.04);
+}
+
+.tarjeta-producto .card-header {
+    padding: 10px 12px;
+}
+
+.tarjeta-producto .card-header small {
+    font-size: 11px;
+}
+
+.foto-producto {
+    width: calc(100% - 24px);
+    height: 105px;
+    margin: 0 12px;
+    border-radius: 8px;
+    background: #f1eef6;
+    object-fit: cover;
+}
+
+.tarjeta-producto .card-body {
+    padding: 10px 12px;
+}
+
+.nombre-producto {
+    margin-bottom: 4px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.descripcion-producto {
+    min-height: 19px;
+    margin-bottom: 10px;
+    color: #99939e;
+    font-size: 11px;
+}
+
+.tarjeta-producto dt {
+    color: #a09ca4;
+    font-size: 10px;
+    font-weight: 400;
+}
+
+.tarjeta-producto dd {
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.tarjeta-producto dd small {
+    color: #a09ca4;
+    font-size: 10px;
+    font-weight: 400;
+}
+
+.tarjeta-producto .card-footer {
+    padding: 8px 10px 10px;
+}
+
+.tarjeta-producto .card-footer .btn {
+    min-width: 0;
+    padding: 6px 4px;
+    white-space: nowrap;
+    font-size: 11px;
+}
+
+/* Modales */
+
+.modal-xl {
+    --bs-modal-width: 860px;
+}
+
+.modal-vanabby {
+    overflow: hidden;
+    border: none;
+    border-radius: 22px;
+}
+
+.modal-vanabby .modal-header {
+    padding: 20px 24px;
+}
+
+.modal-vanabby .modal-footer {
+    padding: 14px 24px;
+    background: #fcfbfa;
+}
+
+.modal-vanabby .form-label {
+    margin-bottom: 6px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.modal-vanabby .form-control,
+.modal-vanabby .form-select {
+    font-size: 13px;
+}
+
+.modal-vanabby .form-control:focus,
+.modal-vanabby .form-select:focus {
+    border-color: var(--morado);
+    box-shadow: 0 0 0 0.2rem rgba(103, 58, 183, 0.12);
+}
+
+.modal-vanabby .form-check-input:checked {
+    background-color: var(--morado);
+    border-color: var(--morado);
+}
+
+.titulo-seccion {
+    color: #4b4355;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.texto-pequeno {
+    font-size: 10px;
+}
+
+.panel-costos {
+    background: #faf9f6;
+}
+
+.opcion-extra {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    border: 1px solid #e8e5ec;
+    border-radius: 9px;
+    background: white;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.opcion-editar {
+    justify-content: space-between;
+    min-height: 64px;
+}
+
+.opcion-editar small {
+    font-size: 10px;
+}
+
+.aviso-lila {
+    color: #66518c;
+    background: #f1ecf8;
+}
+
+/* Imágenes de modales */
+
+.imagen-detalle {
+    display: block;
+    width: 100%;
+    height: 145px;
+    background: #f1eef6;
+    object-fit: cover;
+}
+
+.imagen-editar {
+    width: 75px;
+    height: 65px;
+    background: #f1eef6;
+    object-fit: cover;
+}
+
+/* Confirmación de eliminación */
+
+.modal-dialog.modal-eliminar {
+    max-width: 430px;
+}
+
+.icono-eliminar {
+    display: inline-grid;
+    width: 60px;
+    height: 60px;
+    place-items: center;
+    border-radius: 15px;
+    color: #dc5353;
+    background: #fde7e7;
+    font-size: 26px;
+}
+
+/* Adaptación a pantallas pequeñas */
+
+@media (max-width: 767px) {
+
+    .menu-lateral {
+        width: 70px;
+    }
+
+    .marca strong {
+        font-size: 11px;
+    }
+
+    .marca small {
+        font-size: 9px;
+    }
+
+    .estructura-principal {
+        margin-left: 70px;
+    }
+
+    .barra-superior {
+        min-height: 68px;
+        gap: 10px !important;
+        padding: 10px !important;
+    }
+
+    .datos-usuario {
+        display: none;
+    }
+
+    .bienvenida {
+        flex-wrap: wrap;
+    }
+
+    .filtro,
+    .busqueda {
+        width: 100%;
+    }
+
+    .tarjeta-producto .card-footer .btn {
+        font-size: 10px;
+    }
+
+    .modal-vanabby .modal-header {
+        padding: 15px;
+    }
+
+    .modal-vanabby .modal-body {
+        padding: 15px !important;
+    }
+
+    .modal-vanabby .modal-footer {
+        padding: 12px;
+    }
+
+    .imagen-detalle {
+        height: 160px;
+    }
+
+    .modal-dialog.modal-eliminar {
+        max-width: calc(100% - 24px);
+        margin-inline: auto;
+    }
+}

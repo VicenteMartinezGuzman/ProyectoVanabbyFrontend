@@ -1,0 +1,1531 @@
+    <!-- Navegación lateral -->
+    <aside class="menu-lateral position-fixed top-0 start-0 h-100 border-end">
+
+        <a routerLink="/inicio" class="marca d-block text-center text-decoration-none py-4">
+            <strong>VANABBY</strong>
+            <small class="d-block">Repostería</small>
+        </a>
+
+        <nav class="px-2" aria-label="Navegación principal">
+            <a routerLink="/inicio"
+               class="enlace-menu d-flex flex-column align-items-center gap-2 rounded-3 py-3">
+                <i class="bi bi-house-door fs-4" aria-hidden="true"></i>
+                <span>Inicio</span>
+            </a>
+        </nav>
+
+    </aside>
+
+    <div class="estructura-principal">
+
+        <!-- Barra superior -->
+        <header class="barra-superior bg-white border-bottom d-flex align-items-center justify-content-end gap-3 px-4">
+
+            <i class="bi bi-person-circle fs-1" aria-hidden="true"></i>
+
+            <div class="datos-usuario">
+                <strong class="d-block">P. M. Ramírez</strong>
+                <small class="text-secondary">Administrador</small>
+            </div>
+
+            <time id="fecha-actual" class="border-start ps-3 text-nowrap" [attr.datetime]="fechaISO">{{ fechaTexto }}</time>
+
+            <a href="/login" class="text-dark fs-4 ms-2" aria-label="Cerrar sesión" (click)="$event.preventDefault(); cerrarSesion()">
+                <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+            </a>
+
+        </header>
+
+        <main class="container-fluid px-3 px-lg-4 py-4">
+
+            <!-- CONTROL DE PAGOS -->
+            <section id="vista-control" class="vista-pagos" [class.d-none]="vista() !== 'control'" aria-labelledby="titulo-control">
+
+                <header class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+
+                    <h1 id="titulo-control" class="fs-4 fw-bold mb-0">
+                        Control de Pagos
+                    </h1>
+
+                    <div class="d-flex flex-wrap gap-2">
+
+                        <button type="button" class="btn boton-morado btn-sm"
+                                (click)="ir('nuevo')">
+                            <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>
+                            Nuevo Pago
+                        </button>
+
+                        <button type="button" class="btn btn-outline-primary btn-sm"
+                                (click)="ir('corte')">
+                            Corte de Caja
+                        </button>
+
+                        <button type="button" class="btn btn-light border btn-sm"
+                                (click)="abrir('exportar')">
+                            <i class="bi bi-box-arrow-up me-1" aria-hidden="true"></i>
+                            Exportar
+                        </button>
+
+                    </div>
+
+                </header>
+
+                <!-- Indicadores -->
+                <section class="row g-3 mb-4" aria-label="Resumen de pagos">
+
+                    <div class="col-md-6">
+                        <article class="card tarjeta-panel h-100">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+
+                                <div>
+                                    <h2 class="small text-secondary fw-normal mb-1">
+                                        Total recibido (hoy)
+                                    </h2>
+                                    <strong class="fs-3">$48,500 MXN</strong>
+                                </div>
+
+                                <span class="icono-resumen">
+                                    <i class="bi bi-graph-up-arrow" aria-hidden="true"></i>
+                                </span>
+
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="col-md-6">
+                        <article class="card tarjeta-panel h-100">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+
+                                <div>
+                                    <h2 class="small text-secondary fw-normal mb-1">
+                                        Pagos pendientes
+                                    </h2>
+
+                                    <strong class="fs-3">$12,300 MXN</strong>
+                                    <small class="text-secondary ms-2">15 pedidos</small>
+                                </div>
+
+                                <span class="icono-resumen">
+                                    <i class="bi bi-hourglass-split" aria-hidden="true"></i>
+                                </span>
+
+                            </div>
+                        </article>
+                    </div>
+
+                </section>
+
+                <!-- Búsqueda y filtros -->
+                <section aria-label="Historial de pagos">
+
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+
+                        <div class="input-group input-group-sm campo-busqueda">
+
+                            <span class="input-group-text bg-white border-end-0">
+                                <i class="bi bi-search text-secondary" aria-hidden="true"></i>
+                            </span>
+
+                            <input id="buscar-pago" name="buscar-pago" [ngModel]="busqueda()" (ngModelChange)="busqueda.set($event)"
+                                   type="search"
+                                   class="form-control border-start-0"
+                                   placeholder="Buscar pedido o cliente..."
+                                   aria-label="Buscar pago">
+
+                        </div>
+
+                        <div class="d-flex gap-2">
+
+                            <label for="filtro-pagos" class="visually-hidden">
+                                Filtrar por estado
+                            </label>
+
+                            <select id="filtro-pagos" class="form-select form-select-sm" [ngModel]="filtro()" (ngModelChange)="filtro.set($event)">
+                                <option value="todos">Fecha / Todos los estados</option>
+                                <option value="pagado">Pagado</option>
+                                <option value="pendiente">Pendiente</option>
+                                <option value="cancelado">Cancelado</option>
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Tabla -->
+                    <article class="card tarjeta-panel overflow-hidden">
+
+                        <div class="table-responsive">
+
+                            <table class="table tabla-pagos align-middle mb-0">
+
+                                <thead class="table-light">
+                                    <tr>
+                                        <th scope="col">Pedido</th>
+                                        <th scope="col">Cliente</th>
+                                        <th scope="col">Fecha / Hora</th>
+                                        <th scope="col">Método</th>
+                                        <th scope="col">Monto</th>
+                                        <th scope="col">Estado</th>
+                                        <th scope="col" class="text-end">Acciones</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="tabla-pagos">
+                        @for (p of pagosFiltrados(); track $index) {
+                        <tr class="fila-pago" [attr.data-cliente]="p.cliente" [attr.data-estado]="p.estado">
+                            <td class="texto-morado fw-semibold">{{ p.pedido }}</td>
+                            <td class="fw-semibold">{{ p.cliente }}</td>
+                            <td>{{ p.fecha }}</td>
+                            <td>{{ p.metodo }}</td>
+                            <td class="fw-semibold">{{ p.monto }}</td>
+                            <td>
+                                <span [class]="'badge estado-' + p.estado">● {{ etiquetaEstado[p.estado] }}</span>
+                            </td>
+                            <td>
+                                <div class="d-flex justify-content-end gap-1">
+                                    <button class="btn btn-light btn-sm" type="button" (click)="abrir('ticket')" aria-label="Ver ticket">
+                                        <i class="bi bi-printer" aria-hidden="true"></i>
+                                    </button>
+                                    <button class="btn btn-light btn-sm" type="button" (click)="ir('exito')" aria-label="Ver detalle">
+                                        <i class="bi bi-eye" aria-hidden="true"></i>
+                                    </button>
+                                    <button class="btn btn-light btn-sm" type="button" (click)="ir('nuevo')" aria-label="Ver formulario">
+                                        <i class="bi bi-pencil" aria-hidden="true"></i>
+                                    </button>
+                                    <button class="btn btn-light btn-sm" type="button" disabled aria-label="Eliminar pago no disponible">
+                                        <i class="bi bi-trash" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+
+                            </table>
+
+                        </div>
+
+                        <p id="sin-pagos" class="text-center text-secondary py-4 mb-0" [hidden]="pagosFiltrados().length !== 0">
+                            No se encontraron transacciones.
+                        </p>
+
+                        <footer class="card-footer bg-white d-flex justify-content-between flex-wrap gap-2">
+                            <small id="contador-pagos" class="text-secondary">
+                                Mostrando {{ pagosFiltrados().length }} transacciones
+                            </small>
+
+                            <small class="text-secondary">
+                                <span class="texto-morado">●</span>
+                                Datos de demostración
+                            </small>
+                        </footer>
+
+                    </article>
+
+                </section>
+
+            </section>
+
+
+            <!-- NUEVO PAGO -->
+            <section id="vista-nuevo" class="vista-pagos" [class.d-none]="vista() !== 'nuevo'"
+                     aria-labelledby="titulo-nuevo">
+
+                <header class="d-flex justify-content-between align-items-center mb-3">
+
+                    <div>
+                        <h1 id="titulo-nuevo" class="fs-4 fw-bold mb-1">Nuevo Pago</h1>
+                        <p class="small text-secondary mb-0">
+                            Completa los datos de pago y facturación del pedido.
+                        </p>
+                    </div>
+
+                    <span class="small texto-morado">
+                        <i class="bi bi-lock me-1" aria-hidden="true"></i>
+                        Vista de pago
+                    </span>
+
+                </header>
+
+                <div class="row g-3">
+
+                    <!-- Resumen de compra -->
+                    <aside class="col-lg-4">
+
+                        <article class="card tarjeta-panel h-100">
+
+                            <div class="card-body p-4">
+
+                                <h2 class="fs-6 fw-bold mb-4">
+                                    <i class="bi bi-bag-check icono-titulo me-2"
+                                       aria-hidden="true"></i>
+                                    Resumen de la compra
+                                </h2>
+
+                                <span class="badge bg-body-tertiary text-secondary mb-3">
+                                    Pedido #PB-0012
+                                </span>
+
+                                <ul class="list-unstyled small fw-semibold mb-4">
+                                    <li class="mb-3">Pastel de zanahoria ×1</li>
+                                    <li>Cupcakes de chocolate ×6</li>
+                                </ul>
+
+                                <hr>
+
+                                <h3 class="fs-4 fw-bold mb-2">
+                                    Total a pagar: $4,200.00 MXN
+                                </h3>
+
+                                <p class="small text-secondary mb-4">
+                                    Impuestos incluidos
+                                </p>
+
+                                <section class="bg-body-tertiary rounded-3 p-3"
+                                         aria-label="Cliente del pedido">
+
+                                    <small class="d-block text-secondary mb-1">
+                                        CLIENTE
+                                    </small>
+                                    <strong>Ana García</strong>
+
+                                </section>
+
+                            </div>
+
+                        </article>
+
+                    </aside>
+
+                    <!-- Formulario de pago -->
+                    <section class="col-lg-8" aria-labelledby="titulo-metodo">
+
+                        <form id="formulario-pago" class="card tarjeta-panel h-100" (ngSubmit)="confirmarPago()">
+
+                            <div class="card-body p-4">
+
+                                <fieldset class="border-0 p-0 mb-3">
+
+                                    <legend id="titulo-metodo" class="visually-hidden">
+                                        Método de pago
+                                    </legend>
+
+                                    <div class="row g-2">
+
+                                        <div class="col-sm-4">
+                                            <input class="btn-check" type="radio"
+                                                   name="metodo-pago" id="metodo-tarjeta"
+ value="tarjeta" [(ngModel)]="metodoPago">
+
+                                            <label class="btn btn-metodo w-100"
+                                                   for="metodo-tarjeta">
+                                                <i class="bi bi-credit-card me-1"
+                                                   aria-hidden="true"></i>
+                                                Tarjeta
+                                            </label>
+                                        </div>
+
+                                        <div class="col-sm-4">
+                                            <input class="btn-check" type="radio"
+                                                   name="metodo-pago" id="metodo-efectivo"
+ value="efectivo" [(ngModel)]="metodoPago">
+
+                                            <label class="btn btn-metodo w-100"
+                                                   for="metodo-efectivo">
+                                                <i class="bi bi-cash me-1"
+                                                   aria-hidden="true"></i>
+                                                Efectivo
+                                            </label>
+                                        </div>
+
+                                        <div class="col-sm-4">
+                                            <input class="btn-check" type="radio"
+                                                   name="metodo-pago" id="metodo-transferencia"
+ value="transferencia" [(ngModel)]="metodoPago">
+
+                                            <label class="btn btn-metodo w-100"
+                                                   for="metodo-transferencia">
+                                                <i class="bi bi-arrow-left-right me-1"
+                                                   aria-hidden="true"></i>
+                                                Transferencia
+                                            </label>
+                                        </div>
+
+                                    </div>
+
+                                </fieldset>
+
+                                <!-- Campos de tarjeta -->
+                                <fieldset class="border-0 p-0 mb-3" [class.d-none]="metodoPago !== 'tarjeta'"
+ data-campos-metodo="tarjeta">
+
+                                    <legend class="visually-hidden">
+                                        Datos de tarjeta
+                                    </legend>
+
+                                    <label for="numero-tarjeta" class="form-label">
+                                        Número de tarjeta
+                                    </label>
+
+                                    <div class="input-group mb-3">
+                                        <input id="numero-tarjeta"
+                                               class="form-control"
+                                               type="text"
+                                               inputmode="numeric"
+                                               placeholder="0000 0000 0000 0000">
+
+                                        <span class="input-group-text bg-white">
+                                            <i class="bi bi-credit-card"
+                                               aria-hidden="true"></i>
+                                        </span>
+                                    </div>
+
+                                    <div class="row g-3">
+
+                                        <div class="col-sm-3">
+                                            <label for="vencimiento" class="form-label">
+                                                Vencimiento
+                                            </label>
+                                            <input id="vencimiento"
+                                                   type="text"
+                                                   class="form-control"
+                                                   placeholder="MM/AA">
+                                        </div>
+
+                                        <div class="col-sm-3">
+                                            <label for="codigo-seguridad" class="form-label">
+                                                CVV
+                                            </label>
+                                            <input id="codigo-seguridad"
+                                                   type="text"
+                                                   class="form-control"
+                                                   placeholder="000">
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <label for="titular" class="form-label">
+                                                Titular
+                                            </label>
+                                            <input id="titular"
+                                                   type="text"
+                                                   class="form-control"
+                                                   placeholder="Nombre del titular">
+                                        </div>
+
+                                    </div>
+
+                                </fieldset>
+
+                                <!-- Campos de efectivo -->
+                                <fieldset class="border-0 p-0 mb-3" [class.d-none]="metodoPago !== 'efectivo'"
+ data-campos-metodo="efectivo">
+
+                                    <legend class="visually-hidden">
+                                        Datos de pago en efectivo
+                                    </legend>
+
+                                    <label for="efectivo-recibido" class="form-label">
+                                        Efectivo recibido
+                                    </label>
+
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input id="efectivo-recibido"
+                                               type="number"
+                                               class="form-control"
+                                               min="0"
+                                               placeholder="4200.00">
+                                    </div>
+
+                                </fieldset>
+
+                                <!-- Campos de transferencia -->
+                                <fieldset class="border-0 p-0 mb-3" [class.d-none]="metodoPago !== 'transferencia'"
+ data-campos-metodo="transferencia">
+
+                                    <legend class="visually-hidden">
+                                        Datos de transferencia
+                                    </legend>
+
+                                    <label for="referencia-transferencia" class="form-label">
+                                        Referencia de transferencia
+                                    </label>
+
+                                    <input id="referencia-transferencia"
+                                           type="text"
+                                           class="form-control"
+                                           placeholder="Número de referencia">
+
+                                </fieldset>
+
+                                <hr>
+
+                                <!-- Datos fiscales -->
+                                <div class="form-check mb-3">
+
+                                    <input class="form-check-input" type="checkbox"
+ id="requiere-factura" name="requiere-factura" [(ngModel)]="requiereFactura">
+
+                                    <label class="form-check-label fw-semibold"
+                                           for="requiere-factura">
+                                        Requiere factura
+                                    </label>
+
+                                </div>
+
+                                <fieldset id="campos-factura" class="border-0 p-0" [class.d-none]="!requiereFactura">
+
+                                    <legend class="visually-hidden">
+                                        Datos de facturación
+                                    </legend>
+
+                                    <div class="row g-3 mb-3">
+
+                                        <div class="col-sm-5">
+                                            <label for="pago-rfc" class="form-label">
+                                                RFC
+                                            </label>
+                                            <input id="pago-rfc" name="pago-rfc" [(ngModel)]="rfc"
+                                                   type="text"
+                                                   class="form-control"
+                                                   placeholder="RFC del cliente">
+                                        </div>
+
+                                        <div class="col-sm-7">
+                                            <label for="pago-razon-social" class="form-label">
+                                                Nombre o razón social
+                                            </label>
+                                            <input id="pago-razon-social"
+                                                   type="text"
+                                                   class="form-control"
+                                                   value="ANA GARCÍA">
+                                        </div>
+
+                                    </div>
+
+                                    <label for="uso-cfdi" class="form-label">
+                                        Uso de CFDI
+                                    </label>
+
+                                    <select id="uso-cfdi" class="form-select mb-3">
+                                        <option>G03 - Gastos en general</option>
+                                        <option>S01 - Sin efectos fiscales</option>
+                                    </select>
+
+                                </fieldset>
+
+                                <button type="submit"
+                                        class="btn boton-morado w-100 mt-2">
+                                    Confirmar y pagar
+                                </button>
+
+                                <p class="small text-secondary text-center mt-2 mb-0">
+                                    Demostración visual; no se procesa ningún cobro.
+                                </p>
+
+                            </div>
+
+                        </form>
+
+                    </section>
+
+                </div>
+
+            </section>
+
+
+            <!-- PAGO EXITOSO -->
+            <section id="vista-exito" class="vista-pagos" [class.d-none]="vista() !== 'exito'"
+                     aria-labelledby="titulo-exito">
+
+                <header class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+
+                    <h1 id="titulo-exito" class="fs-4 fw-bold mb-0">
+                        Pago Exitoso y Confirmación de Facturación
+                    </h1>
+
+                    <div class="d-flex flex-wrap gap-2">
+
+                        <button type="button"
+                                class="btn btn-light border btn-sm"
+                                (click)="ir('control')">
+                            <i class="bi bi-arrow-left me-1" aria-hidden="true"></i>
+                            Volver a Control de Pagos
+                        </button>
+
+                        <button type="button"
+                                class="btn btn-outline-primary btn-sm"
+                                (click)="abrir('factura')">
+                            <i class="bi bi-download me-1" aria-hidden="true"></i>
+                            Descargar Factura (PDF/XML)
+                        </button>
+
+                        <button type="button"
+                                class="btn boton-morado btn-sm"
+                                (click)="abrir('ticket')">
+                            <i class="bi bi-printer me-1" aria-hidden="true"></i>
+                            Imprimir Ticket
+                        </button>
+
+                    </div>
+
+                </header>
+
+                <div class="text-center py-3 mb-3">
+
+                    <span class="icono-exito mb-3">
+                        <i class="bi bi-check-lg" aria-hidden="true"></i>
+                    </span>
+
+                    <h2 class="fs-4 fw-bold mb-2">
+                        ¡Pago Realizado con Éxito!
+                    </h2>
+
+                    <p class="text-secondary small mb-0">
+                        Vista de confirmación del pago y su comprobante fiscal.
+                    </p>
+
+                </div>
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+
+                        <article class="card tarjeta-panel h-100">
+
+                            <div class="card-body p-4">
+
+                                <header class="d-flex justify-content-between align-items-center gap-2 mb-3">
+
+                                    <h3 class="fs-6 fw-bold mb-0">
+                                        Resumen del recibo
+                                    </h3>
+
+                                    <span class="badge estado-pagado">● Pagado</span>
+
+                                </header>
+
+                                <p class="fs-3 fw-bold mb-3">$4,200.00 MXN</p>
+
+                                <hr>
+
+                                <p class="small mb-2">
+                                    Para el pedido <strong>#PB-0012</strong>
+                                </p>
+
+                                <p class="small text-secondary mb-0">
+                                    <i class="bi bi-credit-card me-1" aria-hidden="true"></i>
+                                    Método:
+                                    <strong id="metodo-confirmado">{{ metodoConfirmado() }}</strong>
+                                </p>
+
+                            </div>
+
+                        </article>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <article class="card tarjeta-panel h-100">
+
+                            <div class="card-body p-4">
+
+                                <h3 class="fs-6 fw-bold mb-3">
+                                    <i class="bi bi-file-earmark-check texto-morado me-2"
+                                       aria-hidden="true"></i>
+                                    Factura CFDI (vista previa)
+                                </h3>
+
+                                <p class="small mb-2">
+                                    <strong>RFC:</strong> <span id="rfc-confirmado">{{ rfcConfirmado() }}</span>
+                                </p>
+
+                                <p class="small text-secondary mb-1">
+                                    Folio fiscal de ejemplo:
+                                </p>
+
+                                <p class="small text-break">
+                                    14a6e873-12c4-4b82-9a00-3456789a1b2c
+                                </p>
+
+                                <hr>
+
+                                <p class="small mb-0">
+                                    Régimen fiscal: Personas físicas con actividades empresariales.
+                                </p>
+
+                            </div>
+
+                        </article>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- CORTE DE CAJA -->
+            <section id="vista-corte" class="vista-pagos" [class.d-none]="vista() !== 'corte'"
+                     aria-labelledby="titulo-corte">
+
+                <header class="mb-4">
+
+                    <h1 id="titulo-corte" class="fs-4 fw-bold mb-1">
+                        Corte de Caja
+                    </h1>
+
+                    <p class="small text-secondary mb-0">
+                        Revisa las ventas y concilia el efectivo antes de cerrar el turno.
+                    </p>
+
+                </header>
+
+                <div class="row g-3 mb-3">
+
+                    <div class="col-lg-9">
+
+                        <article class="card tarjeta-panel h-100">
+
+                            <div class="card-body">
+
+                                <h2 class="fs-6 fw-bold mb-3">
+                                    Datos del turno
+                                </h2>
+
+                                <dl class="row row-cols-2 row-cols-md-5 g-3 mb-0">
+
+                                    <div class="col">
+                                        <dt class="small text-secondary fw-normal">Fecha</dt>
+                                        <dd class="small fw-semibold mb-0 fecha-turno">{{ fechaTexto }}</dd>
+                                    </div>
+
+                                    <div class="col">
+                                        <dt class="small text-secondary fw-normal">Hora</dt>
+                                        <dd class="small fw-semibold mb-0">18:30</dd>
+                                    </div>
+
+                                    <div class="col">
+                                        <dt class="small text-secondary fw-normal">Caja</dt>
+                                        <dd class="small fw-semibold mb-0">#01</dd>
+                                    </div>
+
+                                    <div class="col">
+                                        <dt class="small text-secondary fw-normal">Turno</dt>
+                                        <dd class="small fw-semibold mb-0">Matutino</dd>
+                                    </div>
+
+                                    <div class="col">
+                                        <dt class="small text-secondary fw-normal">Cajero</dt>
+                                        <dd class="small fw-semibold mb-0">P. M. Ramírez</dd>
+                                    </div>
+
+                                </dl>
+
+                            </div>
+
+                        </article>
+
+                    </div>
+
+                    <div class="col-lg-3">
+
+                        <article class="card tarjeta-panel h-100">
+
+                            <div class="card-body">
+
+                                <h2 class="fs-6 fw-bold mb-3">
+                                    Fondo de Caja
+                                </h2>
+
+                                <dl class="d-flex justify-content-between gap-2 small mb-0">
+                                    <dt class="text-secondary fw-normal">Fondo inicial</dt>
+                                    <dd class="fw-semibold mb-0">$1,000.00 MXN</dd>
+                                </dl>
+
+                            </div>
+
+                        </article>
+
+                    </div>
+
+                </div>
+
+                <article class="card tarjeta-panel">
+
+                    <div class="card-body p-4">
+
+                        <div class="row g-4">
+
+                            <section class="col-lg-4 border-lg-end"
+                                     aria-labelledby="titulo-ventas">
+
+                                <h2 id="titulo-ventas" class="fs-6 fw-bold mb-3">
+                                    <i class="bi bi-wallet2 texto-morado me-2"
+                                       aria-hidden="true"></i>
+                                    Ventas por método
+                                </h2>
+
+                                <dl class="lista-resumen small">
+
+                                    <div>
+                                        <dt>Efectivo</dt>
+                                        <dd>$15,800.00</dd>
+                                    </div>
+
+                                    <div>
+                                        <dt>Tarjeta</dt>
+                                        <dd>$22,400.00</dd>
+                                    </div>
+
+                                    <div>
+                                        <dt>Transferencia</dt>
+                                        <dd>$10,300.00</dd>
+                                    </div>
+
+                                </dl>
+
+                                <hr>
+
+                                <dl class="d-flex justify-content-between small mb-0">
+                                    <dt class="text-secondary fw-normal">Total de ventas</dt>
+                                    <dd class="fw-bold mb-0">$48,500.00 MXN</dd>
+                                </dl>
+
+                            </section>
+
+                            <section class="col-lg-4 border-lg-end"
+                                     aria-labelledby="titulo-movimientos">
+
+                                <h2 id="titulo-movimientos" class="fs-6 fw-bold mb-3">
+                                    <i class="bi bi-arrow-left-right texto-morado me-2"
+                                       aria-hidden="true"></i>
+                                    Movimientos de efectivo
+                                </h2>
+
+                                <dl class="lista-resumen small">
+
+                                    <div>
+                                        <dt>Entradas</dt>
+                                        <dd>$500.00</dd>
+                                    </div>
+
+                                    <div>
+                                        <dt>Salidas</dt>
+                                        <dd>$1,200.00</dd>
+                                    </div>
+
+                                </dl>
+
+                            </section>
+
+                            <section class="col-lg-4"
+                                     aria-labelledby="titulo-conciliacion">
+
+                                <h2 id="titulo-conciliacion" class="fs-6 fw-bold mb-3">
+                                    <i class="bi bi-calculator texto-morado me-2"
+                                       aria-hidden="true"></i>
+                                    Conciliación de efectivo
+                                </h2>
+
+                                <dl class="d-flex justify-content-between gap-2 small">
+                                    <dt class="text-secondary fw-normal">Efectivo esperado</dt>
+                                    <dd class="fw-bold mb-0">$16,100.00 MXN</dd>
+                                </dl>
+
+                                <label for="conteo-real" class="form-label">
+                                    Conteo físico real
+                                </label>
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">$</span>
+                                    <input id="conteo-real" name="conteo-real" [ngModel]="conteoReal()" (ngModelChange)="conteoReal.set($event)"
+                                           type="number"
+                                           class="form-control"
+                                           min="0"
+                                           step="0.01">
+                                    <span class="input-group-text">MXN</span>
+                                </div>
+
+                                <span id="diferencia-caja" [class]="claseDiferencia()">
+ ● Diferencia: {{ diferenciaTexto() }}
+ </span>
+
+                            </section>
+
+                        </div>
+
+                        <hr class="my-4">
+
+                        <dl class="d-flex justify-content-between small mb-0">
+                            <dt class="text-secondary fw-normal">IVA de referencia (16%)</dt>
+                            <dd class="fw-semibold mb-0">$7,760.00 MXN</dd>
+                        </dl>
+
+                    </div>
+
+                </article>
+
+                <footer class="d-flex justify-content-end flex-wrap gap-2 mt-3">
+
+                    <button type="button"
+                            class="btn btn-outline-primary"
+                            (click)="abrir('reporte')">
+                        <i class="bi bi-printer me-1" aria-hidden="true"></i>
+                        Imprimir reporte
+                    </button>
+
+                    <button type="button"
+                            class="btn boton-morado"
+                            (click)="ir('cerrada')">
+                        <i class="bi bi-lock me-1" aria-hidden="true"></i>
+                        Confirmar y cerrar caja
+                    </button>
+
+                </footer>
+
+            </section>
+
+
+            <!-- CAJA CERRADA -->
+            <section id="vista-cerrada"
+                     class="vista-pagos" [class.d-none]="vista() !== 'cerrada'"
+                     aria-labelledby="titulo-cerrada">
+
+                <div class="caja-cerrada text-center mx-auto">
+
+                    <span class="icono-cierre mb-4">
+                        <i class="bi bi-check-circle" aria-hidden="true"></i>
+                    </span>
+
+                    <h1 id="titulo-cerrada" class="fs-4 fw-bold mb-2">
+                        Caja Cerrada Correctamente — Turno Concluido
+                    </h1>
+
+                    <p class="small text-secondary mb-4">
+                        Vista de cierre del turno. Puedes iniciar uno nuevo cuando lo necesites.
+                    </p>
+
+                    <article class="card tarjeta-panel text-start mx-auto">
+
+                        <div class="card-body p-4">
+
+                            <dl class="lista-resumen small mb-0">
+
+                                <div>
+                                    <dt>Cajero</dt>
+                                    <dd>P. M. Ramírez</dd>
+                                </div>
+
+                                <div>
+                                    <dt>Turno</dt>
+                                    <dd>Matutino</dd>
+                                </div>
+
+                                <div>
+                                    <dt>Fecha</dt>
+                                    <dd class="fecha-turno">{{ fechaTexto }}</dd>
+                                </div>
+
+                                <hr>
+
+                                <div>
+                                    <dt>Ventas totales</dt>
+                                    <dd>$48,500.00 MXN</dd>
+                                </div>
+
+                                <div>
+                                    <dt>Diferencia del conteo</dt>
+                                    <dd>
+                                        <span id="diferencia-final" [class]="claseDiferencia()">
+ {{ diferenciaTexto() }}
+ </span>
+                                    </dd>
+                                </div>
+
+                            </dl>
+
+                        </div>
+
+                    </article>
+
+                    <div class="text-end mt-5">
+
+                        <button type="button"
+                                class="btn boton-morado"
+                                (click)="ir('control')">
+                            <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>
+                            Iniciar nuevo turno
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- MODAL: EXPORTAR REPORTE -->
+    <div class="modal fade" #mExportar
+         id="modal-exportar"
+         tabindex="-1"
+         aria-labelledby="titulo-exportar"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <form class="modal-content modal-vanabby">
+
+                <header class="modal-header">
+
+                    <h2 id="titulo-exportar" class="modal-title fs-5 fw-bold">
+                        Exportar reporte
+                    </h2>
+
+                    <button type="button" class="btn-close"
+                            (click)="cerrar(mExportar)"
+                            aria-label="Cerrar"></button>
+
+                </header>
+
+                <div class="modal-body p-4">
+
+                    <p class="small text-secondary mb-3">
+                        Elige el periodo, formato y datos de tu reporte.
+                    </p>
+
+                    <div class="row g-3 mb-3">
+
+                        <div class="col-6">
+                            <label for="exportar-desde" class="form-label">
+                                Desde
+                            </label>
+                            <input id="exportar-desde"
+                                   type="date"
+                                   class="form-control"
+                                   value="2026-10-01">
+                        </div>
+
+                        <div class="col-6">
+                            <label for="exportar-hasta" class="form-label">
+                                Hasta
+                            </label>
+                            <input id="exportar-hasta"
+                                   type="date"
+                                   class="form-control"
+                                   value="2026-10-20">
+                        </div>
+
+                    </div>
+
+                    <fieldset class="border-0 p-0 mb-3">
+
+                        <legend class="fs-6 fw-semibold mb-2">
+                            Formato
+                        </legend>
+
+                        <div class="d-flex flex-wrap gap-3">
+
+                            <label class="form-check">
+                                <input class="form-check-input" type="radio"
+                                       name="formato-exportacion" value="pdf">
+                                PDF
+                            </label>
+
+                            <label class="form-check">
+                                <input class="form-check-input" type="radio"
+                                       name="formato-exportacion" value="xlsx" checked>
+                                Excel (XLSX)
+                            </label>
+
+                            <label class="form-check">
+                                <input class="form-check-input" type="radio"
+                                       name="formato-exportacion" value="csv">
+                                CSV
+                            </label>
+
+                        </div>
+
+                    </fieldset>
+
+                    <hr>
+
+                    <fieldset class="border-0 p-0">
+
+                        <legend class="fs-6 fw-semibold mb-3">
+                            Datos a incluir
+                        </legend>
+
+                        <div class="d-grid gap-2">
+
+                            <label class="form-check">
+                                <input class="form-check-input" type="checkbox" checked>
+                                Información del cliente
+                            </label>
+
+                            <label class="form-check">
+                                <input class="form-check-input" type="checkbox">
+                                Historial de estado
+                            </label>
+
+                            <label class="form-check">
+                                <input class="form-check-input" type="checkbox" checked>
+                                Detalles del pedido
+                            </label>
+
+                            <label class="form-check">
+                                <input class="form-check-input" type="checkbox" checked>
+                                Monto de transacción
+                            </label>
+
+                            <label class="form-check">
+                                <input class="form-check-input" type="checkbox" checked>
+                                Fecha y hora
+                            </label>
+
+                            <label class="form-check">
+                                <input class="form-check-input" type="checkbox">
+                                Resumen de indicadores
+                            </label>
+
+                            <label class="form-check">
+                                <input class="form-check-input" type="checkbox" checked>
+                                Método de pago
+                            </label>
+
+                        </div>
+
+                    </fieldset>
+
+                </div>
+
+                <footer class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-link text-decoration-none me-2"
+                            (click)="cerrar(mExportar)">
+                        Cancelar
+                    </button>
+
+                    <button type="button"
+                            class="btn boton-morado"
+                            (click)="cerrar(mExportar)">
+                        <i class="bi bi-download me-1" aria-hidden="true"></i>
+                        Exportar
+                    </button>
+
+                </footer>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- MODAL: FACTURA CFDI -->
+    <div class="modal fade" #mFactura
+         id="modal-factura"
+         tabindex="-1"
+         aria-labelledby="titulo-factura"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <article class="modal-content modal-vanabby">
+
+                <header class="modal-header">
+
+                    <h2 id="titulo-factura" class="modal-title fs-5 fw-bold">
+                        Descargar Factura CFDI
+                    </h2>
+
+                    <button type="button" class="btn-close"
+                            (click)="cerrar(mFactura)"
+                            aria-label="Cerrar"></button>
+
+                </header>
+
+                <div class="modal-body p-4">
+
+                    <p class="alert alert-success small">
+                        <i class="bi bi-check-lg me-1" aria-hidden="true"></i>
+                        Vista previa de los archivos PDF y XML.
+                    </p>
+
+                    <p class="small mb-1">
+                        <strong>RFC:</strong> <span id="rfc-modal">{{ rfcConfirmado() }}</span>
+                    </p>
+
+                    <p class="small text-secondary text-break mb-3">
+                        UUID de ejemplo: 14a6e873-12c4-4b82-9a00-3456789a1b2c
+                    </p>
+
+                    <div class="row g-3">
+
+                        <div class="col-6">
+                            <button type="button"
+                                    class="btn tarjeta-descarga w-100"
+                                    (click)="cerrar(mFactura)">
+
+                                <i class="bi bi-file-earmark-pdf fs-1 d-block mb-3"
+                                   aria-hidden="true"></i>
+
+                                <strong class="d-block">DESCARGAR PDF</strong>
+
+                                <small>Documento de factura</small>
+
+                            </button>
+                        </div>
+
+                        <div class="col-6">
+                            <button type="button"
+                                    class="btn tarjeta-descarga w-100"
+                                    (click)="cerrar(mFactura)">
+
+                                <i class="bi bi-filetype-xml fs-1 d-block mb-3"
+                                   aria-hidden="true"></i>
+
+                                <strong class="d-block">DESCARGAR XML</strong>
+
+                                <small>Comprobante fiscal</small>
+
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <footer class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-link text-decoration-none"
+                            (click)="cerrar(mFactura)">
+                        Cerrar
+                    </button>
+
+                    <button type="button"
+                            class="btn boton-morado"
+                            (click)="cerrar(mFactura)">
+                        Hecho
+                    </button>
+
+                </footer>
+
+            </article>
+
+        </div>
+
+    </div>
+
+
+    <!-- MODAL: TICKET -->
+    <div class="modal fade" #mTicket
+         id="modal-ticket"
+         tabindex="-1"
+         aria-labelledby="titulo-ticket"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+
+            <article class="modal-content modal-vanabby">
+
+                <header class="modal-header">
+
+                    <h2 id="titulo-ticket" class="modal-title fs-5 fw-bold">
+                        Vista previa e impresión del ticket
+                    </h2>
+
+                    <button type="button" class="btn-close"
+                            (click)="cerrar(mTicket)"
+                            aria-label="Cerrar"></button>
+
+                </header>
+
+                <div class="modal-body p-4">
+
+                    <div class="row g-4">
+
+                        <!-- Configuración -->
+                        <section class="col-md-4" aria-labelledby="titulo-configuracion">
+
+                            <h3 id="titulo-configuracion"
+                                class="small text-secondary text-uppercase mb-3">
+                                Configuración
+                            </h3>
+
+                            <label for="impresora" class="form-label">
+                                Impresora
+                            </label>
+
+                            <select id="impresora" class="form-select mb-3">
+                                <option>Impresora térmica</option>
+                                <option>Impresora estándar</option>
+                            </select>
+
+                            <label for="copias" class="form-label">
+                                Copias
+                            </label>
+
+                            <input id="copias"
+                                   type="number"
+                                   min="1"
+                                   value="1"
+                                   class="form-control mb-3">
+
+                            <label for="papel" class="form-label">
+                                Papel
+                            </label>
+
+                            <select id="papel" class="form-select mb-3">
+                                <option>Térmico 58 mm</option>
+                                <option>Térmico 80 mm</option>
+                            </select>
+
+                            <div class="form-check">
+                                <input id="ajustar-ticket"
+                                       type="checkbox"
+                                       class="form-check-input"
+                                       checked>
+
+                                <label for="ajustar-ticket"
+                                       class="form-check-label">
+                                    Ajustar al ancho
+                                </label>
+                            </div>
+
+                        </section>
+
+                        <!-- Vista previa -->
+                        <section class="col-md-8" aria-labelledby="titulo-vista-ticket">
+
+                            <div class="fondo-ticket rounded-3 p-3">
+
+                                <h3 id="titulo-vista-ticket"
+                                    class="small text-secondary text-center mb-3">
+                                    VISTA PREVIA · 58 MM
+                                </h3>
+
+                                <article class="ticket mx-auto">
+
+                                    <header class="text-center mb-4">
+                                        <h4 class="fs-5 fw-bold mb-0">VANABBY</h4>
+                                        <small>Repostería</small>
+                                        <p class="mt-3 mb-0 fw-bold">TICKET DE VENTA</p>
+                                        <p class="mb-0">#PB-0012</p>
+                                    </header>
+
+                                    <dl class="lista-resumen mb-3">
+
+                                        <div>
+                                            <dt>Pastel de zanahoria ×1</dt>
+                                            <dd>$2,585.21</dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>Cupcakes de chocolate ×6</dt>
+                                            <dd>$1,034.48</dd>
+                                        </div>
+
+                                    </dl>
+
+                                    <hr class="border-secondary border-dashed">
+
+                                    <dl class="lista-resumen mb-0">
+
+                                        <div>
+                                            <dt>Subtotal</dt>
+                                            <dd>$3,619.69</dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>IVA (16%)</dt>
+                                            <dd>$580.31</dd>
+                                        </div>
+
+                                        <div class="fw-bold">
+                                            <dt>Total</dt>
+                                            <dd>$4,200.00 MXN</dd>
+                                        </div>
+
+                                        <div>
+                                            <dt>Método de pago</dt>
+                                            <dd class="metodo-ticket">{{ metodoConfirmado() }}</dd>
+                                        </div>
+
+                                    </dl>
+
+                                    <footer class="text-center mt-3">
+                                        <i class="bi bi-qr-code fs-1" aria-hidden="true"></i>
+                                        <p class="mt-2 mb-0">¡Gracias por tu compra!</p>
+                                    </footer>
+
+                                </article>
+
+                            </div>
+
+                        </section>
+
+                    </div>
+
+                </div>
+
+                <footer class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-link text-decoration-none"
+                            (click)="cerrar(mTicket)">
+                        Cancelar
+                    </button>
+
+                    <button type="button"
+                            class="btn boton-morado"
+                            (click)="cerrar(mTicket)">
+                        <i class="bi bi-printer me-1" aria-hidden="true"></i>
+                        Imprimir ahora
+                    </button>
+
+                </footer>
+
+            </article>
+
+        </div>
+
+    </div>
+
+
+    <!-- MODAL: REPORTE Z -->
+    <div class="modal fade" #mReporte
+         id="modal-reporte"
+         tabindex="-1"
+         aria-labelledby="titulo-reporte"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <article class="modal-content modal-vanabby">
+
+                <header class="modal-header">
+
+                    <h2 id="titulo-reporte" class="modal-title fs-5 fw-bold">
+                        Reporte Z — Corte de Caja
+                    </h2>
+
+                    <button type="button" class="btn-close"
+                            (click)="cerrar(mReporte)"
+                            aria-label="Cerrar"></button>
+
+                </header>
+
+                <div class="modal-body p-4">
+
+                    <div class="fondo-ticket rounded-3 p-3">
+
+                        <article class="ticket ticket-reporte mx-auto">
+
+                            <header class="text-center mb-4">
+
+                                <h3 class="fs-4 fw-bold mb-0">VANABBY</h3>
+                                <small>Repostería</small>
+
+                                <p class="fw-bold mt-3 mb-0">
+                                    REPORTE Z — CORTE DE CAJA
+                                </p>
+
+                            </header>
+
+                            <hr>
+
+                            <dl class="lista-resumen">
+
+                                <div>
+                                    <dt>Fecha</dt>
+                                    <dd class="fecha-turno">{{ fechaTexto }}</dd>
+                                </div>
+
+                                <div>
+                                    <dt>Hora</dt>
+                                    <dd>18:30</dd>
+                                </div>
+
+                                <div>
+                                    <dt>Cajero</dt>
+                                    <dd>P. M. Ramírez</dd>
+                                </div>
+
+                            </dl>
+
+                            <p class="text-center fw-bold my-3">
+                                === FONDO DE CAJA ===
+                            </p>
+
+                            <p class="text-center">$1,000.00 MXN</p>
+
+                            <p class="text-center fw-bold my-3">
+                                === RESUMEN DE VENTAS ===
+                            </p>
+
+                            <dl class="lista-resumen">
+
+                                <div>
+                                    <dt>Efectivo</dt>
+                                    <dd>$15,800.00</dd>
+                                </div>
+
+                                <div>
+                                    <dt>Tarjeta</dt>
+                                    <dd>$22,400.00</dd>
+                                </div>
+
+                                <div>
+                                    <dt>Transferencia</dt>
+                                    <dd>$10,300.00</dd>
+                                </div>
+
+                            </dl>
+
+                            <hr>
+
+                            <dl class="lista-resumen fw-bold mb-0">
+
+                                <div>
+                                    <dt>Total ventas</dt>
+                                    <dd>$48,500.00 MXN</dd>
+                                </div>
+
+                            </dl>
+
+                        </article>
+
+                    </div>
+
+                </div>
+
+                <footer class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-link text-decoration-none"
+                            (click)="cerrar(mReporte)">
+                        Cerrar
+                    </button>
+
+                    <button type="button"
+                            class="btn boton-morado"
+                            (click)="cerrar(mReporte)">
+                        <i class="bi bi-printer me-1" aria-hidden="true"></i>
+                        Imprimir ticket Z
+                    </button>
+
+                </footer>
+
+            </article>
+
+        </div>
+
+    </div>

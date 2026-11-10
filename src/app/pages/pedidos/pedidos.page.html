@@ -1,0 +1,201 @@
+<div class="app">
+  <aside class="sidebar">
+    <a class="marca" routerLink="/inicio" aria-label="Vanabby, página principal"><strong>VANABBY</strong><small>Repostería</small></a>
+    <nav aria-label="Navegación principal"><a class="side-btn" routerLink="/inicio"><i class="bi bi-house-door" aria-hidden="true"></i><span>Inicio</span></a></nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar__title"></div>
+      <div class="topbar__user">
+        <i class="bi bi-person-circle avatar-icon" aria-hidden="true"></i>
+        <div class="user-info"><strong>P. M. Ramírez</strong><small>Administrador</small></div>
+        <time class="topbar__date" id="fechaActual">{{ hoy | fechaCorta }}</time>
+        <a class="btn-salir" href="/login" (click)="$event.preventDefault(); cerrarSesion()" aria-label="Cerrar sesión"><i class="bi bi-box-arrow-right" aria-hidden="true"></i></a>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="banner">
+        <div><h1>¡Hola Pablo Mata Ramirez!</h1><p>Panel de Control de Pedidos</p></div>
+        <button class="btn btn-green" id="btnRegistrarPedido" (click)="abrirRegistro()"><i class="bi bi-person-plus" aria-hidden="true"></i> Registrar Pedido</button>
+      </section>
+
+      <section class="card tabla-card">
+        <div class="tabla-head">
+          <h2>Pedidos <span class="badge badge-lilac" id="contadorPedidos">{{ pedidos().length }}</span></h2>
+          <div class="tabla-head__tools">
+            <select id="filtroEstado" class="mini-select" [ngModel]="filtroEstado()" (ngModelChange)="filtroEstado.set($event)">
+              <option value="">Todos los estados</option>
+              @for (e of ESTADOS; track e) { <option [value]="e">{{ e }}</option> }
+            </select>
+            <span class="muted small">Todos tus pedidos, en un solo lugar</span>
+          </div>
+        </div>
+        <table class="tabla">
+          <thead>
+            <tr><th>Pedido y Cliente</th><th>Fecha y Modalidad</th><th>Total</th><th>Estado</th><th>Prioridad</th><th>Acciones</th></tr>
+          </thead>
+          <tbody id="tbodyPedidos">
+            @for (p of lista(); track p.id) {
+              <tr>
+                <td><span class="ped-id">{{ p.id }}</span><span class="ped-cliente">{{ cliente(p.clienteId)?.nombre }}</span></td>
+                <td class="fecha-mod">{{ fechaLarga(p.fecha) }}<small>{{ p.modalidad }}</small></td>
+                <td><strong>{{ total(p) | moneda }}</strong></td>
+                <td>
+                  <select class="pill-select" [class]="'pill-select ' + claseEstado(p.estado)" [disabled]="p.estado === 'Cancelado'"
+                          [ngModel]="p.estado" (ngModelChange)="cambiarEstado(p, $event)">
+                    @for (e of opcionesEstado(p); track e) { <option [value]="e">{{ e }}</option> }
+                  </select>
+                </td>
+                <td>
+                  <select [class]="'pill-select ' + clasePrioridad(p.prioridad)" [disabled]="p.estado === 'Cancelado'"
+                          [ngModel]="p.prioridad" (ngModelChange)="cambiarPrioridad(p, $event)">
+                    @for (x of PRIORIDADES; track x) { <option [value]="x">{{ x }}</option> }
+                  </select>
+                </td>
+                <td class="acciones">
+                  <button class="btn-icon" title="Editar pedido" [disabled]="p.estado === 'Cancelado'" (click)="abrirRegistro(p)"><i class="bi bi-pencil" aria-hidden="true"></i></button>
+                  <button class="btn-icon" title="Cancelar pedido" [disabled]="p.estado === 'Cancelado'" (click)="abrirCancelar(p)"><i class="bi bi-trash" aria-hidden="true"></i></button>
+                  <button class="btn-icon" title="Ver comprobante" (click)="abrirComprobante(p)"><i class="bi bi-eye" aria-hidden="true"></i></button>
+                </td>
+              </tr>
+            } @empty {
+              <tr><td colspan="6" class="muted" style="text-align:center;padding:30px">Sin pedidos para este filtro.</td></tr>
+            }
+          </tbody>
+        </table>
+        <div class="tabla-foot muted small"><span id="pieTabla">Mostrando {{ lista().length }} de {{ pedidos().length }} pedidos</span><span>Página 1 de 1</span></div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- Modal: registrar pedido -->
+<div class="modal-overlay" id="modalRegistrar" [hidden]="!modalRegistrar()" (click)="cerrarOverlay($event, 'registrar')">
+  <form class="modal modal--lg" id="formPedido" novalidate (ngSubmit)="guardar()" #f="ngForm">
+    <div class="modal__head"><span style="margin:auto" id="tituloRegistro">{{ editandoId() ? 'Editar Pedido #' + editandoId() : 'Registrar Pedido' }}</span><button type="button" (click)="cerrar('registrar')">×</button></div>
+    <div class="modal__body">
+      <h3 class="sec">Selección de Cliente</h3>
+      <div class="form-grid">
+        <div class="field buscador-wrap"><i class="bi bi-search" aria-hidden="true"></i><input type="search" name="buscarCliente" placeholder="Buscar cliente..." [ngModel]="buscar()" (ngModelChange)="buscar.set($event)"></div>
+        <div class="field">
+          <select name="cliente" [ngModel]="clienteSel()" (ngModelChange)="clienteSel.set($event)">
+            <option value="">Seleccione al cliente</option>
+            @for (c of clientesFiltrados(); track c.id) { <option [value]="'' + c.id">{{ c.nombre }}</option> }
+          </select>
+          <span class="error">{{ errores()['cliente'] }}</span>
+        </div>
+      </div>
+
+      <h3 class="sec">Información del Cliente <span class="muted small"><i class="bi bi-lock" aria-hidden="true"></i> Solo lectura</span></h3>
+      <div class="form-grid">
+        <div class="field"><input placeholder="Nombre completo" readonly [value]="clienteActual().nombre"></div>
+        <div class="field"><input placeholder="Teléfono" readonly [value]="clienteActual().telefono"></div>
+        <div class="field"><input placeholder="Colonia" readonly [value]="clienteActual().colonia"></div>
+        <div class="field"><input placeholder="Calle" readonly [value]="clienteActual().calle"></div>
+        <div class="field"><input placeholder="Núm. exterior" readonly [value]="clienteActual().ext"></div>
+        <div class="field"><input placeholder="Núm. interior" readonly [value]="clienteActual().int"></div>
+        <div class="field"><input placeholder="Municipio" readonly [value]="clienteActual().municipio"></div>
+        <div class="field"><input placeholder="Estado" readonly [value]="clienteActual().estado"></div>
+        <div class="field"><input placeholder="Código postal" readonly [value]="clienteActual().cp"></div>
+      </div>
+
+      <h3 class="sec">Entrega</h3>
+      <div class="entrega">
+        <div class="field"><select name="modalidad" [(ngModel)]="modalidad" (ngModelChange)="modalidadSig.set($event)"><option value="">Modalidad</option><option>A domicilio</option><option>Recoger en tienda</option></select><span class="error">{{ errores()['modalidad'] }}</span></div>
+        <div class="field icono-campo"><input type="date" name="fecha" [(ngModel)]="fecha" [min]="fechaMin"><i class="bi bi-calendar3" aria-hidden="true"></i><span class="error">{{ errores()['fecha'] }}</span></div>
+        <div class="field icono-campo"><input type="time" name="hora" [(ngModel)]="hora"><i class="bi bi-clock" aria-hidden="true"></i><span class="error">{{ errores()['hora'] }}</span></div>
+        <div class="field"><select name="prioridad" [(ngModel)]="prioridad"><option>Normal</option><option>Urgente</option><option>No urgente</option></select></div>
+      </div>
+
+      <h3 class="sec">Resumen del pedido <span class="muted small">Importe</span></h3>
+      <div class="agregar-prod">
+        <select name="prodSel" [(ngModel)]="prodSel">
+          @for (p of productos; track p.id) { <option [ngValue]="p.id">{{ p.nombre }} — {{ p.precio | moneda }}</option> }
+        </select>
+        <input type="number" name="cantidad" min="1" [(ngModel)]="cantidad">
+        <button type="button" class="btn btn-outline" (click)="agregarProducto()">Agregar</button>
+      </div>
+      <span class="error">{{ errores()['items'] }}</span>
+      <ul class="items">
+        @for (i of borrador(); track $index) {
+          <li><span class="n">{{ $index + 1 }}</span><span class="desc">{{ producto(i.pid).nombre }} × {{ i.cant }}</span>
+            <strong>{{ producto(i.pid).precio * i.cant | moneda }}</strong>
+            <button type="button" class="quitar" title="Quitar" (click)="quitar($index)"><i class="bi bi-x-lg" aria-hidden="true"></i></button></li>
+        }
+      </ul>
+      <div class="linea-envio"><span>Envío (Oaxaca, Oaxaca):</span><span>{{ envioBorrador() | moneda }}</span></div>
+      <div class="total-box"><strong>TOTAL MXN:</strong><strong>{{ totalBorrador() | moneda }}</strong></div>
+    </div>
+    <div class="modal__foot">
+      <span class="muted small" style="align-self:center">Revisa los datos antes de guardar.</span>
+      <div>
+        <button type="button" class="btn btn-salmon" (click)="cerrar('registrar')">Cancelar</button>
+        <button type="submit" class="btn btn-green">Guardar <i class="bi bi-check-lg" aria-hidden="true"></i></button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- Modal: cancelar pedido -->
+<div class="modal-overlay" id="modalCancelar" [hidden]="!modalCancelar()" (click)="cerrarOverlay($event, 'cancelar')">
+  <div class="modal modal--rel">
+    <button type="button" class="cerrar-x" aria-label="Cerrar" (click)="cerrar('cancelar')">×</button>
+    <div class="modal__body">
+      <div class="modal-icon alerta-roja"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></div>
+      @if (cancelando(); as c) {
+        <h3>¿Deseas cancelar el pedido #{{ c.id }}?</h3>
+        <p class="muted small">Esta acción no se puede deshacer. Se notificará al cliente {{ cliente(c.clienteId)?.nombre }}.</p>
+      }
+      <h4 class="sec">Motivo de cancelación</h4>
+      <div class="radios">
+        @for (m of MOTIVOS; track m) {
+          <label><input type="radio" name="motivo" [value]="m" [(ngModel)]="motivo"> {{ m }}</label>
+        }
+      </div>
+      <div class="field" style="margin-top:12px">
+        <label for="comentarioCancel">Comentario adicional (opcional)</label>
+        <textarea id="comentarioCancel" rows="3" placeholder="Escribe el motivo o agrega más detalles..." [(ngModel)]="comentario"></textarea>
+      </div>
+    </div>
+    <div class="modal__foot">
+      <button class="btn btn-light" (click)="cerrar('cancelar')">Volver</button>
+      <button class="btn btn-salmon" (click)="confirmarCancelar()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: comprobante -->
+<div class="modal-overlay" id="modalComprobante" [hidden]="!modalComprobante()" (click)="cerrarOverlay($event, 'comprobante')">
+  <div class="modal">
+    @if (verPedido(); as p) {
+      <div class="modal__head"><span style="margin:auto">Comprobante de Pedido #{{ p.id }}</span><button type="button" (click)="cerrar('comprobante')">×</button></div>
+      <div class="modal__body ticket">
+        <h2>VANABBY</h2>
+        <div class="sub">Repostería</div>
+        <div class="sub">Pedido #{{ p.id }} · {{ fechaLarga(p.fecha) }}, {{ p.hora }} h</div>
+        <hr>
+        <div><strong>Cliente:</strong> {{ cliente(p.clienteId)?.nombre }}</div>
+        <div><strong>Teléfono:</strong> {{ cliente(p.clienteId)?.telefono }}</div>
+        <div><strong>Dirección:</strong> {{ direccion(cliente(p.clienteId)!) }}</div>
+        <div><strong>Modalidad:</strong> {{ p.modalidad }}</div>
+        <hr>
+        <div class="fila muted small"><span>CANT. / DESCRIPCIÓN</span><span>IMPORTE</span></div>
+        @for (i of p.items; track $index) {
+          <div class="fila"><span>{{ i.cant }} × {{ producto(i.pid).nombre }}</span><span>{{ producto(i.pid).precio * i.cant | moneda }}</span></div>
+        }
+        <hr>
+        <div class="fila"><span>Subtotal:</span><span>{{ subtotal(p.items) | moneda }}</span></div>
+        <div class="fila"><span>Envío (Oaxaca, Oaxaca):</span><span>{{ envio(p.modalidad) | moneda }}</span></div>
+        <div class="fila total"><span>TOTAL MXN:</span><span>{{ total(p) | moneda }}</span></div>
+        <div class="muted small" style="text-align:right">IVA incluido</div>
+        <div class="qr"><span [innerHTML]="qrHtml()"></span><small>QR ilustrativo · No funcional</small></div>
+      </div>
+    }
+    <div class="modal__foot end no-print">
+      <button class="btn btn-salmon" (click)="cerrar('comprobante')">Cerrar</button>
+      <button class="btn btn-green" (click)="imprimir()">Imprimir</button>
+    </div>
+  </div>
+</div>

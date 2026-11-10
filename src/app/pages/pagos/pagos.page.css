@@ -1,0 +1,443 @@
+:root {
+    --morado: #8857ef;
+    --morado-oscuro: #7043d5;
+    --lila: #f2e9ff;
+    --fondo: #faf9f7;
+}
+
+body {
+    background: var(--fondo);
+    color: #252b38;
+    font-size: 14px;
+}
+
+/* Estructura */
+
+.menu-lateral {
+    width: 100px;
+    background: #f5f4f9;
+    z-index: 1020;
+}
+
+.marca {
+    color: #77717e;
+}
+
+.marca strong {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.marca small {
+    font-size: 10px;
+}
+
+.enlace-menu {
+    background: #edebf3;
+    color: #292633;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.enlace-menu:hover {
+    background: var(--lila);
+    color: var(--morado-oscuro);
+}
+
+.estructura-principal {
+    min-height: 100vh;
+    margin-left: 100px;
+}
+
+.barra-superior {
+    min-height: 84px;
+}
+
+.datos-usuario {
+    line-height: 1.3;
+}
+
+.datos-usuario small {
+    font-size: 12px;
+}
+
+/* Colores */
+
+.texto-morado {
+    color: var(--morado-oscuro);
+}
+
+.boton-morado {
+    background: var(--morado);
+    border-color: var(--morado);
+    color: white;
+}
+
+.boton-morado:hover,
+.boton-morado:focus-visible {
+    background: var(--morado-oscuro);
+    border-color: var(--morado-oscuro);
+    color: white;
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--morado-oscuro);
+    --bs-btn-border-color: #c5a6ff;
+    --bs-btn-hover-bg: var(--morado);
+    --bs-btn-hover-border-color: var(--morado);
+    --bs-btn-hover-color: white;
+    --bs-btn-active-bg: var(--morado-oscuro);
+    --bs-btn-active-border-color: var(--morado-oscuro);
+}
+
+.icono-titulo {
+    color: var(--morado);
+}
+
+/* Tarjetas e indicadores */
+
+.tarjeta-panel {
+    border: 1px solid #ebe9ee;
+    border-radius: 14px;
+    box-shadow: 0 3px 10px rgba(35, 25, 50, 0.04);
+}
+
+.icono-resumen {
+    display: inline-grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border-radius: 12px;
+    background: var(--lila);
+    color: var(--morado);
+    font-size: 21px;
+}
+
+/* Tabla */
+
+.campo-busqueda {
+    width: 290px;
+}
+
+.tabla-pagos {
+    min-width: 850px;
+    font-size: 12px;
+}
+
+.tabla-pagos thead th {
+    padding: 14px 16px;
+    color: #929aaa;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.tabla-pagos tbody td {
+    padding: 13px 16px;
+    color: #596171;
+}
+
+.tabla-pagos tbody td:nth-child(2) {
+    color: #252b38;
+}
+
+.tabla-pagos tbody .btn {
+    color: #718096;
+}
+
+.tabla-pagos tbody .btn:hover:not(:disabled) {
+    background: var(--lila);
+    color: var(--morado-oscuro);
+}
+
+.fila-pago[hidden],
+#sin-pagos[hidden] {
+    display: none;
+}
+
+/* Estados */
+
+.estado-pagado,
+.estado-pendiente,
+.estado-cancelado {
+    padding: 6px 10px;
+    border-radius: 30px;
+    font-weight: 500;
+}
+
+.estado-pagado {
+    background: #d3f9e7;
+    color: #167b56;
+}
+
+.estado-pendiente {
+    background: #fff0c9;
+    color: #996714;
+}
+
+.estado-cancelado {
+    background: #ffe1e2;
+    color: #aa4249;
+}
+
+/* Formulario de pago */
+
+.btn-metodo {
+    width: 100%;
+    border: 1px solid #eeebf1;
+    background: white;
+    color: #686d79;
+    font-size: 13px;
+}
+
+.btn-check:checked + .btn-metodo {
+    background: var(--lila);
+    border-color: var(--lila);
+    color: var(--morado-oscuro);
+    font-weight: 600;
+}
+
+.form-check-input:checked {
+    background-color: var(--morado);
+    border-color: var(--morado);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--morado);
+    box-shadow: 0 0 0 0.2rem rgba(136, 87, 239, 0.12);
+}
+
+/* Pantallas de confirmación */
+
+.icono-exito,
+.icono-cierre {
+    display: inline-grid;
+    width: 62px;
+    height: 62px;
+    place-items: center;
+    border-radius: 50%;
+    font-size: 29px;
+}
+
+.icono-exito {
+    background: #d1f9e8;
+    color: #229c73;
+}
+
+.icono-cierre {
+    background: var(--lila);
+    color: var(--morado);
+}
+
+.caja-cerrada {
+    max-width: 900px;
+    padding-top: 60px;
+}
+
+.caja-cerrada .tarjeta-panel {
+    max-width: 580px;
+}
+
+/* Corte de caja */
+
+.lista-resumen > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 15px;
+    margin-bottom: 12px;
+}
+
+.lista-resumen dt {
+    color: #818896;
+    font-weight: 400;
+}
+
+.lista-resumen dd {
+    margin: 0;
+    font-weight: 600;
+    text-align: right;
+}
+
+.lista-resumen > div:last-child {
+    margin-bottom: 0;
+}
+
+/* Modales */
+
+.modal-vanabby {
+    overflow: hidden;
+    border: none;
+    border-radius: 18px;
+}
+
+.modal-vanabby .modal-header {
+    padding: 20px 24px;
+}
+
+.modal-vanabby .modal-footer {
+    padding: 14px 24px;
+}
+
+.modal-vanabby .form-label {
+    margin-bottom: 6px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.modal-vanabby .form-control,
+.modal-vanabby .form-select,
+.modal-vanabby .form-check {
+    font-size: 13px;
+}
+
+/* Descarga de facturas */
+
+.tarjeta-descarga {
+    display: flex;
+    min-height: 165px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--morado);
+    border: 0;
+    border-radius: 13px;
+    color: white;
+}
+
+.tarjeta-descarga:hover {
+    background: var(--morado-oscuro);
+    color: white;
+}
+
+.tarjeta-descarga strong {
+    font-size: 12px;
+}
+
+.tarjeta-descarga small {
+    margin-top: 4px;
+    opacity: 0.85;
+}
+
+/* Tickets */
+
+.fondo-ticket {
+    min-height: 345px;
+    background: #f7f7f9;
+}
+
+.ticket {
+    max-width: 260px;
+    padding: 22px 16px;
+    background: white;
+    border: 1px solid #ebebeb;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+    font-family: monospace;
+    font-size: 10px;
+}
+
+.ticket .lista-resumen > div {
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.ticket .lista-resumen dt,
+.ticket .lista-resumen dd {
+    color: #333;
+    font-size: 10px;
+    font-weight: 400;
+}
+
+.ticket .lista-resumen .fw-bold dt,
+.ticket .lista-resumen .fw-bold dd {
+    font-weight: 700;
+}
+
+.ticket-reporte {
+    max-width: 340px;
+    padding: 26px 20px;
+}
+
+/* Animación de cambio de pantalla */
+
+.vista-pagos:not(.d-none) {
+    animation: aparecer-vista 0.25s ease-out;
+}
+
+@keyframes aparecer-vista {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Adaptación */
+
+@media (min-width: 992px) {
+    .border-lg-end {
+        border-right: 1px solid #e9e9ee;
+    }
+}
+
+@media (max-width: 767px) {
+
+    .menu-lateral {
+        width: 70px;
+    }
+
+    .marca strong {
+        font-size: 11px;
+    }
+
+    .marca small {
+        font-size: 9px;
+    }
+
+    .estructura-principal {
+        margin-left: 70px;
+    }
+
+    .barra-superior {
+        min-height: 68px;
+        gap: 10px !important;
+        padding: 10px !important;
+    }
+
+    .datos-usuario {
+        display: none;
+    }
+
+    .campo-busqueda {
+        width: 100%;
+    }
+
+    .modal-vanabby .modal-header,
+    .modal-vanabby .modal-footer {
+        padding: 15px;
+    }
+
+    .modal-vanabby .modal-body {
+        padding: 15px !important;
+    }
+
+    .tarjeta-descarga {
+        min-height: 135px;
+    }
+
+    .caja-cerrada {
+        padding-top: 25px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vista-pagos:not(.d-none) {
+        animation: none;
+    }
+}

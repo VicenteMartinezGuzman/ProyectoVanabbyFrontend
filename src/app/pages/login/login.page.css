@@ -1,0 +1,172 @@
+:root {
+    --login-background: #fef7ff;
+    --login-card-background: #ffffff;
+    --login-primary: #6750a4;
+    --login-primary-hover: #59428f;
+    --login-text: #292929;
+    --login-text-secondary: #888888;
+    --login-input-border: #e2e2e2;
+    --login-placeholder: #b8b8b8;
+}
+
+/* Página de inicio de sesión */
+
+.login-page {
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 32px 16px;
+    background-color: var(--login-background);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Identificación del sistema */
+
+.login-header {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.login-logo {
+    display: block;
+    width: 145px;
+    height: 145px;
+    margin: 0 auto 12px;
+    object-fit: contain;
+}
+
+.login-title {
+    margin-bottom: 5px;
+    color: var(--login-text);
+    font-size: 27px;
+    font-weight: 600;
+}
+
+.login-subtitle {
+    margin-bottom: 0;
+    color: var(--login-text-secondary);
+    font-size: 20px;
+}
+
+/* Tarjeta de acceso */
+
+.login-card {
+    width: 100%;
+    max-width: 510px;
+    min-height: 340px;
+    padding: 40px 35px;
+
+    background-color: var(--login-card-background);
+    border-radius: 24px;
+}
+
+.login-form {
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto;
+}
+
+/* Campos del formulario */
+
+.login-input {
+    width: 100%;
+    height: 46px;
+    padding: 0 15px;
+
+    background-color: #ffffff;
+    border: 1px solid var(--login-input-border);
+    border-radius: 8px;
+
+    color: var(--login-text);
+    font-size: 16px;
+}
+
+.login-input::placeholder {
+    color: var(--login-placeholder);
+    opacity: 1;
+}
+
+.login-input:focus {
+    background-color: #ffffff;
+    border-color: var(--login-primary);
+    box-shadow: 0 0 0 0.2rem rgba(103, 80, 164, 0.16);
+}
+
+.login-password {
+    margin-top: 48px;
+}
+
+/* Recuperación de contraseña */
+
+.login-recovery-link {
+    margin-top: 24px;
+    color: #3d3d3d;
+    font-size: 16px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.login-recovery-link:hover {
+    color: var(--login-primary);
+}
+
+/* Botón de ingreso */
+
+.login-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    width: 145px;
+    height: 43px;
+    margin: 38px auto 0;
+    padding: 0;
+
+    border: none;
+    border-radius: 999px;
+
+    background-color: var(--login-primary);
+    color: #ffffff;
+
+    font-size: 15px;
+}
+
+.login-button:hover,
+.login-button:focus-visible {
+    background-color: var(--login-primary-hover);
+    color: #ffffff;
+}
+
+/* Adaptación a pantallas pequeñas */
+
+@media (max-width: 576px) {
+
+    .login-page {
+        padding: 24px 16px;
+    }
+
+    .login-logo {
+        width: 120px;
+        height: 120px;
+    }
+
+    .login-title {
+        font-size: 24px;
+    }
+
+    .login-subtitle {
+        font-size: 17px;
+    }
+
+    .login-card {
+        padding: 35px 24px;
+    }
+
+    .login-input {
+        font-size: 15px;
+    }
+
+    .login-recovery-link {
+        font-size: 15px;
+    }
+}

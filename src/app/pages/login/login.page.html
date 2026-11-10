@@ -1,0 +1,89 @@
+<main class="login-page d-flex flex-column align-items-center justify-content-center">
+
+    <!-- Identificación del sistema -->
+    <header class="login-header text-center">
+
+        <img
+            src="img/logo-vanabby.png"
+            alt="Logotipo de Repostería Vanabby"
+            class="login-logo"
+            width="145"
+            height="145"
+        >
+
+        <h1 class="login-title">Repostería Vanabby</h1>
+
+        <p class="login-subtitle">
+            Sistema de Gestión de Repostería
+        </p>
+
+    </header>
+
+    <!-- Tarjeta de inicio de sesión -->
+    <section class="login-card" aria-labelledby="login-heading">
+
+        <h2 id="login-heading" class="visually-hidden">
+            Iniciar sesión
+        </h2>
+
+        <form class="login-form d-flex flex-column" (submit)="entrar($event)">
+
+            <label for="nombre-usuario" class="visually-hidden">
+                Nombre del Usuario
+            </label>
+
+            <input
+                type="text"
+                id="nombre-usuario"
+                name="nombre-usuario"
+                class="form-control login-input"
+                placeholder="Nombre del Usuario"
+                autocomplete="username"
+                required
+            >
+
+            <label for="contrasena" class="visually-hidden">
+                Contraseña
+            </label>
+
+            <input
+                type="password"
+                id="contrasena"
+                name="contrasena"
+                class="form-control login-input login-password"
+                placeholder="Contraseña"
+                autocomplete="current-password"
+                required
+            >
+
+            <a href="#" class="login-recovery-link" (click)="$event.preventDefault()">
+                Recuperar contraseña
+            </a>
+
+            <button type="submit" class="btn login-button">
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    aria-hidden="true"
+                    focusable="false"
+                >
+                    <circle cx="10" cy="10" r="9" fill="#FFFFFF"/>
+
+                    <path
+                        d="M10 3.9L11.5 8.1L15.9 8.2L12.5 10.9L13.7 15.2L10 12.7L6.3 15.2L7.5 10.9L4.1 8.2L8.5 8.1Z"
+                        fill="#6750A4"
+                    />
+                </svg>
+
+                <span>Ingresar</span>
+
+            </button>
+
+        </form>
+
+    </section>
+
+</main>

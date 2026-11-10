@@ -1,0 +1,836 @@
+<aside class="menu-lateral position-fixed top-0 start-0 h-100 border-end">
+
+        <a routerLink="/inicio" class="marca d-block text-center text-decoration-none py-4">
+            <strong>VANABBY</strong>
+            <small class="d-block">Repostería</small>
+        </a>
+
+        <nav class="px-2" aria-label="Navegación principal">
+            <a routerLink="/inicio"
+               class="enlace-menu d-flex flex-column align-items-center gap-2 rounded-3 py-3">
+                <i class="bi bi-house-door fs-4" aria-hidden="true"></i>
+                <span>Inicio</span>
+            </a>
+        </nav>
+
+    </aside>
+
+    <div class="estructura-principal">
+
+        <header class="barra-superior bg-white border-bottom d-flex align-items-center justify-content-end gap-3 px-4">
+
+            <i class="bi bi-person-circle fs-1" aria-hidden="true"></i>
+
+            <div class="datos-usuario">
+                <strong class="d-block">P. M. Ramírez</strong>
+                <small class="text-secondary">Administrador</small>
+            </div>
+
+            <time id="fecha-actual" class="border-start ps-3 text-nowrap" [attr.datetime]="fechaISO">{{ fechaTexto }}</time>
+
+            <a href="/login" (click)="cerrarSesion($event)" class="text-dark fs-4 ms-2" aria-label="Cerrar sesión">
+                <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+            </a>
+
+        </header>
+
+        <main class="container-fluid px-3 px-lg-4 py-3">
+
+            <!-- Presentación -->
+            <section class="bienvenida bg-white border rounded-4 p-3 mb-3"
+                     aria-labelledby="titulo-bienvenida">
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+                    <div>
+                        <h1 id="titulo-bienvenida" class="fs-6 fw-bold mb-1">
+                            ¡Hola, P. M. Ramírez!
+                            <span class="badge etiqueta-lila ms-2">Cartera de clientes</span>
+                        </h1>
+                        <p class="text-secondary small mb-0">
+                            Administración de clientes y expedientes fiscales de Repostería Vanabby.
+                        </p>
+                    </div>
+
+                    <button type="button"
+                            class="btn boton-morado btn-sm px-3"
+                            (click)="abrir('nuevo')">
+                        <i class="bi bi-person-plus me-1" aria-hidden="true"></i>
+                        Nuevo cliente
+                    </button>
+
+                </div>
+
+            </section>
+
+            <!-- Indicadores -->
+            <section aria-label="Resumen de clientes" class="mb-3">
+
+                <div class="row g-3">
+
+                    <div class="col-md-4">
+                        <article class="card tarjeta-indicador h-100">
+                            <div class="card-body d-flex align-items-center gap-3">
+
+                                <span class="icono-indicador icono-morado">
+                                    <i class="bi bi-people-fill" aria-hidden="true"></i>
+                                </span>
+
+                                <div class="flex-grow-1">
+                                    <h2 class="indicador-titulo mb-1">Total de clientes</h2>
+                                    <p class="small text-secondary mb-0">Cartera global</p>
+                                </div>
+
+                                <strong class="fs-4">{{ clientes.length }}</strong>
+
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="col-md-4">
+                        <article class="card tarjeta-indicador h-100">
+                            <div class="card-body d-flex align-items-center gap-3">
+
+                                <span class="icono-indicador icono-verde">
+                                    <i class="bi bi-person-fill" aria-hidden="true"></i>
+                                </span>
+
+                                <div class="flex-grow-1">
+                                    <h2 class="indicador-titulo mb-1">Personas físicas</h2>
+                                    <p class="small text-success mb-0">Tipo PF</p>
+                                </div>
+
+                                <strong class="fs-4">{{ totalPf }}</strong>
+
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="col-md-4">
+                        <article class="card tarjeta-indicador h-100">
+                            <div class="card-body d-flex align-items-center gap-3">
+
+                                <span class="icono-indicador icono-azul">
+                                    <i class="bi bi-buildings-fill" aria-hidden="true"></i>
+                                </span>
+
+                                <div class="flex-grow-1">
+                                    <h2 class="indicador-titulo mb-1">Personas morales</h2>
+                                    <p class="small text-primary mb-0">Tipo PM</p>
+                                </div>
+
+                                <strong class="fs-4">{{ totalPm }}</strong>
+
+                            </div>
+                        </article>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- Filtros -->
+            <section class="bg-white border rounded-3 p-2 mb-3"
+                     aria-label="Búsqueda y filtros">
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                    <div class="input-group input-group-sm campo-busqueda">
+                        <span class="input-group-text bg-body-tertiary border-end-0">
+                            <i class="bi bi-search text-secondary" aria-hidden="true"></i>
+                        </span>
+
+                        <input id="buscar-cliente"
+                               type="search"
+                               class="form-control bg-body-tertiary border-start-0"
+                               placeholder="Buscar por nombre, RFC, teléfono o domicilio..."
+                               [ngModel]="busqueda()" (ngModelChange)="busqueda.set($event)"
+                               aria-label="Buscar cliente">
+                    </div>
+
+                    <nav class="d-flex flex-wrap align-items-center gap-2"
+                         aria-label="Filtrar clientes">
+
+                        <button type="button"
+                                class="btn btn-sm boton-filtro"
+                                [class.active]="filtro() === 'todos'"
+                                [attr.aria-pressed]="filtro() === 'todos'"
+                                (click)="setFiltro('todos')">
+                            Todos ({{ clientes.length }})
+                        </button>
+
+                        <button type="button"
+                                class="btn btn-sm boton-filtro"
+                                [class.active]="filtro() === 'pf'"
+                                [attr.aria-pressed]="filtro() === 'pf'"
+                                (click)="setFiltro('pf')">
+                            Persona física ({{ totalPf }})
+                        </button>
+
+                        <button type="button"
+                                class="btn btn-sm boton-filtro"
+                                [class.active]="filtro() === 'pm'"
+                                [attr.aria-pressed]="filtro() === 'pm'"
+                                (click)="setFiltro('pm')">
+                            Persona moral ({{ totalPm }})
+                        </button>
+
+                        <span id="contador-clientes"
+                              class="badge bg-body-tertiary text-secondary border">
+                            Mostrando {{ visibles().length }} de {{ clientes.length }} clientes
+                            </span>
+
+                    </nav>
+
+                </div>
+
+            </section>
+
+            <!-- Cartera -->
+            <section class="card panel-cartera" aria-labelledby="titulo-cartera">
+
+                <header class="card-header bg-white d-flex justify-content-between align-items-center gap-2 py-3">
+
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-person-vcard icono-texto-morado" aria-hidden="true"></i>
+
+                        <div>
+                            <h2 id="titulo-cartera" class="fs-6 fw-semibold mb-0">
+                                Cartera activa
+                            </h2>
+                            <p class="texto-auxiliar text-secondary mb-0">
+                                Registros de ejemplo
+                            </p>
+                        </div>
+                    </div>
+
+                    <span class="badge bg-success-subtle text-success-emphasis">
+                        <i class="bi bi-check-circle me-1" aria-hidden="true"></i>
+                        Vista de cartera
+                    </span>
+
+                </header>
+
+                <div class="table-responsive">
+
+                    <table class="table tabla-clientes align-middle mb-0">
+
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Tipo</th>
+                                <th scope="col">Nombre / Razón social</th>
+                                <th scope="col">RFC</th>
+                                <th scope="col">Teléfono</th>
+                                <th scope="col">Domicilio / Expediente PDF</th>
+                                <th scope="col" class="text-end">Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="tabla-clientes">
+                            @for (c of visibles(); track c.id) {
+                            <tr class="fila-cliente">
+                                <td>{{ c.id }}</td>
+                                <td>
+                                    @if (c.tipo === 'pf') { <span class="badge etiqueta-fisica">● Física</span> }
+                                    @else { <span class="badge etiqueta-moral">● Moral</span> }
+                                </td>
+                                <td class="fw-semibold">{{ c.nombre }}</td>
+                                <td>{{ c.rfc }}</td>
+                                <td>{{ c.telefono }}</td>
+                                <td>
+                                    <span class="d-block">{{ c.domicilio }}</span>
+                                    <small class="text-secondary">{{ c.archivo }}</small>
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-end gap-1">
+                                        <button type="button" class="btn btn-light btn-sm"
+                                                (click)="abrirEditar(c)"
+                                                [attr.aria-label]="'Editar ' + c.nombre">
+                                            <i class="bi bi-pencil" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-light btn-sm"
+                                                (click)="abrirEliminar(c)"
+                                                [attr.aria-label]="'Desactivar ' + c.nombre">
+                                            <i class="bi bi-trash" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+
+                    </table>
+
+                    <p id="sin-clientes" class="text-center text-secondary py-5 mb-0" [hidden]="visibles().length > 0">
+                        No se encontraron clientes.
+                    </p>
+
+                </div>
+
+                <footer class="card-footer bg-white d-flex justify-content-between align-items-center flex-wrap gap-2 py-3">
+
+                    <p class="small text-secondary mb-0">
+                        <i class="bi bi-shield-check text-success me-1" aria-hidden="true"></i>
+                        Expedientes de ejemplo para la interfaz de clientes.
+                    </p>
+
+                    <nav aria-label="Paginación de clientes">
+                        <ul class="pagination pagination-sm mb-0">
+                            <li class="page-item disabled">
+                                <span class="page-link">Anterior</span>
+                            </li>
+                            <li class="page-item active" aria-current="page">
+                                <span class="page-link">1</span>
+                            </li>
+                            <li class="page-item disabled">
+                                <span class="page-link">Siguiente</span>
+                            </li>
+                        </ul>
+                    </nav>
+
+                </footer>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- Nuevo cliente -->
+    <div class="modal fade" #modalNuevo
+         id="modal-nuevo-cliente"
+         tabindex="-1"
+         aria-labelledby="titulo-nuevo-cliente"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+
+            <form id="formulario-nuevo-cliente" class="modal-content modal-vanabby" (submit)="$event.preventDefault()">
+
+                <header class="modal-header">
+
+                    <div>
+                        <h2 id="titulo-nuevo-cliente" class="modal-title fs-5 fw-bold">
+                            <i class="bi bi-person-plus icono-titulo me-2" aria-hidden="true"></i>
+                            Nuevo cliente — Expediente fiscal y domiciliario
+                        </h2>
+
+                        <p class="small text-secondary mb-0 mt-1">
+                            Registro de datos del cliente y comprobante de domicilio.
+                        </p>
+                    </div>
+
+                    <button type="button" class="btn-close"
+                            (click)="cerrar('nuevo')" aria-label="Cerrar"></button>
+
+                </header>
+
+                <div class="modal-body p-4">
+
+                    <fieldset class="border-0 p-0 mb-3">
+
+                        <legend class="fs-6 fw-semibold mb-2">
+                            Tipo de persona
+                        </legend>
+
+                        <div class="d-flex flex-wrap gap-2">
+
+                            <input type="radio" class="btn-check"
+                                   name="tipo-persona" id="tipo-pf" value="pf" [checked]="!personaMoral()" (change)="personaMoral.set(false)">
+
+                            <label for="tipo-pf" class="btn btn-outline-secondary btn-sm">
+                                <i class="bi bi-person-fill me-1" aria-hidden="true"></i>
+                                Persona física (PF)
+                            </label>
+
+                            <input type="radio" class="btn-check"
+                                   name="tipo-persona" id="tipo-pm" value="pm" [checked]="personaMoral()" (change)="personaMoral.set(true)">
+
+                            <label for="tipo-pm" class="btn btn-outline-secondary btn-sm">
+                                <i class="bi bi-buildings me-1" aria-hidden="true"></i>
+                                Persona moral (PM)
+                            </label>
+
+                        </div>
+
+                    </fieldset>
+
+                    <div class="row g-3">
+
+                        <!-- Datos generales -->
+                        <section class="col-lg-6" aria-labelledby="titulo-datos-cliente">
+
+                            <div class="border rounded-4 p-3 h-100">
+
+                                <h3 id="titulo-datos-cliente" class="titulo-panel mb-3">
+                                    <i class="bi bi-person-vcard me-2" aria-hidden="true"></i>
+                                    Datos del cliente
+                                </h3>
+
+                                <fieldset id="campos-pf" class="border-0 p-0 mb-3" [class.d-none]="personaMoral()">
+                                    <legend class="visually-hidden">Datos de persona física</legend>
+
+                                    <div class="row g-3">
+
+                                        <div class="col-sm-6">
+                                            <label for="nuevo-nombre" class="form-label">
+                                                Nombre *
+                                            </label>
+                                            <input id="nuevo-nombre" [(ngModel)]="nuevo.nombre" name="nuevo-nombre" type="text"
+                                                   class="form-control"
+                                                   placeholder="Ej. Ana">
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <label for="nuevo-razon-opcional" class="form-label">
+                                                Nombre comercial (opcional)
+                                            </label>
+                                            <input id="nuevo-razon-opcional" [(ngModel)]="nuevo.comercial" name="nuevo-razon-opcional" type="text"
+                                                   class="form-control"
+                                                   placeholder="Ej. Pastelería artesanal">
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <label for="nuevo-apellido-paterno" class="form-label">
+                                                Apellido paterno *
+                                            </label>
+                                            <input id="nuevo-apellido-paterno" [(ngModel)]="nuevo.paterno" name="nuevo-apellido-paterno" type="text"
+                                                   class="form-control"
+                                                   placeholder="Ej. García">
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <label for="nuevo-apellido-materno" class="form-label">
+                                                Apellido materno
+                                            </label>
+                                            <input id="nuevo-apellido-materno" [(ngModel)]="nuevo.materno" name="nuevo-apellido-materno" type="text"
+                                                   class="form-control"
+                                                   placeholder="Ej. Morales">
+                                        </div>
+
+                                    </div>
+                                </fieldset>
+
+                                <fieldset id="campos-pm" class="border-0 p-0 mb-3" [class.d-none]="!personaMoral()">
+                                    <legend class="visually-hidden">Datos de persona moral</legend>
+
+                                    <label for="nuevo-razon-social" class="form-label">
+                                        Razón social *
+                                    </label>
+                                    <input id="nuevo-razon-social"
+[(ngModel)]="nuevo.razon" name="nuevo-razon-social"                                            type="text"
+                                           class="form-control"
+                                           placeholder="Ej. Repostería del Valle, S.A. de C.V.">
+                                </fieldset>
+
+                                <div class="row g-3">
+
+                                    <div class="col-sm-6">
+                                        <label for="nuevo-rfc" class="form-label">RFC *</label>
+                                        <input id="nuevo-rfc"
+[(ngModel)]="nuevo.rfc" name="nuevo-rfc"                                                type="text"
+                                               class="form-control"
+                                               maxlength="13"
+                                               placeholder="RFC del cliente">
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label for="nuevo-telefono" class="form-label">
+                                            Teléfono de contacto *
+                                        </label>
+                                        <input id="nuevo-telefono"
+[(ngModel)]="nuevo.telefono" name="nuevo-telefono"                                                type="tel"
+                                               class="form-control"
+                                               placeholder="951 000 0000">
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="nuevo-fecha" class="form-label">
+                                            Fecha de registro
+                                        </label>
+                                        <input id="nuevo-fecha"
+[(ngModel)]="nuevo.fecha" name="nuevo-fecha"                                                type="date"
+                                               class="form-control">
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+                        <!-- Expediente -->
+                        <section class="col-lg-6" aria-labelledby="titulo-expediente">
+
+                            <div class="border rounded-4 p-3 h-100">
+
+                                <header class="d-flex justify-content-between align-items-center gap-2 mb-3">
+
+                                    <h3 id="titulo-expediente" class="titulo-panel mb-0">
+                                        <i class="bi bi-file-earmark-pdf me-2" aria-hidden="true"></i>
+                                        Comprobante de domicilio
+                                    </h3>
+
+                                    <span class="badge etiqueta-verde">PDF</span>
+
+                                </header>
+
+                                <label for="nuevo-pdf" class="zona-archivo text-center rounded-3 p-4 d-block">
+
+                                    <i class="bi bi-file-earmark-arrow-up fs-3 d-block mb-2"
+                                       aria-hidden="true"></i>
+
+                                    <strong class="d-block small">
+                                        Seleccionar comprobante de domicilio
+                                    </strong>
+
+                                    <small class="d-block text-secondary mt-1">
+                                        Recibo CFE, agua u otro comprobante en PDF.
+                                    </small>
+
+                                    <span class="btn btn-outline-secondary btn-sm mt-3">
+                                        Explorar archivo local
+                                    </span>
+
+                                </label>
+
+                                <input id="nuevo-pdf" #nuevoPdf (change)="elegirArchivo($event, 'nuevo')"
+                                       type="file"
+                                       accept=".pdf,application/pdf"
+                                       class="visually-hidden">
+
+                                <section class="border rounded-3 p-3 mt-3"
+                                         aria-labelledby="titulo-archivo-nuevo">
+
+                                    <h4 id="titulo-archivo-nuevo" class="fs-6 fw-semibold mb-2">
+                                        Archivo seleccionado
+                                    </h4>
+
+                                    <p class="small mb-0 d-flex align-items-center gap-2">
+                                        <i class="bi bi-file-earmark-pdf text-danger fs-4"
+                                           aria-hidden="true"></i>
+
+                                        <span id="nuevo-nombre-archivo" class="text-secondary">{{ nuevoArchivo() }}</span>
+                                    </p>
+
+                                </section>
+
+                                <section class="aviso-lila rounded-3 p-3 mt-3"
+                                         aria-labelledby="titulo-verificacion">
+
+                                    <h4 id="titulo-verificacion" class="fs-6 fw-semibold">
+                                        <i class="bi bi-geo-alt me-1" aria-hidden="true"></i>
+                                        Domicilio del cliente
+                                    </h4>
+
+                                    <p class="small mb-0">
+                                        La extracción automática de datos del PDF
+                                        se integrará posteriormente.
+                                    </p>
+
+                                </section>
+
+                            </div>
+
+                        </section>
+
+                    </div>
+
+                </div>
+
+                <footer class="modal-footer">
+
+                    <button type="button" (click)="limpiarNuevo(nuevoPdf)"
+                            class="btn btn-link text-secondary text-decoration-none me-auto">
+                        <i class="bi bi-arrow-counterclockwise me-1" aria-hidden="true"></i>
+                        Limpiar formulario
+                    </button>
+
+                    <button type="button"
+                            class="btn btn-outline-secondary"
+                            (click)="cerrar('nuevo')">
+                        Cancelar
+                    </button>
+
+                    <button type="button"
+                            class="btn boton-morado"
+                            (click)="cerrar('nuevo')">
+                        <i class="bi bi-check-circle me-1" aria-hidden="true"></i>
+                        Guardar cliente
+                    </button>
+
+                </footer>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- Editar cliente -->
+    <div class="modal fade" #modalEditar
+         id="modal-editar-cliente"
+         tabindex="-1"
+         aria-labelledby="titulo-editar-cliente"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+
+            <form id="formulario-editar-cliente" class="modal-content modal-vanabby" (submit)="$event.preventDefault()">
+
+                <header class="modal-header">
+
+                    <div>
+                        <h2 id="titulo-editar-cliente" class="modal-title fs-5 fw-bold">
+                            Editar cliente
+                        </h2>
+
+                        <p class="text-secondary small mb-0 mt-1">
+                            Expediente digital y comprobante de domicilio.
+                        </p>
+                    </div>
+
+                    <button type="button" class="btn-close"
+                            (click)="cerrar('editar')" aria-label="Cerrar"></button>
+
+                </header>
+
+                <div class="modal-body p-4">
+
+                    <div class="row g-3 mb-3">
+
+                        <div class="col-sm-6">
+                            <label for="editar-nombre" class="form-label">
+                                Nombre completo / Razón social
+                            </label>
+                            <input id="editar-nombre" [(ngModel)]="editar.nombre" name="editar-nombre" type="text" class="form-control">
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="editar-rfc" class="form-label">
+                                RFC fiscal
+                            </label>
+                            <input id="editar-rfc" [(ngModel)]="editar.rfc" name="editar-rfc" type="text" class="form-control">
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="editar-telefono" class="form-label">
+                                Teléfono de contacto
+                            </label>
+                            <input id="editar-telefono" [(ngModel)]="editar.telefono" name="editar-telefono" type="tel" class="form-control">
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="editar-fecha" class="form-label">
+                                Fecha de registro
+                            </label>
+                            <input id="editar-fecha" [(ngModel)]="editar.fecha" name="editar-fecha" type="date" class="form-control">
+                        </div>
+
+                    </div>
+
+                    <section class="aviso-lila border rounded-3 p-3 mb-3"
+                             aria-labelledby="titulo-domicilio">
+
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <i class="bi bi-geo-alt" aria-hidden="true"></i>
+
+                            <h3 id="titulo-domicilio" class="fs-6 fw-semibold mb-0">
+                                Domicilio registrado
+                            </h3>
+                        </div>
+
+                        <p id="editar-domicilio"
+                           class="small text-secondary mb-0">{{ editarDomicilio }}</p>
+
+                    </section>
+
+                    <fieldset class="border-0 p-0">
+
+                        <legend class="fs-6 fw-semibold mb-2">
+                            Comprobante de domicilio (PDF)
+                        </legend>
+
+                        <div class="row g-3">
+
+                            <div class="col-sm-6">
+
+                                <section class="border rounded-3 p-3 h-100">
+
+                                    <div class="d-flex align-items-center gap-2">
+
+                                        <i class="bi bi-file-earmark-pdf text-danger fs-4"
+                                           aria-hidden="true"></i>
+
+                                        <div>
+                                            <strong id="editar-archivo-actual"
+                                                    class="d-block small text-break">{{ editarArchivoActual }}</strong>
+
+                                            <small class="text-secondary">
+                                                Documento de ejemplo
+                                            </small>
+                                        </div>
+
+                                    </div>
+
+                                    <hr>
+
+                                    <span class="small text-secondary">
+                                        Expediente registrado
+                                    </span>
+
+                                </section>
+
+                            </div>
+
+                            <div class="col-sm-6">
+
+                                <label for="editar-pdf"
+                                       class="zona-archivo rounded-3 p-3 h-100 d-flex flex-column align-items-center justify-content-center text-center">
+
+                                    <i class="bi bi-cloud-arrow-up fs-3 mb-2"
+                                       aria-hidden="true"></i>
+
+                                    <strong class="small">Seleccionar nuevo PDF</strong>
+
+                                    <small id="editar-nombre-archivo"
+                                           class="text-secondary mt-1 text-break">{{ editarArchivoNuevo() }}</small>
+
+                                </label>
+
+                                <input id="editar-pdf" #editarPdf (change)="elegirArchivo($event, 'editar')"
+                                       type="file"
+                                       accept=".pdf,application/pdf"
+                                       class="visually-hidden">
+
+                            </div>
+
+                        </div>
+
+                    </fieldset>
+
+                </div>
+
+                <footer class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-outline-secondary"
+                            (click)="cerrar('editar')">
+                        Cancelar
+                    </button>
+
+                    <button type="button"
+                            class="btn boton-morado"
+                            (click)="cerrar('editar')">
+                        <i class="bi bi-check-lg me-1" aria-hidden="true"></i>
+                        Guardar cambios
+                    </button>
+
+                </footer>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- Confirmar eliminación -->
+    <div class="modal fade" #modalEliminar
+         id="modal-eliminar-cliente"
+         tabindex="-1"
+         aria-labelledby="titulo-eliminar-cliente"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered modal-eliminar">
+
+            <article class="modal-content modal-vanabby">
+
+                <header class="modal-header">
+
+                    <h2 id="titulo-eliminar-cliente" class="modal-title fs-6">
+                        <i class="bi bi-exclamation-triangle text-warning me-2"
+                           aria-hidden="true"></i>
+                        Confirmar eliminación
+                    </h2>
+
+                    <button type="button" class="btn-close"
+                            (click)="cerrar('eliminar')" aria-label="Cerrar"></button>
+
+                </header>
+
+                <div class="modal-body p-4">
+
+                    <span class="badge bg-warning-subtle text-warning-emphasis mb-3">
+                        ACCIÓN PERMANENTE
+                    </span>
+
+                    <h3 class="fs-5 fw-bold mb-3">
+                        ¿Eliminar «<span id="eliminar-nombre" class="texto-morado">{{ eliminando()?.nombre }}</span>»?
+                    </h3>
+
+                    <section class="bg-body-tertiary border rounded-3 p-3 mb-3"
+                             aria-label="Advertencia">
+
+                        <p class="small fw-semibold mb-1">
+                            <i class="bi bi-exclamation-circle me-1" aria-hidden="true"></i>
+                            Esta acción no se puede deshacer.
+                        </p>
+
+                        <p class="small text-secondary mb-0">
+                            En esta demostración no se desactivará ningún registro.
+                        </p>
+
+                    </section>
+
+                    <section class="aviso-lila rounded-3 p-3"
+                             aria-label="Cliente seleccionado">
+
+                        <div class="d-flex justify-content-between gap-2 mb-2">
+
+                            <strong class="small">
+                                ID <span id="eliminar-id">{{ eliminando()?.id }}</span>
+                                · <span id="eliminar-cliente">{{ eliminando()?.nombre }}</span>
+                            </strong>
+
+                        </div>
+
+                        <p class="small mb-0">
+                            <i class="bi bi-telephone me-1" aria-hidden="true"></i>
+                            <span id="eliminar-telefono">{{ eliminando()?.telefono }}</span>
+                        </p>
+
+                        <p class="small text-secondary text-break mb-0 mt-1">
+                            <i class="bi bi-file-earmark-pdf me-1" aria-hidden="true"></i>
+                            <span id="eliminar-archivo">{{ eliminando()?.archivo }}</span>
+                        </p>
+
+                    </section>
+
+                </div>
+
+                <footer class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-outline-secondary"
+                            (click)="cerrar('eliminar')">
+                        Cancelar
+                    </button>
+
+                    <button type="button"
+                            class="btn boton-morado"
+                            (click)="cerrar('eliminar')">
+                        <i class="bi bi-check-lg me-1" aria-hidden="true"></i>
+                        Aceptar y desactivar
+                    </button>
+
+                </footer>
+
+            </article>
+
+        </div>
+
+    </div>

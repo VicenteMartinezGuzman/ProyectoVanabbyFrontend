@@ -1,0 +1,181 @@
+<div class="app">
+  <aside class="sidebar">
+    <a class="marca" routerLink="/inicio" aria-label="Vanabby, página principal"><strong>VANABBY</strong><small>Repostería</small></a>
+    <nav aria-label="Navegación principal"><a class="side-btn" routerLink="/inicio"><i class="bi bi-house-door" aria-hidden="true"></i><span>Inicio</span></a></nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar__title"></div>
+      <div class="topbar__user">
+        <i class="bi bi-person-circle avatar-icon" aria-hidden="true"></i>
+        <div class="user-info"><strong>P. M. Ramírez</strong><small>Administrador</small></div>
+        <time class="topbar__date" id="fechaActual">{{ hoy | fechaCorta }}</time>
+        <a class="btn-salir" href="/login" (click)="salir($event)" aria-label="Cerrar sesión"><i class="bi bi-box-arrow-right" aria-hidden="true"></i></a>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="banner">
+        <div><h1>¡Hola Pablo Mata Ramirez!</h1><p>Panel de Control de Compras</p></div>
+        <div class="banner__actions">
+          <button class="btn btn-green" id="btnNuevoProveedor" (click)="abrirFormProveedor()"><i class="bi bi-person-plus" aria-hidden="true"></i> Registrar Proveedor</button>
+          <button class="btn btn-green" id="btnVerProveedores" (click)="abrirLista()">Ver Proveedores</button>
+        </div>
+      </section>
+
+      <div class="compras-grid">
+        <!-- Almacén de insumos -->
+        <section class="card panel-insumos">
+          <div class="panel-head">
+            <h2><i class="bi bi-box-seam" aria-hidden="true"></i> Almacén de Insumos</h2>
+            <span class="muted small" id="contadorInsumos">{{ filtrados().length }} insumos</span>
+          </div>
+          <div class="buscador-wrap"><i class="bi bi-search" aria-hidden="true"></i><input type="search" id="buscarInsumo" class="buscador" placeholder="Buscar insumo o Ingrediente..." [ngModel]="busqueda()" (ngModelChange)="busqueda.set($event)"></div>
+          <div class="insumos-grid" id="listaInsumos">
+            @for (i of filtrados(); track i.id) {
+              <article class="insumo">
+                <div class="insumo__icono"><i [class]="'bi ' + i.icono"></i></div>
+                <div>
+                  <div class="insumo__nombre">{{ i.nombre }}</div>
+                  <div class="insumo__sub">Subtotal {{ i.precio | moneda }}</div>
+                </div>
+                <span [class]="'badge ' + claseStock(i.stock) + ' insumo__stock'">Stock: {{ i.stock }}</span>
+                <button class="btn-add" title="Agregar a la orden" style="grid-column:3;grid-row:2;justify-self:end" (click)="agregar(i.id)">+</button>
+              </article>
+            } @empty {
+              <p class="muted small">No se encontraron insumos.</p>
+            }
+          </div>
+          <p class="muted small nota"><i class="bi bi-info-circle" aria-hidden="true"></i> Agrega los insumos que necesites a tu orden de compra.</p>
+        </section>
+
+        <!-- Orden de compra -->
+        <aside class="card panel-orden">
+          <div class="panel-head">
+            <h2><i class="bi bi-receipt" aria-hidden="true"></i> Orden de Compra</h2>
+            <span class="badge badge-lilac" id="contadorOrden">{{ orden().length }} insumo{{ orden().length === 1 ? '' : 's' }}</span>
+          </div>
+          <div class="field">
+            <label for="selProveedor">Proveedor:</label>
+            <select id="selProveedor" [ngModel]="proveedorSel()" (ngModelChange)="proveedorSel.set($event)">
+              <option value="">Selecciona un proveedor</option>
+              @for (p of proveedores(); track p.id) {
+                <option [value]="'' + p.id">{{ p.nombre }}</option>
+              }
+            </select>
+          </div>
+          <div class="orden-lista" id="listaOrden">
+            @for (l of lineas(); track l.id) {
+              <div class="orden-item">
+                <div class="orden-item__top">
+                  <div class="insumo__icono"><i [class]="'bi ' + l.insumo.icono"></i></div>
+                  <div><div class="insumo__nombre">{{ l.insumo.nombre }}</div><div class="insumo__sub">Subtotal {{ l.insumo.precio * l.cantidad | moneda }}</div></div>
+                  <button class="btn-icon" title="Quitar" (click)="quitar(l.id)"><i class="bi bi-trash" aria-hidden="true"></i></button>
+                </div>
+                <div class="orden-item__qty">
+                  <span>Cantidad</span>
+                  <div class="qty">
+                    <button class="mas" (click)="cambiarCantidad(l.id, 1)">+</button>
+                    <strong>{{ l.cantidad }}</strong>
+                    <button class="menos" (click)="cambiarCantidad(l.id, -1)">−</button>
+                  </div>
+                </div>
+              </div>
+            } @empty {
+              <p class="orden-vacio">Aún no agregas insumos a la orden.</p>
+            }
+          </div>
+          <div class="orden-total"><span>Total Estimado:</span><strong id="totalOrden">{{ total() | moneda }}</strong></div>
+          <button class="btn btn-primary btn-block" id="btnRegistrarCompra" (click)="registrarCompra()"><i class="bi bi-check-lg" aria-hidden="true"></i> Registrar Compra</button>
+          <p class="muted small center" id="resumenUnidades">Subtotal por unidad · {{ unidades() }} unidades en esta compra</p>
+        </aside>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Modal: agregar / editar proveedor -->
+<div class="modal-overlay" id="modalProveedor" [hidden]="!modalProveedor()" (click)="cerrarSiFondo($event, 'proveedor')">
+  <form class="modal" id="formProveedor" novalidate (ngSubmit)="guardarProveedor()" #fp="ngForm">
+    <div class="modal__head"><span id="tituloProveedor">{{ proveedorEditando() ? 'Editar Proveedor' : 'Agregar Nuevo Proveedor' }}</span><button type="button" (click)="cerrar('proveedor')">×</button></div>
+    <div class="modal__body">
+      <div class="form-grid">
+        <div class="field"><input name="nombre" placeholder="Nombre" required [(ngModel)]="form.nombre"><span class="error">{{ errores()['nombre'] }}</span></div>
+        <div class="field"><input name="telefono" placeholder="Teléfono" inputmode="numeric" [(ngModel)]="form.telefono"><span class="error">{{ errores()['telefono'] }}</span></div>
+        <div class="field"><input name="correo" type="email" placeholder="Correo" [(ngModel)]="form.correo"><span class="error">{{ errores()['correo'] }}</span></div>
+        <div class="field"><input name="colonia" placeholder="Colonia" [(ngModel)]="form.colonia"></div>
+        <div class="field"><input name="calle" placeholder="Calle" [(ngModel)]="form.calle"></div>
+        <div class="field"><input name="cp" placeholder="Código Postal" maxlength="5" [(ngModel)]="form.cp"></div>
+        <div class="field"><input name="numExt" placeholder="Número Exterior" [(ngModel)]="form.numExt"></div>
+        <div class="field"><input name="municipio" placeholder="Municipio" [(ngModel)]="form.municipio"></div>
+        <div class="field"><input name="numInt" placeholder="Número Interior" [(ngModel)]="form.numInt"></div>
+        <div class="field"><input name="estado" placeholder="Estado" [(ngModel)]="form.estado"></div>
+      </div>
+      <h3 class="center sub">Insumos Relacionados</h3>
+      <div class="field combo">
+        <input name="categoria" id="inpCategoria" list="listaCategorias" placeholder="Seleccionar Categoría" autocomplete="off" [(ngModel)]="form.categoria">
+        <datalist id="listaCategorias">
+          @for (c of categorias; track c) { <option [value]="c"></option> }
+        </datalist>
+        <span class="combo__ico" aria-hidden="true"><i class="bi bi-search"></i> <i class="bi bi-chevron-down"></i></span>
+        <span class="error">{{ errores()['categoria'] }}</span>
+      </div>
+      <div class="field combo">
+        <input name="insumo" id="inpInsumoProv" list="listaInsumosProv" placeholder="Seleccionar de Insumos" autocomplete="off" [(ngModel)]="form.insumo">
+        <datalist id="listaInsumosProv">
+          @for (i of insumos(); track i.id) { <option [value]="i.nombre"></option> }
+        </datalist>
+        <span class="combo__ico" aria-hidden="true"><i class="bi bi-search"></i> <i class="bi bi-chevron-down"></i></span>
+      </div>
+    </div>
+    <div class="modal__foot">
+      <button type="button" class="btn btn-salmon" (click)="cerrar('proveedor')">Cancelar</button>
+      <button type="submit" class="btn btn-green">Guardar <i class="bi bi-check-lg" aria-hidden="true"></i></button>
+    </div>
+  </form>
+</div>
+
+<!-- Modal: proveedores registrados -->
+<div class="modal-overlay" id="modalListaProv" [hidden]="!modalLista()" (click)="cerrarSiFondo($event, 'lista')">
+  <div class="modal modal--lg">
+    <div class="modal__head"><span style="margin:auto">Proveedores Registrados</span><button type="button" (click)="cerrar('lista')">×</button></div>
+    <div class="modal__body">
+      <table class="tabla">
+        <thead><tr><th>Nombre</th><th>Correo</th><th>Teléfono</th><th>Categoría</th><th>Acciones</th></tr></thead>
+        <tbody id="tbodyProv">
+          @for (p of proveedores(); track p.id) {
+            <tr>
+              <td>{{ p.nombre }}</td>
+              <td>{{ p.correo }}</td>
+              <td>{{ p.telefono }}</td>
+              <td>{{ p.categoria }}</td>
+              <td>
+                <button class="btn-icon" title="Editar" (click)="editarProveedor(p.id)"><i class="bi bi-pencil" aria-hidden="true"></i></button>
+                <button class="btn-icon" title="Eliminar" (click)="pedirEliminar(p.id)"><i class="bi bi-trash" aria-hidden="true"></i></button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <p class="muted small nota" id="totalProv">{{ proveedores().length }} proveedores registrados</p>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: eliminar proveedor -->
+<div class="modal-overlay" id="modalEliminarProv" [hidden]="!modalEliminar()" (click)="cerrarSiFondo($event, 'eliminar')">
+  <div class="modal">
+    <div class="modal__body">
+      <div class="modal-icon"><i class="bi bi-trash" aria-hidden="true"></i></div>
+      <h3>Eliminar Proveedor</h3>
+      <p class="muted small">¿Estás seguro de que deseas eliminar este proveedor?</p>
+      <p class="chip-nombre" id="nombreEliminar">{{ nombreEliminar() }}</p>
+      <p class="muted small">Esta acción no se puede deshacer.</p>
+    </div>
+    <div class="modal__foot end">
+      <button class="btn btn-light" (click)="cerrar('eliminar')">Cancelar</button>
+      <button class="btn btn-salmon" id="btnConfirmarEliminar" (click)="confirmarEliminar()">Eliminar</button>
+    </div>
+  </div>
+</div>

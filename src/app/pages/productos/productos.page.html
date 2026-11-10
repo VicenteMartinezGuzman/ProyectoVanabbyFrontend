@@ -1,0 +1,942 @@
+<!-- Navegación lateral -->
+<aside class="menu-lateral position-fixed top-0 start-0 h-100 border-end">
+
+    <a routerLink="/inicio" class="marca d-block text-center text-decoration-none py-4">
+        <strong>VANABBY</strong>
+        <small class="d-block">Repostería</small>
+    </a>
+
+    <nav aria-label="Navegación principal" class="px-2">
+
+        <a routerLink="/inicio" class="enlace-menu d-flex flex-column align-items-center gap-2 rounded-3 py-3">
+            <i class="bi bi-house-door fs-4" aria-hidden="true"></i>
+            <span>Inicio</span>
+        </a>
+
+    </nav>
+
+</aside>
+
+<div class="estructura-principal">
+
+    <!-- Barra superior -->
+    <header class="barra-superior bg-white border-bottom d-flex align-items-center justify-content-end gap-3 px-4">
+
+        <i class="bi bi-person-circle fs-1" aria-hidden="true"></i>
+
+        <div class="datos-usuario">
+            <strong class="d-block">P. M. Ramírez</strong>
+            <small class="text-secondary">Administrador</small>
+        </div>
+
+        <time id="fecha-actual" class="border-start ps-3 text-nowrap" [attr.datetime]="fechaIso">{{ fechaTexto }}</time>
+
+        <a href="/login" class="text-dark fs-4 ms-2" aria-label="Cerrar sesión" (click)="cerrarSesion($event)">
+            <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+        </a>
+
+    </header>
+
+    <main class="container-fluid px-3 px-lg-4 py-3">
+
+        <!-- Bienvenida -->
+        <section class="bienvenida d-flex align-items-center justify-content-between gap-3 rounded-3 p-3 mb-3">
+
+            <div>
+                <h1 class="fs-6 fw-bold mb-1">¡Hola Pablo Mata Ramírez!</h1>
+                <p class="small mb-0">Panel de Control</p>
+            </div>
+
+            <span class="badge rounded-pill bg-white text-secondary">
+                Turno Activo
+            </span>
+
+        </section>
+
+        <!-- Encabezado del módulo -->
+        <section aria-labelledby="titulo-productos">
+
+            <header class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+
+                <div>
+                    <h2 id="titulo-productos" class="fs-5 fw-bold mb-1">
+                        Gestión de Productos
+                    </h2>
+                    <p class="text-secondary small mb-0">
+                        Control de recetas preparadas, tiempos de horneado y despacho en tiempo real.
+                    </p>
+                </div>
+
+                <button type="button" class="btn boton-morado btn-sm px-3" (click)="abrirRegistrar()">
+                    <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>
+                    Nuevo Producto
+                </button>
+
+            </header>
+
+            <!-- Catálogo -->
+            <section aria-labelledby="titulo-catalogo">
+
+                <header class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+
+                    <div class="d-flex align-items-center gap-2">
+                        <h3 id="titulo-catalogo" class="fs-6 fw-semibold mb-0">
+                            Catálogo de Productos
+                        </h3>
+                        <span class="badge bg-success-subtle text-success-emphasis">
+                            En Vitrina
+                        </span>
+                    </div>
+
+                    <form ngNoForm class="d-flex flex-wrap align-items-center gap-2" role="search"
+                          (submit)="evitarEnvio($event)" (reset)="resetFiltros($event)">
+
+                        <label for="filtro-estado" class="visually-hidden">
+                            Filtrar por disponibilidad
+                        </label>
+
+                        <select id="filtro-estado" class="form-select form-select-sm filtro"
+                                [ngModel]="filtroEstado()" (ngModelChange)="filtroEstado.set($event)" name="filtroEstado">
+                            <option>{{ TODOS_ESTADO }}</option>
+                            <option>Disponible</option>
+                            <option>Terminado</option>
+                            <option>En horno</option>
+                            <option>En proceso</option>
+                        </select>
+
+                        <label for="filtro-categoria" class="visually-hidden">
+                            Filtrar por categoría
+                        </label>
+
+                        <select id="filtro-categoria" class="form-select form-select-sm filtro"
+                                [ngModel]="filtroCategoria()" (ngModelChange)="filtroCategoria.set($event)" name="filtroCategoria">
+                            <option>{{ TODOS_TIPO }}</option>
+                            <option>Pasteles</option>
+                            <option>Cupcakes</option>
+                            <option>Tartas y pays</option>
+                        </select>
+
+                        <label for="buscar-producto" class="visually-hidden">
+                            Buscar producto
+                        </label>
+
+                        <div class="input-group input-group-sm busqueda">
+                            <span class="input-group-text bg-white border-end-0">
+                                <i class="bi bi-search text-secondary" aria-hidden="true"></i>
+                            </span>
+                            <input
+                                id="buscar-producto"
+                                type="search"
+                                class="form-control border-start-0"
+                                placeholder="Buscar por nombre..."
+                                [ngModel]="busqueda()" (ngModelChange)="busqueda.set($event)" name="busqueda"
+                            >
+                        </div>
+
+                        <button type="reset" class="btn btn-sm btn-light">
+                            Limpiar
+                        </button>
+
+                    </form>
+
+                </header>
+
+                <!-- Productos -->
+                <ul id="lista-productos" class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 list-unstyled">
+
+                    @for (p of visibles(); track p.nombre) {
+                    <li class="col producto">
+                        <article class="card tarjeta-producto h-100">
+
+                            <header class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+                                <span class="badge bg-{{ color(p.estado) }}-subtle text-{{ color(p.estado) }}-emphasis">
+                                    ● {{ p.estado }}
+                                </span>
+                                <small class="text-secondary">{{ p.nota }}</small>
+                            </header>
+
+                            <img [src]="p.imagen" class="card-img-top foto-producto" [alt]="p.nombre" (error)="imagenFallida($event)">
+
+                            <section class="card-body">
+                                <h4 class="nombre-producto">{{ p.nombre }}</h4>
+                                <p class="descripcion-producto">
+                                    {{ p.descripcion }}
+                                </p>
+
+                                <dl class="d-flex justify-content-between border-top pt-2 mb-0">
+                                    <div>
+                                        <dt>PRECIO</dt>
+                                        <dd>{{ p.precio | number: '1.2-2' }} <small>MXN</small></dd>
+                                    </div>
+                                    <div class="text-end">
+                                        <dt>Stock</dt>
+                                        <dd>{{ p.stock }} u.</dd>
+                                    </div>
+                                </dl>
+                            </section>
+
+                            <footer class="card-footer bg-white border-0 d-flex gap-1">
+                                <button type="button" class="btn btn-light btn-sm flex-fill" (click)="abrirDetalle(p)">
+                                    <i class="bi bi-info-circle" aria-hidden="true"></i> Detalle
+                                </button>
+
+                                <button type="button" class="btn btn-{{ color(p.estado) }}-subtle btn-sm flex-fill">
+                                    <i class="bi bi-check-circle" aria-hidden="true"></i> Listo
+                                </button>
+
+                                <button type="button" class="btn btn-light btn-sm flex-fill">
+                                    <i class="bi bi-truck" aria-hidden="true"></i> Envío
+                                </button>
+
+                                <button type="button" class="btn btn-light btn-sm" (click)="abrirEliminar(p)"
+                                        [attr.aria-label]="'Eliminar ' + p.nombre.toLowerCase()">
+                                    <i class="bi bi-trash" aria-hidden="true"></i>
+                                </button>
+                            </footer>
+
+                        </article>
+                    </li>
+                    }
+
+                </ul>
+
+                <footer class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-3">
+                    <p class="text-secondary small mb-0">
+                        Mostrando {{ visibles().length }} de {{ productos().length }} productos
+                    </p>
+
+                    <nav aria-label="Paginación">
+                        <ul class="pagination pagination-sm mb-0">
+                            <li class="page-item disabled">
+                                <span class="page-link">Anterior</span>
+                            </li>
+                            <li class="page-item active" aria-current="page">
+                                <span class="page-link">1</span>
+                            </li>
+                            <li class="page-item disabled">
+                                <span class="page-link">Siguiente</span>
+                            </li>
+                        </ul>
+                    </nav>
+                </footer>
+
+            </section>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- Modal: Registrar producto -->
+<div #modalRegistrar class="modal fade" id="modal-registrar-producto" tabindex="-1" aria-labelledby="titulo-registrar" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+
+        <form ngNoForm id="formulario-registrar" class="modal-content modal-vanabby"
+              (submit)="evitarEnvio($event)" (reset)="resetRegistrar($event)">
+
+            <header class="modal-header">
+                <div>
+                    <h2 id="titulo-registrar" class="modal-title fs-5 fw-bold">
+                        <i class="bi bi-cake2 icono-lila me-2" aria-hidden="true"></i>
+                        Registrar Producto
+                        <span class="badge etiqueta-lila ms-2">Nuevo ítem</span>
+                    </h2>
+                    <p class="text-secondary small mb-0 mt-1">
+                        Ingresa los datos esenciales de la receta, costeo y disponibilidad en vitrina.
+                    </p>
+                </div>
+
+                <button type="button" class="btn-close" aria-label="Cerrar" (click)="cerrar(mRegistrar)"></button>
+            </header>
+
+            <div class="modal-body p-4">
+
+                <div class="row g-4">
+
+                    <section class="col-lg-7" aria-label="Información del producto">
+
+                        <label for="registrar-nombre" class="form-label">
+                            Nombre del producto *
+                        </label>
+                        <input id="registrar-nombre" type="text" class="form-control mb-3"
+                               placeholder="Ej. Tarta de moras y lavanda"
+                               [ngModel]="rNombre()" (ngModelChange)="rNombre.set($event)" name="rNombre">
+
+                        <div class="row g-3 mb-3">
+
+                            <div class="col-sm-6">
+                                <label for="registrar-categoria" class="form-label">
+                                    Categoría
+                                </label>
+                                <select id="registrar-categoria" class="form-select"
+                                        [ngModel]="rCategoria()" (ngModelChange)="rCategoria.set($event)" name="rCategoria">
+                                    <option>Tartas y pays</option>
+                                    <option>Pasteles</option>
+                                    <option>Cupcakes</option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label for="registrar-cliente" class="form-label">
+                                    Cliente asignado
+                                </label>
+                                <select id="registrar-cliente" class="form-select"
+                                        [ngModel]="rCliente()" (ngModelChange)="rCliente.set($event)" name="rCliente">
+                                    <option>Venta general (vitrina)</option>
+                                    <option>Pedido especial</option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label for="registrar-precio" class="form-label">
+                                    Precio base (MXN)
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input id="registrar-precio" type="number" class="form-control" min="0"
+                                           [ngModel]="rPrecio()" (ngModelChange)="rPrecio.set($event)" name="rPrecio">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label for="registrar-cantidad" class="form-label">
+                                    Cantidad a elaborar (stock)
+                                </label>
+                                <div class="input-group">
+                                    <button type="button" class="btn btn-outline-secondary boton-cantidad"
+                                            aria-label="Restar una unidad" (click)="ajustar(rCantidad, -1, 1)">−</button>
+
+                                    <input id="registrar-cantidad" type="number" class="form-control text-center" min="1"
+                                           [ngModel]="rCantidad()" (ngModelChange)="rCantidad.set($event)" name="rCantidad">
+
+                                    <button type="button" class="btn btn-outline-secondary boton-cantidad"
+                                            aria-label="Sumar una unidad" (click)="ajustar(rCantidad, 1, 1)">+</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <fieldset class="border-0 p-0 mb-3">
+                            <legend class="fs-6 fw-semibold mb-2">
+                                Personalización y opciones
+                            </legend>
+
+                            <div class="d-flex flex-wrap gap-2">
+
+                                <label class="opcion-extra">
+                                    <input type="checkbox" class="form-check-input mt-0"
+                                           [ngModel]="rMolde()" (ngModelChange)="rMolde.set($event)" name="rMolde">
+                                    Molde de 22 cm
+                                </label>
+
+                                <label class="opcion-extra">
+                                    <input type="checkbox" class="form-check-input mt-0"
+                                           [ngModel]="rFruta()" (ngModelChange)="rFruta.set($event)" name="rFruta">
+                                    Fruta fresca
+                                </label>
+
+                                <label class="opcion-extra">
+                                    <input type="checkbox" class="form-check-input mt-0"
+                                           [ngModel]="rCrema()" (ngModelChange)="rCrema.set($event)" name="rCrema">
+                                    Doble crema
+                                </label>
+
+                            </div>
+                        </fieldset>
+
+                        <div class="d-flex align-items-center gap-3 border rounded-3 p-3 bg-body-tertiary">
+
+                            <i class="bi bi-hourglass-split text-warning fs-5" aria-hidden="true"></i>
+
+                            <label for="registrar-produccion" class="flex-grow-1">
+                                <strong class="d-block small">Requiere ciclo de producción</strong>
+                                <small class="text-secondary">
+                                    Activar monitoreo de horneado y semáforo.
+                                </small>
+                            </label>
+
+                            <div class="form-check form-switch">
+                                <input id="registrar-produccion" class="form-check-input" type="checkbox" role="switch"
+                                       [ngModel]="rProduccion()" (ngModelChange)="rProduccion.set($event)" name="rProduccion">
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                    <aside class="col-lg-5">
+
+                        <section class="panel-costos border rounded-4 p-3">
+
+                            <header class="d-flex justify-content-between align-items-center mb-3">
+                                <h3 class="fs-6 fw-semibold mb-0">Resumen de costeo</h3>
+                                <span class="badge bg-success-subtle text-success-emphasis">
+                                    Sugerido
+                                </span>
+                            </header>
+
+                            <dl class="small mb-3">
+
+                                <div class="d-flex justify-content-between mb-2">
+                                    <dt class="fw-normal text-secondary">Precio base</dt>
+                                    <dd class="mb-0">$450.00</dd>
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-2">
+                                    <dt class="fw-normal text-secondary">Extras e ingredientes</dt>
+                                    <dd class="mb-0">+$30.00</dd>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <dt class="fw-normal text-secondary">Margen estimado (25%)</dt>
+                                    <dd class="mb-0">+$120.00</dd>
+                                </div>
+
+                            </dl>
+
+                            <hr>
+
+                            <div class="d-flex justify-content-between align-items-end gap-2 mb-3">
+                                <div>
+                                    <small class="text-secondary d-block">PRECIO FINAL SUGERIDO</small>
+                                    <strong class="precio-destacado">$480.00</strong>
+                                    <small class="text-secondary">MXN</small>
+                                </div>
+                                <div class="text-end small">
+                                    <span class="text-success d-block">Utilidad neta</span>
+                                    <strong>$120.00 MXN</strong>
+                                </div>
+                            </div>
+
+                            <p class="aviso-lila rounded-3 p-3 small mb-0">
+                                <i class="bi bi-lightbulb me-1" aria-hidden="true"></i>
+                                El producto se listará como En proceso hasta que culmine
+                                el tiempo de horneado en cocina.
+                            </p>
+
+                        </section>
+
+                        <p class="alert alert-warning small mt-3 mb-0">
+                            <i class="bi bi-bell me-1" aria-hidden="true"></i>
+                            Notificación automática habilitada para el equipo
+                            de repostería al confirmar registro.
+                        </p>
+
+                    </aside>
+
+                </div>
+
+            </div>
+
+            <footer class="modal-footer">
+                <button type="reset" class="btn btn-link text-secondary text-decoration-none me-auto">
+                    Limpiar formulario
+                </button>
+
+                <button type="button" class="btn btn-outline-secondary" (click)="cerrar(mRegistrar)">
+                    Cancelar
+                </button>
+
+                <button type="button" class="btn boton-morado" (click)="cerrar(mRegistrar)">
+                    <i class="bi bi-check-lg me-1" aria-hidden="true"></i>
+                    Guardar producto
+                </button>
+            </footer>
+
+        </form>
+
+    </div>
+</div>
+
+
+<!-- Modal: Detalle del producto -->
+<div #modalDetalle class="modal fade" id="modal-detalle-producto" tabindex="-1" aria-labelledby="titulo-detalle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+
+        <article class="modal-content modal-vanabby">
+
+            <header class="modal-header">
+                <div>
+                    <h2 id="titulo-detalle" class="modal-title fs-5 fw-bold">
+                        <i class="bi bi-cake2 icono-lila me-2" aria-hidden="true"></i>
+                        Detalle del producto
+                        <span id="detalle-etiqueta" class="badge etiqueta-lila ms-2">{{ seleccionado().nombre }}</span>
+                        <span id="detalle-estado"
+                              class="badge bg-{{ color(seleccionado().estado) }}-subtle text-{{ color(seleccionado().estado) }}-emphasis ms-1">{{ seleccionado().estado }}</span>
+                    </h2>
+                    <p class="text-secondary small mb-0 mt-1">
+                        Especificaciones de receta, costeo y disponibilidad en vitrina.
+                    </p>
+                </div>
+                <button type="button" class="btn-close" aria-label="Cerrar" (click)="cerrar(mDetalle)"></button>
+            </header>
+
+            <div class="modal-body p-4">
+
+                <div class="row g-4">
+
+                    <!-- Receta -->
+                    <section class="col-lg-6" aria-labelledby="titulo-receta">
+
+                        <h3 id="titulo-receta" class="titulo-seccion mb-3">
+                            <i class="bi bi-journal-text me-1" aria-hidden="true"></i>
+                            Información técnica y receta
+                        </h3>
+
+                        <figure class="mb-3">
+                            <img id="detalle-imagen" [src]="seleccionado().imagen" [alt]="seleccionado().nombre"
+                                 class="imagen-detalle rounded-3" (error)="imagenFallida($event)">
+                            <figcaption id="detalle-nombre" class="fw-semibold mt-2">{{ seleccionado().nombre }}</figcaption>
+                        </figure>
+
+                        <dl class="row text-center g-2 bg-body-tertiary rounded-3 p-2 mb-3">
+                            <div class="col-4">
+                                <dt class="texto-pequeno text-secondary">FORMATO</dt>
+                                <dd id="detalle-formato" class="small fw-semibold mb-0">{{ seleccionado().formato }}</dd>
+                            </div>
+                            <div class="col-4 border-start border-end">
+                                <dt class="texto-pequeno text-secondary">CONSERVACIÓN</dt>
+                                <dd id="detalle-conservacion" class="small fw-semibold mb-0">{{ seleccionado().conservacion }}</dd>
+                            </div>
+                            <div class="col-4">
+                                <dt class="texto-pequeno text-secondary">CADUCIDAD</dt>
+                                <dd class="small fw-semibold mb-0">4 días</dd>
+                            </div>
+                        </dl>
+
+                        <section class="bg-body-tertiary rounded-3 p-3" aria-labelledby="titulo-ingredientes">
+
+                            <header class="d-flex justify-content-between align-items-center mb-3">
+                                <h4 id="titulo-ingredientes" class="titulo-seccion mb-0">
+                                    <i class="bi bi-journal-bookmark me-1" aria-hidden="true"></i>
+                                    Ingredientes clave
+                                </h4>
+                                <small class="text-secondary">Porción base</small>
+                            </header>
+
+                            <dl class="row g-2 small mb-3">
+                                <div class="col-6 d-flex justify-content-between gap-2">
+                                    <dt class="fw-normal">Harina de trigo</dt>
+                                    <dd class="fw-semibold mb-0">250 g</dd>
+                                </div>
+                                <div class="col-6 d-flex justify-content-between gap-2">
+                                    <dt class="fw-normal">Leche</dt>
+                                    <dd class="fw-semibold mb-0">180 ml</dd>
+                                </div>
+                                <div class="col-6 d-flex justify-content-between gap-2">
+                                    <dt class="fw-normal">Azúcar</dt>
+                                    <dd class="fw-semibold mb-0">140 g</dd>
+                                </div>
+                                <div class="col-6 d-flex justify-content-between gap-2">
+                                    <dt class="fw-normal">Crema</dt>
+                                    <dd class="fw-semibold mb-0">120 g</dd>
+                                </div>
+                            </dl>
+
+                            <p class="small text-secondary mb-0">
+                                Alérgenos:
+                                <span class="badge bg-white text-secondary border">Lácteos</span>
+                                <span class="badge bg-white text-secondary border">Gluten</span>
+                            </p>
+
+                        </section>
+
+                    </section>
+
+                    <!-- Costos y control -->
+                    <aside class="col-lg-6">
+
+                        <section class="panel-costos border rounded-4 p-3 mb-3">
+
+                            <header class="d-flex justify-content-between align-items-center mb-3">
+                                <h3 class="titulo-seccion mb-0">Resumen de costeo</h3>
+                                <span class="badge bg-success-subtle text-success-emphasis">
+                                    Margen incluido
+                                </span>
+                            </header>
+
+                            <dl class="small mb-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <dt class="fw-normal text-secondary">Precio base de receta</dt>
+                                    <dd id="detalle-precio-base" class="mb-0">{{ moneda(seleccionado().precio) }}</dd>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <dt class="fw-normal text-secondary">Extras, envase e insumos</dt>
+                                    <dd class="mb-0">+$0.00 MXN</dd>
+                                </div>
+                            </dl>
+
+                            <hr>
+
+                            <small class="text-secondary d-block">PRECIO DE VENTA SUGERIDO</small>
+                            <strong id="detalle-precio" class="precio-destacado">{{ moneda(seleccionado().precio) }}</strong>
+                            <small class="text-secondary">MXN</small>
+
+                        </section>
+
+                        <section class="bg-body-tertiary rounded-3 p-3 mb-3">
+
+                            <header class="d-flex justify-content-between align-items-center mb-3">
+                                <h3 class="titulo-seccion mb-0">
+                                    <i class="bi bi-clock-history me-1" aria-hidden="true"></i>
+                                    Tiempos y control
+                                </h3>
+                                <small class="text-secondary">Área de repostería</small>
+                            </header>
+
+                            <div class="row g-2 text-center">
+                                <div class="col-6">
+                                    <div class="bg-white rounded-3 p-2">
+                                        <small class="text-secondary d-block">Preparación</small>
+                                        <strong id="detalle-preparacion" class="small">{{ seleccionado().preparacion }}</strong>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="bg-white rounded-3 p-2">
+                                        <small class="text-secondary d-block">Reposo o enfriado</small>
+                                        <strong class="small">180 min (3 h)</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </section>
+
+                        <section class="d-flex align-items-center gap-3 bg-body-tertiary rounded-3 p-3">
+                            <strong id="detalle-stock" class="fs-4 texto-morado">{{ seleccionado().stock }}</strong>
+                            <div class="flex-grow-1">
+                                <h3 class="fs-6 fw-semibold mb-0">Unidades disponibles</h3>
+                                <small class="text-secondary">Existencia registrada</small>
+                            </div>
+                            <span class="badge bg-success-subtle text-success-emphasis">
+                                ● Stock disponible
+                            </span>
+                        </section>
+
+                    </aside>
+
+                </div>
+
+            </div>
+
+            <footer class="modal-footer">
+                <button type="button" class="btn btn-link text-secondary text-decoration-none me-auto" (click)="cerrar(mDetalle)">
+                    Cerrar
+                </button>
+
+                <button type="button" class="btn btn-outline-secondary" (click)="abrirEditar(mDetalle)">
+                    <i class="bi bi-pencil-square me-1" aria-hidden="true"></i>
+                    Editar receta
+                </button>
+
+                <button type="button" class="btn btn-outline-secondary">
+                    <i class="bi bi-truck me-1" aria-hidden="true"></i>
+                    Mandar a envío
+                </button>
+
+                <button type="button" class="btn boton-morado" (click)="cerrar(mDetalle)">
+                    <i class="bi bi-check-circle me-1" aria-hidden="true"></i>
+                    Actualizar estado
+                </button>
+            </footer>
+
+        </article>
+
+    </div>
+</div>
+
+
+<!-- Modal: Editar producto -->
+<div #modalEditar class="modal fade" id="modal-editar-producto" tabindex="-1" aria-labelledby="titulo-editar" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+
+        <form ngNoForm id="formulario-editar" class="modal-content modal-vanabby" (submit)="evitarEnvio($event)">
+
+            <header class="modal-header">
+                <div>
+                    <h2 id="titulo-editar" class="modal-title fs-5 fw-bold">
+                        <i class="bi bi-pencil-square icono-lila me-2" aria-hidden="true"></i>
+                        Editar producto
+                        <span id="editar-etiqueta" class="badge etiqueta-lila ms-2">{{ seleccionado().nombre }}</span>
+                    </h2>
+                    <p class="text-secondary small mb-0 mt-1">
+                        Modifica los datos esenciales de la receta, costeo y disponibilidad en vitrina.
+                    </p>
+                </div>
+
+                <button type="button" class="btn-close" aria-label="Cerrar" (click)="cerrar(mEditar)"></button>
+            </header>
+
+            <div class="modal-body p-4">
+
+                <div class="row g-4">
+
+                    <section class="col-lg-7" aria-labelledby="titulo-informacion-general">
+
+                        <h3 id="titulo-informacion-general" class="titulo-seccion mb-3">
+                            <i class="bi bi-card-list me-1" aria-hidden="true"></i>
+                            Información general
+                        </h3>
+
+                        <div class="d-flex align-items-center flex-wrap gap-3 border rounded-3 p-2 mb-3">
+
+                            <img id="editar-imagen" [src]="eImagen()" alt="Imagen del producto"
+                                 class="imagen-editar rounded-3" (error)="imagenFallida($event)">
+
+                            <div>
+                                <label for="editar-foto" class="btn btn-outline-secondary btn-sm">
+                                    <i class="bi bi-camera me-1" aria-hidden="true"></i>
+                                    Cambiar foto
+                                </label>
+
+                                <input type="file" id="editar-foto" class="visually-hidden"
+                                       accept="image/png,image/jpeg,image/webp" (change)="cambiarFoto($event)">
+
+                                <small class="d-block text-secondary mt-1">
+                                    JPG o PNG · Máximo 5 MB
+                                </small>
+                            </div>
+
+                        </div>
+
+                        <label for="editar-nombre" class="form-label">
+                            Nombre del producto
+                        </label>
+                        <input id="editar-nombre" type="text" class="form-control mb-3"
+                               [ngModel]="eNombre()" (ngModelChange)="eNombre.set($event)" name="eNombre">
+
+                        <div class="row g-3 mb-3">
+
+                            <div class="col-sm-6">
+                                <label for="editar-categoria" class="form-label">
+                                    Categoría
+                                </label>
+                                <select id="editar-categoria" class="form-select"
+                                        [ngModel]="eCategoria()" (ngModelChange)="eCategoria.set($event)" name="eCategoria">
+                                    <option>Pasteles</option>
+                                    <option>Cupcakes</option>
+                                    <option>Tartas y pays</option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label for="editar-estado" class="form-label">
+                                    Estado de producción
+                                </label>
+                                <select id="editar-estado" class="form-select"
+                                        [ngModel]="eEstado()" (ngModelChange)="eEstado.set($event)" name="eEstado">
+                                    <option>Disponible</option>
+                                    <option>Terminado</option>
+                                    <option>En horno</option>
+                                    <option>En proceso</option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label for="editar-precio" class="form-label">
+                                    Precio base (MXN)
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input id="editar-precio" type="number" class="form-control" min="0"
+                                           [ngModel]="ePrecio()" (ngModelChange)="ePrecio.set($event)" name="ePrecio">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label for="editar-cantidad" class="form-label">
+                                    Cantidad / stock disponible
+                                </label>
+                                <div class="input-group">
+                                    <button type="button" class="btn btn-outline-secondary boton-cantidad"
+                                            aria-label="Restar una unidad" (click)="ajustar(eCantidad, -1, 0)">−</button>
+
+                                    <input id="editar-cantidad" type="number" class="form-control text-center" min="0"
+                                           [ngModel]="eCantidad()" (ngModelChange)="eCantidad.set($event)" name="eCantidad">
+
+                                    <button type="button" class="btn btn-outline-secondary boton-cantidad"
+                                            aria-label="Sumar una unidad" (click)="ajustar(eCantidad, 1, 0)">+</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <label class="d-flex align-items-center gap-2 bg-body-tertiary rounded-3 p-3 mb-3">
+                            <input type="checkbox" class="form-check-input mt-0" checked>
+                            <span>
+                                <strong class="d-block small">Requiere semáforo de producción</strong>
+                                <small class="text-secondary">
+                                    Monitorear tiempos de refrigeración y disponibilidad activa.
+                                </small>
+                            </span>
+                        </label>
+
+                        <fieldset class="border-0 p-0">
+
+                            <legend class="titulo-seccion mb-3">
+                                <i class="bi bi-sliders me-1" aria-hidden="true"></i>
+                                Personalización / extras
+                            </legend>
+
+                            <div class="row g-2">
+
+                                <div class="col-sm-4">
+                                    <label class="opcion-extra opcion-editar w-100">
+                                        <span>
+                                            <strong class="d-block">Fruta fresca</strong>
+                                            <small class="text-secondary">Fruta seleccionada</small>
+                                        </span>
+                                        <input type="checkbox" class="form-check-input mt-0" checked>
+                                    </label>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <label class="opcion-extra opcion-editar w-100">
+                                        <span>
+                                            <strong class="d-block">Relleno especial</strong>
+                                            <small class="text-secondary">Personalización</small>
+                                        </span>
+                                        <input type="checkbox" class="form-check-input mt-0" checked>
+                                    </label>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <label class="opcion-extra opcion-editar w-100">
+                                        <span>
+                                            <strong class="d-block">Refrigerado</strong>
+                                            <small class="text-secondary">Cámara fría</small>
+                                        </span>
+                                        <input type="checkbox" class="form-check-input mt-0" checked>
+                                    </label>
+                                </div>
+
+                            </div>
+
+                        </fieldset>
+
+                    </section>
+
+                    <aside class="col-lg-5">
+
+                        <section class="panel-costos border rounded-4 p-3">
+
+                            <h3 class="titulo-seccion mb-3">
+                                <i class="bi bi-receipt me-1" aria-hidden="true"></i>
+                                Resumen de costeo
+                            </h3>
+
+                            <dl class="small mb-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <dt class="fw-normal text-secondary">Precio base de receta</dt>
+                                    <dd id="editar-resumen-base" class="mb-0">{{ eResumen() }}</dd>
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-2">
+                                    <dt class="fw-normal text-secondary">Extras e insumos</dt>
+                                    <dd class="mb-0">+$0.00</dd>
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <dt class="fw-normal text-secondary">Margen de repostería</dt>
+                                    <dd class="text-success mb-0">Incluido</dd>
+                                </div>
+                            </dl>
+
+                            <hr>
+
+                            <small class="text-secondary d-block">
+                                PRECIO FINAL SUGERIDO
+                            </small>
+                            <strong id="editar-resumen-total" class="precio-destacado">{{ eResumen() }}</strong>
+                            <small class="text-secondary">MXN</small>
+
+                            <p class="alert alert-success small mt-3 mb-0">
+                                <i class="bi bi-check-circle me-1" aria-hidden="true"></i>
+                                Sincronizado con inventario y vitrina al guardar.
+                            </p>
+
+                        </section>
+
+                    </aside>
+
+                </div>
+
+            </div>
+
+            <footer class="modal-footer">
+                <button type="button" class="btn btn-link text-danger text-decoration-none me-auto" (click)="eliminarDesdeEditar()">
+                    <i class="bi bi-trash me-1" aria-hidden="true"></i>
+                    Eliminar producto
+                </button>
+
+                <button type="button" class="btn btn-outline-secondary" (click)="cerrar(mEditar)">
+                    Cancelar
+                </button>
+
+                <button type="button" class="btn boton-morado" (click)="cerrar(mEditar)">
+                    <i class="bi bi-floppy me-1" aria-hidden="true"></i>
+                    Guardar cambios
+                </button>
+            </footer>
+
+        </form>
+
+    </div>
+</div>
+
+
+<!-- Modal: Confirmar eliminación -->
+<div #modalEliminar class="modal fade" id="modal-eliminar-producto" tabindex="-1" aria-labelledby="titulo-eliminar" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm modal-eliminar">
+
+        <section class="modal-content modal-vanabby">
+
+            <header class="modal-header">
+                <h2 id="titulo-eliminar" class="modal-title fs-6">
+                    <i class="bi bi-exclamation-triangle text-danger me-2" aria-hidden="true"></i>
+                    Confirmar eliminación
+                </h2>
+
+                <button type="button" class="btn-close" aria-label="Cerrar" (click)="cerrar(mEliminar)"></button>
+            </header>
+
+            <div class="modal-body text-center px-4 py-4">
+
+                <span class="icono-eliminar">
+                    <i class="bi bi-trash" aria-hidden="true"></i>
+                </span>
+
+                <h3 class="fs-5 fw-bold mt-3">
+                    ¿Eliminar «<span id="eliminar-nombre">{{ seleccionado().nombre }}</span>»?
+                </h3>
+
+                <p class="text-secondary small mt-2">
+                    El producto se desactivará de la vitrina y no
+                    estará disponible para venta ni pedidos inmediatos.
+                </p>
+
+                <p class="alert alert-warning small text-start mt-3 mb-0">
+                    <i class="bi bi-exclamation-circle me-1" aria-hidden="true"></i>
+                    Esta acción retiraría el lote actual del semáforo
+                    de horneado y los pedidos en curso.
+                </p>
+
+            </div>
+
+            <footer class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" (click)="cerrar(mEliminar)">
+                    Cancelar
+                </button>
+
+                <button type="button" class="btn btn-danger" (click)="cerrar(mEliminar)">
+                    <i class="bi bi-trash me-1" aria-hidden="true"></i>
+                    Eliminar producto
+                </button>
+            </footer>
+
+        </section>
+
+    </div>
+</div>

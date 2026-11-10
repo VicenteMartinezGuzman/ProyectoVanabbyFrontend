@@ -1,0 +1,431 @@
+<div class="app">
+  <aside class="sidebar">
+    <a class="marca" routerLink="/inicio" aria-label="Vanabby, página principal"><strong>VANABBY</strong><small>Repostería</small></a>
+    <nav aria-label="Navegación principal"><a class="side-btn" routerLink="/inicio"><i class="bi bi-house-door" aria-hidden="true"></i><span>Inicio</span></a></nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar__title" id="tituloVista">{{ tituloVista() }}</div>
+      <div class="topbar__user">
+        <i class="bi bi-person-circle avatar-icon" aria-hidden="true"></i>
+        <div class="user-info"><strong>P. M. Ramírez</strong><small>Administrador</small></div>
+        <time class="topbar__date" id="fechaActual">{{ hoy | fechaCorta }}</time>
+        <a class="btn-salir" href="/login" (click)="cerrarSesion($event)" aria-label="Cerrar sesión"><i class="bi bi-box-arrow-right" aria-hidden="true"></i></a>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- ============ 1. HUB ============ -->
+      @if (vista() === 'v-hub') {
+      <section class="view" id="v-hub">
+        <h1 class="h1">Tableros de Estado y Analítica Operativa</h1>
+        <p class="muted mb">Una vista clara de tu operación, en un solo lugar.</p>
+        <div class="hub-grid">
+          <article class="card hub-card">
+            <div class="hub-card__top"><span class="ico"><i class='bi bi-truck' aria-hidden='true'></i></span><span class="badge badge-lilac">• 5 en ruta</span></div>
+            <h3>Monitoreo de Pedidos y Envíos</h3>
+            <p class="muted small">Sigue cada pedido desde la cocina hasta la puerta del cliente.</p>
+            <div class="hub-card__foot"><span class="muted small">Live Order Tracker</span><button class="btn btn-primary" (click)="ir('v-pedidos')">Abrir Módulo de Pedidos →</button></div>
+          </article>
+          <article class="card hub-card">
+            <div class="hub-card__top"><span class="ico"><i class='bi bi-box-seam' aria-hidden='true'></i></span><span class="badge badge-orange">• 3 insumos en mínimo</span></div>
+            <h3>Monitoreo de Productos y Almacén</h3>
+            <p class="muted small">Controla existencias, productos más vendidos y caducidades.</p>
+            <div class="hub-card__foot"><span class="muted small">Stock Health Index</span><button class="btn btn-primary" (click)="ir('v-almacen')">Abrir Módulo de Almacén →</button></div>
+          </article>
+          <article class="card hub-card">
+            <div class="hub-card__top"><span class="ico"><i class='bi bi-people' aria-hidden='true'></i></span><span class="badge badge-lilac">• 64.2% retorno</span></div>
+            <h3>Monitoreo de Clientes y Reseñas</h3>
+            <p class="muted small">Conoce a tus clientes y descubre lo que más les gusta.</p>
+            <div class="hub-card__foot"><span class="muted small">Customer Retention</span><button class="btn btn-primary" (click)="ir('v-clientes')">Abrir Módulo de Clientes →</button></div>
+          </article>
+          <article class="card hub-card">
+            <div class="hub-card__top"><span class="ico"><i class='bi bi-shield-check' aria-hidden='true'></i></span><span class="badge badge-lilac">• 100% trazabilidad activa</span></div>
+            <h3>Bitácora de Auditoría</h3>
+            <p class="muted small">Consulta la trazabilidad de cada acción en tu negocio.</p>
+            <div class="hub-card__foot"><span class="muted small">Security Health</span><button class="btn btn-primary" (click)="ir('v-auditoria')">Abrir Módulo de Auditoría →</button></div>
+          </article>
+        </div>
+        <footer class="hub-foot muted small"><span>VANABBY Repostería · Centro de operaciones</span><span class="ok-dot">● Todos los módulos conectados</span></footer>
+      </section>
+      }
+
+      <!-- ============ 2. PEDIDOS Y ENVÍOS ============ -->
+      @if (vista() === 'v-pedidos') {
+      <section class="view" id="v-pedidos">
+        <div class="row-between">
+          <button class="link-back" (click)="ir('v-hub')">← Volver al Hub Principal</button>
+          <span class="muted small" id="pedOperacion">{{ pedOperacion() }}</span>
+        </div>
+        <div class="tabs">
+          <button [class.active]="periodoPedidos() === 'hoy'" (click)="setPeriodo('pedidos', 'hoy')">Hoy</button>
+          <button [class.active]="periodoPedidos() === 'semana'" (click)="setPeriodo('pedidos', 'semana')">Semana</button>
+          <button [class.active]="periodoPedidos() === 'mes'" (click)="setPeriodo('pedidos', 'mes')">Mes</button>
+          <button [class.active]="periodoPedidos() === 'custom'" (click)="setPeriodo('pedidos', 'custom')">Personalizado</button>
+        </div>
+        <div class="kpis" id="kpisPedidos">
+          <div class="card kpi"><div><small class="muted">Pendientes</small><div class="big">{{ kpi().pend }}</div><small class="muted">Pedidos por confirmar</small></div><span class="ico"><i class='bi bi-clock' aria-hidden='true'></i></span></div>
+          <div class="card kpi"><div><small class="muted">En preparación</small><div class="big">{{ kpi().prep }}</div><small class="muted">Pedidos en cocina</small></div><span class="ico"><i class='bi bi-egg-fried' aria-hidden='true'></i></span></div>
+          <div class="card kpi"><div><small class="muted">En camino</small><div class="big">{{ kpi().ruta }}</div><small class="muted">Envíos en ruta</small></div><span class="ico"><i class='bi bi-truck' aria-hidden='true'></i></span></div>
+          <div class="card kpi alert"><div><small class="red">Incidencias</small><div class="big red">{{ kpi().inc }}</div><small class="red">Retraso por atender</small></div><span class="ico"><i class='bi bi-exclamation-triangle' aria-hidden='true'></i></span></div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="row-between"><div><h3>Tracking de Pedidos Activos</h3><p class="muted small">Próximas entregas primero</p></div>
+              <select id="filtroTracking" class="mini-select" [ngModel]="filtroTracking()" (ngModelChange)="filtroTracking.set($event)"><option value="">Estado: Todos</option><option>En camino</option><option>Listo</option><option>En cocina</option><option>Pendiente</option></select></div>
+            <table class="tabla"><thead><tr><th>Folio</th><th>Cliente</th><th>Hora Entrega</th><th>Estado</th><th>Conductor</th><th>Acciones</th></tr></thead>
+              <tbody id="tbodyTracking">
+                @for (t of trackingLista(); track t.folio) {
+                <tr>
+                  <td class="link">{{ t.folio }}</td><td>{{ t.cliente }}</td><td><b>{{ t.hora }}</b></td>
+                  <td><span class="badge" [class]="'badge ' + claseEstado[t.estado]">• {{ t.estado }}</span></td>
+                  <td [class.muted]="t.conductor === 'Sin asignar'">{{ t.conductor }}</td>
+                  <td class="acc-cell">
+                    <button class="btn-icon" title="Ver seguimiento" (click)="abrirSeguimiento(t.folio)"><i class='bi bi-eye' aria-hidden='true'></i></button>
+                    <div class="kebab"><button class="btn-icon" title="Más acciones" aria-haspopup="true" (click)="toggleMenu(t.folio)"><i class='bi bi-three-dots-vertical' aria-hidden='true'></i></button>
+                      <div class="kebab-menu" [hidden]="menuAbierto() !== t.folio">
+                        <button (click)="accion('seguir', t)">Ver seguimiento</button>
+                        <button (click)="accion('contactar', t)">Contactar al cliente</button>
+                        <button (click)="accion('reasignar', t)">Reasignar repartidor</button>
+                        <button (click)="accion('incidencia', t)">Reportar incidencia</button>
+                      </div></div>
+                  </td>
+                </tr>
+                }
+              </tbody></table>
+            <div class="row-between small muted pad-t"><span id="pieTracking">Mostrando {{ trackingLista().length }} de 14 pedidos activos</span><button class="link" (click)="ir('v-seguimiento')">Ver Tracking Detallado →</button></div>
+          </div>
+          <div class="card">
+            <h3>Estadísticas de Entrega y Alertas</h3>
+            <div class="eficiencia">
+              <div><small class="muted">Eficiencia de Entregas</small><div class="big" id="efValor">{{ kpi().efi }}%</div><div class="bar"><i id="efBar" [style.width.%]="kpi().efi"></i></div><small class="muted">meta: 95%</small></div>
+              <div class="ring" id="efRing" [style.--p]="kpi().efi"></div>
+            </div>
+            <div class="mini-stats"><div><b>{{ kpi().entreg }}</b><small>Entregados</small></div><div><b>{{ kpi().cancel }}</b><small>Cancelados</small></div><div class="warn"><b>{{ kpi().retraso }}</b><small>Con retraso</small></div><div><b>{{ kpi().prom }}</b><small>Tiempo promedio</small></div></div>
+            <h4 class="mt">ALERTAS ACTIVAS</h4>
+            <div class="alerta"><b><i class='bi bi-exclamation-triangle' aria-hidden='true'></i> 1 retraso · Zona Norte · Tráfico Intenso</b><p class="small">#ENV-021 · Entrega estimada 14:45 (+15 min). Conductor: E. Torres</p><p class="small muted">Cliente notificado · Cancelaciones de hoy: 0</p></div>
+          </div>
+        </div>
+      </section>
+      }
+
+      <!-- ============ 3. PRODUCTOS Y ALMACÉN ============ -->
+      @if (vista() === 'v-almacen') {
+      <section class="view" id="v-almacen">
+        <div class="row-between"><button class="link-back" (click)="ir('v-hub')">← Volver al Hub Principal</button><span class="muted small">Inventario sincronizado</span></div>
+        <div class="tabs">
+          <button [class.active]="periodoAlm() === 'hoy'" (click)="setPeriodo('almacen', 'hoy')">Hoy</button>
+          <button [class.active]="periodoAlm() === 'semana'" (click)="setPeriodo('almacen', 'semana')">Semana</button>
+          <button [class.active]="periodoAlm() === 'mes'" (click)="setPeriodo('almacen', 'mes')">Mes</button>
+          <button [class.active]="periodoAlm() === 'custom'" (click)="setPeriodo('almacen', 'custom')">Personalizado</button>
+        </div>
+        <div class="kpis kpis3">
+          <div class="card kpi"><div><small class="muted">Top Producto</small><div class="big">Red Velvet</div><small class="muted" id="topUds">{{ topUds() }}</small></div><span class="ico"><i class='bi bi-cake2' aria-hidden='true'></i></span></div>
+          <div class="card kpi"><div><small class="muted">Insumo Crítico</small><div class="big">Harina de trigo</div><small class="muted">15% restante</small></div><span class="ico"><i class='bi bi-flower1' aria-hidden='true'></i></span></div>
+          <div class="card kpi"><div><small class="muted">Proyección de Caducidad</small><div class="big">Crema para batir</div><small class="muted">caduca en 2 días</small></div><span class="ico"><i class='bi bi-hourglass-split' aria-hidden='true'></i></span></div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="row-between"><h3>Rendimiento y Nivel de Inventario</h3>
+              <select class="mini-select" id="filtroCat" [ngModel]="filtroCat()" (ngModelChange)="filtroCat.set($event)"><option value="">Todas las categorías</option><option>Pasteles</option><option>Individual</option><option>Tartas</option></select></div>
+            <div class="tabs inner" id="tabsRanking">
+              <button [class.active]="modoRanking() === 'mas'" (click)="modoRanking.set('mas')">Más vendidos</button>
+              <button [class.active]="modoRanking() === 'menos'" (click)="modoRanking.set('menos')">Menos vendidos</button>
+            </div>
+            <table class="tabla"><thead><tr><th>Producto</th><th>Categoría</th><th>Ventas del día</th><th>Nivel de stock</th><th>Analítica</th></tr></thead>
+              <tbody id="tbodyRanking">
+                @for (r of rankingLista(); track r.nombre) {
+                <tr>
+                  <td><div class="prod-cell"><span class="thumb">{{ r.icono }}</span>{{ r.nombre }}</div></td>
+                  <td class="muted">{{ r.cat }}</td>
+                  <td><b>{{ r.ventas }} uds.</b></td>
+                  <td>
+                    @if (r.stock === 0) {
+                      <span class="badge badge-red">• Agotado</span>
+                    } @else {
+                      <div class="stock-bar"><div class="bar"><i [style.width.%]="r.stock"></i></div><small>{{ r.stock }}%</small></div>
+                    }
+                  </td>
+                  <td><button class="link" (click)="ir('v-consumo')">Ver Analítica →</button></td>
+                </tr>
+                }
+              </tbody></table>
+            <div class="tip">Planifica tu producción con datos del día.<br><small>Red Velvet lidera con 42 uds. · Repón los insumos críticos antes del siguiente turno.</small></div>
+          </div>
+          <div class="card">
+            <h3>Materia Prima Crítica</h3>
+            <div id="materiaCritica">
+              @for (m of materiaCritica; track m[0]) {
+              <div class="mp-row"><div class="row-between"><span>{{ m[0] }}</span><b class="red">{{ m[1] }}%</b></div><div class="bar"><i [style.width.%]="m[1]"></i></div></div>
+              }
+            </div>
+            <h4 class="mt">Por caducar</h4>
+            <div id="porCaducar">
+              @for (c of porCaducar; track c[0]) {
+              <div class="cad-row"><div><b>{{ c[0] }}</b><br><small class="muted">{{ c[1] }}</small></div><span class="badge badge-orange">• {{ c[2] }}</span></div>
+              }
+            </div>
+            <div class="tip lilac">Análisis de consumo disponible<br><small>Revisa la proyección de insumos y el histórico de consumo en el módulo de Analítica de Consumo.</small>
+              <button class="btn btn-outline mt" (click)="ir('v-consumo')">Ver analítica de Harina →</button></div>
+          </div>
+        </div>
+      </section>
+      }
+
+      <!-- ============ 4. CLIENTES Y RESEÑAS ============ -->
+      @if (vista() === 'v-clientes') {
+      <section class="view" id="v-clientes">
+        <div class="row-between"><button class="link-back" (click)="ir('v-hub')">← Volver al Hub Principal</button><span class="muted small">Relación con clientes · Últimos 7 días</span></div>
+        <div class="tabs">
+          <button [class.active]="periodoClientes() === 'hoy'" (click)="setPeriodo('clientes', 'hoy')">Hoy</button>
+          <button [class.active]="periodoClientes() === 'semana'" (click)="setPeriodo('clientes', 'semana')">Semana</button>
+          <button [class.active]="periodoClientes() === 'mes'" (click)="setPeriodo('clientes', 'mes')">Mes</button>
+          <button [class.active]="periodoClientes() === 'custom'" (click)="setPeriodo('clientes', 'custom')">Personalizado</button>
+        </div>
+        <div class="two-col rev">
+          <div class="card">
+            <h3>Resumen de Clientes</h3>
+            <div class="mini-stats three"><div><b>18</b><small>Recurrentes</small></div><div><b>10</b><small>Nuevos</small></div><div><b>28</b><small>Total</small></div></div>
+            <div class="bar"><i style="width:64.2%"></i></div>
+            <p class="badge badge-lilac mt"><i class='bi bi-arrow-repeat' aria-hidden='true'></i> 64.2% tasa de retorno</p>
+            <p class="chip-activos"><span class="badge badge-lilac">• Clientes activos</span> <span class="muted small">64.2% retorno · 35.8% nuevo</span></p>
+          </div>
+          <div class="card">
+            <div class="row-between"><h3>Análisis de Sentimiento y Reseñas Recientes</h3><b class="rating">★ 5.0</b></div>
+            <div class="sent small"><span class="g">● Positivo 94%</span><span class="o">● Neutro 4%</span><span class="r">● Negativo 2%</span></div>
+            <div id="listaResenas">
+              @for (r of resenas; track r.nombre) {
+              <div class="resena"><div class="avatar-sm">{{ r.ini }}</div>
+                <div><b>{{ r.nombre }}</b> <span class="stars">★★★★★</span> <small class="muted">{{ r.tiempo }}</small><br><span class="small">{{ r.texto }}</span></div></div>
+              }
+            </div>
+            <button class="link-back" (click)="ir('v-cliente-detalle')">Ver Perfil de Cliente →</button>
+          </div>
+        </div>
+        <div class="two-col rev">
+          <div class="card"><div class="row-between"><h3>Ventas por Período</h3><span class="muted small">Semana <i class='bi bi-chevron-down' aria-hidden='true'></i></span></div>
+            <p class="muted small" id="ventasTotal">{{ ventasTotal() }}</p>
+            <div class="bars" id="chartVentas">
+              @for (c of ventas().cols; track $index) {
+              <div class="col" [class.hoy]="c.hoy" [title]="c.etiqueta + ': ' + moneda(c.valor)">
+                <span>{{ c.k }}</span><i [style.height.%]="c.alto"></i><span>{{ c.etiqueta }}</span></div>
+              }
+            </div>
+            <div class="row-between small mt"><span id="ventasHoy">{{ ventasHoy }}</span><span class="ok-dot">▲ 8.3% vs ayer</span></div></div>
+          <div class="card"><h3>Horas y Días de Mayor Demanda</h3><p class="muted small">Patrón semanal · últimas 4 semanas</p>
+            <div id="heatmap">
+              <div class="heat"><span></span>
+                @for (h of horas; track h) { <span style="text-align:center">{{ h }}</span> }
+                @for (fila of demanda; track $index; let i = $index) {
+                  <span>{{ dias[i] }}</span>
+                  @for (n of fila; track $index; let j = $index) {
+                    <div class="c" [style.background]="coloresCalor[n]" [title]="dias[i] + ' ' + horas[j] + ': nivel ' + n + '/4'"></div>
+                  }
+                }
+              </div>
+              <div class="heat-leyenda">Menor @for (c of coloresCalor; track c) { <i [style.background]="c"></i> } Mayor</div>
+            </div>
+          </div>
+        </div>
+      </section>
+      }
+
+      <!-- ============ 5. AUDITORÍA ============ -->
+      @if (vista() === 'v-auditoria') {
+      <section class="view" id="v-auditoria">
+        <button class="link-back" (click)="ir('v-hub')">← Volver al Hub Principal</button>
+        <div class="row-between mb">
+          <span class="muted small"><i class='bi bi-shield-check' aria-hidden='true'></i> Registro inalterable · Todos los roles · Solo lectura</span>
+          <div class="row-gap"><span class="badge badge-red" id="contSensibles"><i class='bi bi-exclamation-triangle' aria-hidden='true'></i> {{ sensiblesTotal }} acciones sensibles hoy</span><button class="btn btn-outline" id="btnExportarBitacora" (click)="exportarBitacora()"><i class='bi bi-box-arrow-up' aria-hidden='true'></i> Exportar bitácora</button></div>
+        </div>
+        <div class="filtros">
+          <input type="search" id="audBuscar" placeholder="Buscar usuario, acción..." [ngModel]="audBuscar()" (ngModelChange)="audBuscar.set($event)">
+          <select id="audRol" [ngModel]="audRol()" (ngModelChange)="audRol.set($event)"><option value="">Rol</option>@for (r of roles; track r) { <option>{{ r }}</option> }</select>
+          <select id="audModulo" [ngModel]="audModulo()" (ngModelChange)="audModulo.set($event)"><option value="">Módulo</option>@for (m of modulos; track m) { <option>{{ m }}</option> }</select>
+          <button class="btn btn-light" id="audSensibles" [class.activo]="soloSensibles()" (click)="soloSensibles.set(!soloSensibles())"><i class='bi bi-exclamation-triangle' aria-hidden='true'></i> Acciones sensibles</button>
+          <input type="date" id="audFecha" [(ngModel)]="audFecha">
+        </div>
+        <div class="card nopad">
+          <div class="row-between pad"><h3>Actividad del sistema</h3><span class="muted small" id="audResumen">13 Oct 2026 · Últimos movimientos · {{ bitacoraFiltrada().length }} registros</span></div>
+          <table class="tabla"><thead><tr><th>Fecha/Hora</th><th>Usuario</th><th>Rol</th><th>Módulo</th><th>Acción realizada</th><th>Registro afectado</th><th>Modificación (anterior → nuevo)</th><th>IP</th><th>Dispositivo</th><th>Acción</th></tr></thead>
+            <tbody id="tbodyAud">
+              @for (b of bitacoraFiltrada(); track b.id) {
+              <tr [class.sensible]="b.sensible">
+                <td>{{ b.fecha }}<br><small class="muted">{{ b.hora }} · #{{ b.id }}</small></td>
+                <td>{{ b.usuario }}</td><td>{{ b.rol }}</td><td>{{ b.modulo }}</td>
+                <td><span class="acc">{{ b.accion }}{{ b.sensible ? ' ▲' : '' }}</span></td>
+                <td class="link">{{ b.registro }}</td>
+                <td>{{ b.anterior }} → <b>{{ b.nuevo }}</b></td>
+                <td>{{ b.ip }}</td><td>{{ b.dispositivo }}</td>
+                <td><button class="btn-icon" title="Inspeccionar" (click)="abrirInspeccion(b)"><i class='bi bi-eye' aria-hidden='true'></i></button></td>
+              </tr>
+              } @empty {
+              <tr><td colspan="10" class="muted" style="text-align:center;padding:24px">Sin resultados.</td></tr>
+              }
+            </tbody></table>
+          <p class="muted small pad"><i class='bi bi-info-circle' aria-hidden='true'></i> Las filas resaltadas identifican cambios de precio y cancelaciones de pago.</p>
+        </div>
+      </section>
+      }
+
+      <!-- ============ 6. DETALLE: CONSUMO ============ -->
+      @if (vista() === 'v-consumo') {
+      <section class="view" id="v-consumo">
+        <button class="link-back" (click)="ir('v-almacen')">← Volver a Monitoreo de Almacén</button>
+        <p class="muted small">Harina de Trigo · #INS-004 · Categoría: Harinas y derivados · Sincronizado · 13 Oct 2026, 14:30</p>
+        <h2 class="mb">Harina de Trigo <span class="badge badge-red">• Nivel Crítico · 15%</span></h2>
+        <div class="kpis kpis3">
+          <div class="card kpi"><div><small class="muted">Stock Actual</small><div class="big red">15 kg</div><small class="muted">Mínimo recomendado: 50 kg</small></div><span class="ico"><i class='bi bi-exclamation-triangle' aria-hidden='true'></i></span></div>
+          <div class="card kpi"><div><small class="muted">Consumo Promedio Diario</small><div class="big">12 kg / día</div><small class="muted">Promedio últimos 30 días</small></div><span class="ico"><i class='bi bi-graph-up-arrow' aria-hidden='true'></i></span></div>
+          <div class="card kpi"><div><small class="muted">Días de Autonomía Restantes</small><div class="big red" id="autonomia">{{ autonomia }}</div><small class="red small">▲ Reabastecimiento urgente</small></div><span class="ico"><i class='bi bi-calendar-check' aria-hidden='true'></i></span></div>
+        </div>
+        <div class="two-col">
+          <div class="card"><h3>Consumo histórico · últimos 30 días</h3><div class="row-between"><p class="muted small">Consumo real vs umbral de reorden (solo lectura)</p><div class="leyenda-linea"><span><i style="background:#7c5cf0"></i>Consumo real</span><span><i style="background:#dc2626"></i>Umbral de reorden</span></div></div>
+            <div id="chartConsumo">
+              <svg class="chart-svg" [attr.viewBox]="'0 0 ' + cW + ' ' + cH" role="img" aria-label="Consumo histórico de harina">
+                @for (v of cEjes; track v) {
+                  <line x1="40" [attr.x2]="cX2" [attr.y1]="cy(v)" [attr.y2]="cy(v)" stroke="#eceaf3"/>
+                  <text x="34" [attr.y]="cy(v) + 3" font-size="9" text-anchor="end" fill="#888">{{ v }} kg</text>
+                }
+                <line x1="40" [attr.x2]="cX2" [attr.y1]="cy(50)" [attr.y2]="cy(50)" stroke="#dc2626" stroke-dasharray="5 4"/>
+                <text [attr.x]="cW - 12" [attr.y]="cy(50) - 5" font-size="9" text-anchor="end" fill="#dc2626">Umbral de reorden: 50 kg</text>
+                <polyline [attr.points]="cPuntos" fill="none" stroke="#7c5cf0" stroke-width="2"/>
+                @for (e of cFechas; track e.f) {
+                  <text [attr.x]="e.x" [attr.y]="cH - 10" font-size="9" text-anchor="middle" fill="#888">{{ e.f }}</text>
+                }
+              </svg>
+            </div></div>
+          <div>
+            <div class="card"><h3>Tiempo de entrega · Proveedores</h3>
+              <div id="proveedoresTiempo">
+                @for (p of proveedoresTiempo; track p[0]) {
+                <div class="prov-row"><div class="row-between"><b>{{ p[0] }}</b><b [style.color]="p[3]">{{ p[1] }}</b></div><div class="bar"><i [style.width.%]="p[2]" [style.background]="p[3]"></i></div></div>
+                }
+              </div>
+              <div class="tip lilac small">Proveedor recomendado: Molinos del Sur · Lead time más corto para reposición urgente.</div></div>
+            <div class="card mt"><table class="tabla"><thead><tr><th>Lote</th><th>Cantidad</th><th>Caducidad</th><th>Estado</th></tr></thead><tbody>
+              <tr><td class="link">#LT-2241</td><td>8 kg</td><td>15 Oct 2026</td><td><span class="badge badge-orange">• 2 días</span></td></tr>
+              <tr><td class="link">#LT-2238</td><td>7 kg</td><td>18 Oct 2026</td><td><span class="badge badge-orange">• 5 días</span></td></tr>
+              <tr><td class="link">#LT-2235</td><td>0 kg</td><td>13 Oct 2026</td><td><span class="badge badge-red">• Agotado</span></td></tr></tbody></table></div>
+          </div>
+        </div>
+      </section>
+      }
+
+      <!-- ============ 7. DETALLE: CLIENTE ============ -->
+      @if (vista() === 'v-cliente-detalle') {
+      <section class="view" id="v-cliente-detalle">
+        <button class="link-back" (click)="ir('v-clientes')">← Volver a Monitoreo de Clientes</button>
+        <div class="card perfil">
+          <div class="avatar-lg">AG</div>
+          <div><h2>Ana García</h2><span class="badge badge-lilac">• VIP / Recurrente</span><p class="muted small mt">ana.garcia&#64;email.com · 55 1234 5678</p></div>
+          <div class="perfil__k"><small class="muted">Lifetime Value</small><b>$12,450 MXN</b></div>
+          <div class="perfil__k"><small class="muted">Total Orders</small><b>8</b></div>
+          <div class="perfil__k"><small class="muted">Avg Ticket</small><b>$1,556 MXN</b></div>
+        </div>
+        <div class="two-col rev">
+          <div class="card"><div class="row-between"><h3>Historial de Pedidos</h3><span class="muted small">8 pedidos</span></div>
+            <table class="tabla"><thead><tr><th>Folio</th><th>Date</th><th>Items</th><th>Amount</th><th>Status</th></tr></thead>
+              <tbody id="tbodyHistorial">
+                @for (h of historialCliente; track h[0]) {
+                <tr><td class="link">{{ h[0] }}</td><td>{{ h[1] }}</td><td>{{ h[2] }}</td><td><b>{{ h[3] }}</b></td>
+                  <td><span class="badge" [class.badge-green]="h[4] === 'Entregado'" [class.badge-lilac]="h[4] !== 'Entregado'">• {{ h[4] }}</span></td></tr>
+                }
+              </tbody></table>
+            <p class="muted small mt">Mostrando 4 de 8 pedidos</p></div>
+          <div class="card"><h3>Reseñas y preferencias</h3>
+            <div class="resena"><div class="avatar-sm">AG</div><div><b>Ana García</b> <span class="stars">★★★★★</span><br><small class="muted">13 Oct 2026 · Compra verificada</small></div></div>
+            <blockquote>“El Red Velvet tiene un sabor increíble… ¡Mi favorito! Siempre cuidan cada detalle.”<br><small class="rubros">Sabor <span class="stars">★★★★★</span> · Atención <span class="stars">★★★★★</span></small></blockquote>
+            <div class="two-col rev inner">
+              <div><h4>Productos favoritos</h4><div class="donut-wrap"><div class="donut" style="background:conic-gradient(#7c3aed 0 62.5%,#a78bfa 62.5% 87.5%,#ddd6fe 87.5% 100%)"></div>
+                <ul class="leyenda"><li><i style="background:#7c3aed"></i>Red Velvet 62.5%</li><li><i style="background:#a78bfa"></i>Cupcakes 25%</li><li><i style="background:#ddd6fe"></i>Otros 12.5%</li></ul></div></div>
+              <div><h4>Historial de calificación</h4>
+                <div id="chartRating">
+                  <svg class="chart-svg" [attr.viewBox]="'0 0 ' + rW + ' ' + rH">
+                    @for (v of rEjes; track v) {
+                      <line x1="22" [attr.x2]="rW - 8" [attr.y1]="ry(v)" [attr.y2]="ry(v)" stroke="#eceaf3"/>
+                      <text x="16" [attr.y]="ry(v) + 3" font-size="8" text-anchor="end" fill="#888">{{ v }}</text>
+                    }
+                    <polyline fill="none" stroke="#7c5cf0" stroke-width="2" [attr.points]="rPuntos"/>
+                    @for (m of rMeses; track m.m) {
+                      <text [attr.x]="m.x" [attr.y]="rH - 4" font-size="8" text-anchor="middle" fill="#888">{{ m.m }}</text>
+                    }
+                  </svg>
+                </div></div>
+            </div>
+            <p class="muted small">Cliente desde febrero de 2026 · Prefiere entregas por la tarde.</p></div>
+        </div>
+      </section>
+      }
+
+      <!-- ============ 8. DETALLE: SEGUIMIENTO ============ -->
+      @if (vista() === 'v-seguimiento') {
+      <section class="view" id="v-seguimiento">
+        <button class="link-back" (click)="ir('v-pedidos')">← Volver a Monitoreo de Pedidos</button>
+        <div class="two-col rev">
+          <div>
+            <div class="card perfil2"><div class="avatar-sm lg">AG</div><div><b>Ana García</b><br><small class="muted">Cliente VIP · 8 pedidos</small><p class="small mt"><i class='bi bi-geo-alt' aria-hidden='true'></i> Av. Reforma 123<br><span class="muted">Zona Norte, Ciudad de México · Tel. 55 1234 5678</span></p></div><span class="badge badge-lilac">• En Ruta</span></div>
+            <div class="card mt"><div class="row-between"><h3>Desglose del pedido</h3><span class="badge badge-green">• Pagado</span></div>
+              <div class="item-ped"><span class="ico"><i class='bi bi-cake2' aria-hidden='true'></i></span><div><b>Red Velvet Aniversario - $1,500 MXN</b><br><small class="muted">1 pastel · 12 porciones · Mensaje: "Feliz aniversario"</small></div></div>
+              <div class="row-between small mt"><span class="muted">Total pagado · Transferencia #PG-0812</span><b>$1,500 MXN</b></div></div>
+            <div class="card mt"><h3>Seguimiento del pedido</h3>
+              <div class="timeline" id="timeline">
+                @for (p of pasos; track p.nombre) {
+                <div class="t-step" [class]="'t-step ' + p.clase"><i>{{ p.clase === 'hecho' ? '✓' : '' }}</i><b>{{ p.nombre }}</b><br>{{ p.hora }}@if (p.tiempo) {<small class="t-tiempo">{{ p.tiempo }}</small>}</div>
+                }
+              </div></div>
+          </div>
+          <div class="card">
+            <h3>Envío y repartidor</h3>
+            <div class="two-col rev inner"><div class="box"><small class="muted">Repartidor asignado</small><br><b>E. Torres</b> <small class="muted">ID: DRV-882</small></div><div class="box"><small class="muted">Hora estimada de entrega</small><br><b>14:45</b> <small class="red">+15 min estimado</small></div></div>
+            <div class="row-between small mt"><b>Ruta de entrega · #ENV-021</b><span class="link">Zona Norte</span></div>
+            <svg class="mapa" viewBox="0 0 360 200" aria-label="Mapa ilustrativo de la ruta">
+              <rect width="360" height="200" fill="#eef0ec"/>
+              <g fill="#dfe3dc"><rect x="10" y="10" width="90" height="60"/><rect x="115" y="10" width="110" height="60"/><rect x="240" y="10" width="110" height="60"/><rect x="10" y="85" width="90" height="50"/><rect x="240" y="85" width="110" height="50"/><rect x="10" y="150" width="340" height="40"/></g>
+              <rect x="125" y="85" width="100" height="50" fill="#d3e5d0" rx="6"/>
+              <polyline id="ruta" points="35,150 35,110 105,110 105,70 235,70 235,25" fill="none" stroke="#7c5cf0" stroke-width="3"/>
+              <circle cx="35" cy="150" r="5" fill="#fff" stroke="#7c5cf0" stroke-width="2"/>
+              <circle id="camion" [attr.cx]="camX()" [attr.cy]="camY()" r="9" fill="#7c5cf0"/><path id="camionIco" d="M0 0h7v5H0zM7 1.5h2.5L11 3v2H7z" fill="#fff" [attr.transform]="'translate(' + (camX() - 6) + ' ' + (camY() - 3) + ')'"/>
+              <circle cx="244" cy="19" r="3.5" fill="#7c5cf0"/><text x="251" y="22" font-size="10" fill="#333">Zona Norte</text>
+              <rect x="22" y="158" width="104" height="16" rx="8" fill="#fff" stroke="#e0dcef"/><text x="30" y="169" font-size="8" fill="#666">GPS · Última ubicación 14:30</text>
+            </svg>
+            <div class="row-between mt"><span class="small">Velocidad actual</span><span class="badge badge-lilac" id="velocidad">{{ velocidad() }}</span></div>
+            <div class="alerta amarilla small"><i class='bi bi-clock' aria-hidden='true'></i> Tráfico intenso · Retraso estimado de 15 min</div>
+            <p class="muted small mt">El cliente ha sido notificado de la nueva hora de llegada.<br>GPS 19.4621° N · 99.1284° O</p>
+          </div>
+        </div>
+      </section>
+      }
+
+      <!-- ============ 9. DETALLE: INSPECCIÓN DE REGISTRO ============ -->
+      @if (vista() === 'v-inspeccion') {
+      <section class="view" id="v-inspeccion">
+        <button class="link-back" (click)="ir('v-auditoria')">← Volver a Bitácora</button>
+        @if (inspeccion(); as r) {
+        <div class="card insp">
+          <div class="alerta" id="inspAlerta" [hidden]="!r.sensible"><b><i class='bi bi-shield-check' aria-hidden='true'></i> Acción Sensible Registrada: {{ r.titulo }}</b></div>
+          <div class="row-between mt"><h2 id="inspTitulo">{{ inspTitulo() }}</h2><span class="badge badge-lilac">• Solo lectura</span></div>
+          <p class="muted small" id="inspSub">{{ inspSub() }}</p>
+          <div class="form-grid mt" id="inspDatos">
+            <div class="dato"><small>Usuario</small><b>{{ r.usuario }} - {{ r.rol }}</b></div>
+            <div class="dato"><small>Fecha y hora</small><b>{{ r.fecha }}, {{ r.hora }}</b></div>
+            <div class="dato"><small>IP</small><b>{{ r.ip }}</b></div>
+            <div class="dato"><small>Dispositivo</small><b>{{ r.dispositivo }}</b></div>
+          </div>
+          <div class="form-grid mt" id="inspValores">
+            <div class="valor ant"><small>Valor Anterior</small><b>{{ r.anterior }}</b></div>
+            <div class="valor nue"><small>Valor Nuevo</small><b>{{ r.nuevo }}</b></div>
+          </div>
+          <div class="row-between mt"><div><b class="small">Registro protegido e inalterable</b><br><small class="muted">Conserva el historial completo de la modificación.</small></div><button class="btn btn-primary" id="btnReportePDF" (click)="imprimir()">Descargar Reporte PDF</button></div>
+        </div>
+        } @else {
+        <div class="card insp"><p class="muted small">Selecciona un registro desde la bitácora para inspeccionarlo.</p></div>
+        }
+      </section>
+      }
+
+    </main>
+  </div>
+</div>

@@ -1,0 +1,370 @@
+<!-- Navegación lateral -->
+<aside class="menu-lateral position-fixed top-0 start-0 h-100 border-end">
+
+    <a routerLink="/inicio" class="marca d-block text-center text-decoration-none py-4">
+        <strong>VANABBY</strong>
+        <small class="d-block">Repostería</small>
+    </a>
+
+    <nav class="px-2" aria-label="Navegación principal">
+        <a routerLink="/inicio"
+           class="enlace-menu d-flex flex-column align-items-center gap-2 rounded-3 py-3">
+            <i class="bi bi-house-door fs-4" aria-hidden="true"></i>
+            <span>Inicio</span>
+        </a>
+    </nav>
+
+</aside>
+
+<div class="estructura-principal">
+
+    <!-- Barra superior -->
+    <header class="barra-superior bg-white border-bottom d-flex align-items-center justify-content-end gap-3 px-4">
+
+        <i class="bi bi-person-circle fs-1" aria-hidden="true"></i>
+
+        <div class="datos-usuario">
+            <strong class="d-block">P. M. Ramírez</strong>
+            <small class="text-secondary">Administrador</small>
+        </div>
+
+        <time id="fecha-actual" class="border-start ps-3 text-nowrap" [attr.datetime]="fechaISO">{{ fechaActual }}</time>
+
+        <a href="/login" (click)="cerrarSesion($event)" class="text-dark fs-4 ms-2" aria-label="Cerrar sesión">
+            <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+        </a>
+
+    </header>
+
+    <main class="container-fluid px-3 px-lg-4 py-4">
+
+        <!-- LISTADO DE INSUMOS -->
+        <section id="vista-listado" class="vista-almacen" [class.d-none]="vista() !== 'listado'" aria-labelledby="titulo-almacen">
+
+            <header class="mb-3">
+                <h1 id="titulo-almacen" class="fs-4 fw-bold mb-1">Almacén</h1>
+                <p class="small text-secondary mb-0">Control de insumos y existencias.</p>
+            </header>
+
+            <!-- Indicadores -->
+            <section class="row g-3 mb-3" aria-label="Resumen del almacén">
+
+                <div class="col-md-4">
+                    <article class="card tarjeta-panel h-100">
+                        <div class="card-body d-flex align-items-center gap-3">
+                            <span class="icono-indicador">
+                                <i class="bi bi-box-seam" aria-hidden="true"></i>
+                            </span>
+                            <div>
+                                <h2 class="small text-secondary fw-normal mb-1">Insumos totales</h2>
+                                <strong class="fs-4">248</strong>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-md-4">
+                    <article class="card tarjeta-panel h-100">
+                        <div class="card-body d-flex align-items-center gap-3">
+                            <span class="icono-indicador">
+                                <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+                            </span>
+                            <div>
+                                <h2 class="small text-secondary fw-normal mb-1">Stock bajo</h2>
+                                <strong class="fs-4">8</strong>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-md-4">
+                    <article class="card tarjeta-panel h-100">
+                        <div class="card-body d-flex align-items-center gap-3">
+                            <span class="icono-indicador">
+                                <i class="bi bi-clock-history" aria-hidden="true"></i>
+                            </span>
+                            <div>
+                                <h2 class="small text-secondary fw-normal mb-1">Por caducar</h2>
+                                <strong class="fs-4">5</strong>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+            </section>
+
+            <!-- Búsqueda y acceso al registro -->
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+                <form id="formulario-busqueda"
+                      class="input-group input-group-sm campo-busqueda"
+                      role="search" (submit)="$event.preventDefault()">
+                    <label for="buscar-insumo" class="visually-hidden">Buscar insumo</label>
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="bi bi-search text-secondary" aria-hidden="true"></i>
+                    </span>
+                    <input id="buscar-insumo" name="busqueda"
+                           type="search"
+                           class="form-control border-start-0"
+                           placeholder="Buscar insumo..."
+                           [ngModel]="busqueda()" (ngModelChange)="busqueda.set($event)">
+                </form>
+
+                <button type="button" class="btn boton-morado btn-sm px-3" (click)="abrirFormulario('agregar')">
+                    <i class="bi bi-plus-lg me-1" aria-hidden="true"></i>
+                    Agregar insumo
+                </button>
+            </div>
+
+            <!-- Tabla de insumos -->
+            <section class="card tarjeta-panel overflow-hidden" aria-labelledby="titulo-listado">
+                <h2 id="titulo-listado" class="visually-hidden">Lista de insumos almacenados</h2>
+
+                <div class="table-responsive">
+                    <table class="table tabla-insumos align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">Insumo</th>
+                                <th scope="col">Categoría</th>
+                                <th scope="col">Existencia</th>
+                                <th scope="col">Unidad</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-insumos">
+                            @for (i of visibles(); track i.nombre) {
+                                <tr>
+                                    <th scope="row">{{ i.nombre }}</th>
+                                    <td>{{ i.categoria }}</td>
+                                    <td>{{ i.existencia }}</td>
+                                    <td>{{ i.unidad }}</td>
+                                    <td>
+                                        <span [class]="'badge ' + estilosEstado[i.estado]">{{ i.estado }}</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex gap-1">
+                                            <button type="button" class="btn btn-light btn-sm"
+                                                    (click)="ver(i)"
+                                                    [attr.aria-label]="'Ver ' + i.nombre.toLowerCase()">
+                                                <i class="bi bi-eye" aria-hidden="true"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-light btn-sm"
+                                                    (click)="abrirFormulario('editar', i)"
+                                                    [attr.aria-label]="'Editar ' + i.nombre.toLowerCase()">
+                                                <i class="bi bi-pencil" aria-hidden="true"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-light btn-sm"
+                                                    (click)="abrirEliminar(i)"
+                                                    [attr.aria-label]="'Eliminar ' + i.nombre.toLowerCase()">
+                                                <i class="bi bi-trash" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                @if (visibles().length === 0) {
+                    <p id="sin-resultados" class="text-secondary text-center py-4 mb-0">No se encontraron insumos.</p>
+                }
+
+                <footer class="card-footer bg-white d-flex justify-content-between align-items-center flex-wrap gap-3 py-3">
+                    <small id="contador-insumos" class="text-secondary">{{ contador() }}</small>
+
+                    <nav aria-label="Paginación del almacén">
+                        <ul class="pagination pagination-sm mb-0">
+                            <li class="page-item disabled"><span class="page-link">‹</span></li>
+                            <li class="page-item active" aria-current="page"><span class="page-link">1</span></li>
+                            <li class="page-item disabled"><span class="page-link">2</span></li>
+                            <li class="page-item disabled"><span class="page-link">3</span></li>
+                            <li class="page-item disabled"><span class="page-link">…</span></li>
+                            <li class="page-item disabled"><span class="page-link">42</span></li>
+                            <li class="page-item disabled"><span class="page-link">›</span></li>
+                        </ul>
+                    </nav>
+                </footer>
+            </section>
+        </section>
+
+        <!-- DETALLE DEL INSUMO -->
+        <section id="vista-detalle" class="vista-almacen" [class.d-none]="vista() !== 'detalle'" aria-labelledby="titulo-detalle">
+
+            <header class="mb-4">
+                <button type="button" class="btn btn-link boton-volver p-0 mb-2" (click)="mostrarVista('listado')">
+                    <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                    Volver a almacén
+                </button>
+                <h1 id="titulo-detalle" class="fs-4 fw-bold mb-1">Detalles del insumo</h1>
+                <p class="small text-secondary mb-0">Información del producto almacenado.</p>
+            </header>
+
+            <article class="card tarjeta-panel formulario-contenedor mx-auto">
+                <header class="card-header bg-white d-flex justify-content-between align-items-center gap-3 p-4">
+                    <h2 id="detalle-nombre" class="fs-5 fw-bold mb-0">{{ seleccionado().nombre }}</h2>
+                    <span id="detalle-estado" [class]="'badge ' + estilosEstado[seleccionado().estado]">{{ seleccionado().estado }}</span>
+                </header>
+
+                <div class="card-body p-4">
+                    <dl class="row g-4 mb-0">
+                        <div class="col-sm-6">
+                            <dt>Nombre</dt>
+                            <dd id="detalle-nombre-campo">{{ seleccionado().nombre }}</dd>
+                        </div>
+                        <div class="col-sm-6">
+                            <dt>Categoría</dt>
+                            <dd id="detalle-categoria">{{ seleccionado().categoria }}</dd>
+                        </div>
+                        <div class="col-sm-6">
+                            <dt>Existencia actual</dt>
+                            <dd id="detalle-existencia">{{ seleccionado().existencia }} {{ seleccionado().unidad }}</dd>
+                        </div>
+                        <div class="col-sm-6">
+                            <dt>Stock mínimo</dt>
+                            <dd id="detalle-minimo">{{ seleccionado().minimo }} {{ seleccionado().unidad }}</dd>
+                        </div>
+                        <div class="col-sm-6">
+                            <dt>Fecha de caducidad</dt>
+                            <dd id="detalle-caducidad">{{ formatearFecha(seleccionado().caducidad) }}</dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <footer class="card-footer bg-white d-flex justify-content-end gap-2 p-3">
+                    <button type="button" class="btn btn-outline-secondary" (click)="mostrarVista('listado')">Volver</button>
+                    <button type="button" class="btn boton-morado" (click)="abrirFormulario('editar')">Editar insumo</button>
+                </footer>
+            </article>
+        </section>
+
+        <!-- AGREGAR / EDITAR INSUMO -->
+        <section id="vista-formulario" class="vista-almacen" [class.d-none]="vista() !== 'formulario'" aria-labelledby="titulo-formulario">
+
+            <header class="mb-4">
+                <button type="button" class="btn btn-link boton-volver p-0 mb-2" (click)="mostrarVista('listado')">
+                    <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                    Volver a almacén
+                </button>
+                <h1 id="titulo-formulario" class="fs-4 fw-bold mb-1">{{ editando() ? 'Editar insumo' : 'Agregar insumo' }}</h1>
+                <p id="descripcion-formulario" class="small text-secondary mb-0">
+                    {{ editando() ? 'Modificar la información del insumo.' : 'Registrar un nuevo insumo en el almacén.' }}
+                </p>
+            </header>
+
+            <form id="formulario-insumo" class="card tarjeta-panel formulario-contenedor mx-auto" (submit)="$event.preventDefault()">
+
+                <header class="card-header bg-white p-4">
+                    <h2 id="titulo-datos" class="fs-6 fw-bold mb-1">
+                        {{ editando() ? 'Actualizar información' : 'Información del insumo' }}
+                    </h2>
+                    <p class="small text-secondary mb-0">Los campos marcados con * son obligatorios.</p>
+                </header>
+
+                <div class="card-body p-4">
+                    <div class="row g-3">
+
+                        <!-- Nombre -->
+                        <div class="col-sm-6">
+                            <label for="insumo-nombre" class="form-label">
+                                Nombre del insumo <span class="texto-morado">*</span>
+                            </label>
+                            <input id="insumo-nombre" name="nombre" type="text" class="form-control"
+                                   placeholder="Ej. Harina de trigo" required [(ngModel)]="formNombre">
+                        </div>
+
+                        <!-- Categoría -->
+                        <div class="col-sm-6">
+                            <label for="insumo-categoria" class="form-label">
+                                Categoría <span class="texto-morado">*</span>
+                            </label>
+                            <select id="insumo-categoria" name="categoria" class="form-select" required [(ngModel)]="formCategoria">
+                                <option value="" disabled>Seleccionar categoría</option>
+                                @for (c of categorias; track c) {
+                                    <option [value]="c">{{ c }}</option>
+                                }
+                            </select>
+                        </div>
+
+                        <!-- Cantidad -->
+                        <div class="col-sm-6">
+                            <label for="insumo-cantidad" class="form-label">
+                                <span id="etiqueta-cantidad">{{ editando() ? 'Cantidad disponible' : 'Cantidad inicial' }}</span>
+                                <span class="texto-morado">*</span>
+                            </label>
+                            <input id="insumo-cantidad" name="cantidad" type="number" class="form-control"
+                                   min="0" step="0.01" placeholder="0" required [(ngModel)]="formCantidad">
+                        </div>
+
+                        <!-- Unidad -->
+                        <div class="col-sm-6">
+                            <label for="insumo-unidad" class="form-label">
+                                Unidad de medida <span class="texto-morado">*</span>
+                            </label>
+                            <select id="insumo-unidad" name="unidad" class="form-select" required [(ngModel)]="formUnidad">
+                                <option value="" disabled>Seleccionar unidad</option>
+                                @for (u of unidades; track u.valor) {
+                                    <option [value]="u.valor">{{ u.texto }}</option>
+                                }
+                            </select>
+                        </div>
+
+                        <!-- Stock mínimo -->
+                        <div class="col-sm-6">
+                            <label for="insumo-minimo" class="form-label">
+                                Stock mínimo <span class="texto-morado">*</span>
+                            </label>
+                            <input id="insumo-minimo" name="minimo" type="number" class="form-control"
+                                   min="0" step="0.01" placeholder="0" required [(ngModel)]="formMinimo">
+                        </div>
+
+                        <!-- Caducidad -->
+                        <div class="col-sm-6">
+                            <label for="insumo-caducidad" class="form-label">
+                                Fecha de caducidad
+                                <span class="text-secondary fw-normal">(opcional)</span>
+                            </label>
+                            <input id="insumo-caducidad" name="caducidad" type="date" class="form-control" [(ngModel)]="formCaducidad">
+                        </div>
+
+                    </div>
+                </div>
+
+                <footer class="card-footer bg-white d-flex justify-content-end gap-2 p-3">
+                    <button type="button" class="btn btn-outline-secondary" (click)="mostrarVista('listado')">Cancelar</button>
+                    <button id="guardar-insumo" type="button" class="btn boton-morado" (click)="mostrarVista('listado')">
+                        {{ editando() ? 'Guardar cambios' : 'Guardar insumo' }}
+                    </button>
+                </footer>
+            </form>
+        </section>
+
+    </main>
+</div>
+
+<!-- MODAL: ELIMINAR INSUMO -->
+<div class="modal fade" #modalEliminar
+     id="modal-eliminar-insumo"
+     tabindex="-1"
+     aria-labelledby="titulo-eliminar"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-eliminar">
+        <article class="modal-content modal-vanabby">
+
+            <div class="modal-body p-4">
+                <span class="icono-eliminar mb-3">
+                    <i class="bi bi-trash" aria-hidden="true"></i>
+                </span>
+                <h2 id="titulo-eliminar" class="fs-5 fw-bold mb-2">Eliminar insumo</h2>
+                <p class="text-secondary small mb-3">¿Estás seguro de que deseas eliminar este insumo?</p>
+                <p id="eliminar-nombre" class="bg-body-tertiary rounded-3 p-3 fw-semibold mb-3">{{ seleccionado().nombre }}</p>
+                <p class="text-secondary small mb-0">Esta acción no se puede deshacer.</p>
+            </div>
+
+            <footer class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" (click)="confirmarEliminar()">Eliminar</button>
+            </footer>
+        </article>
+    </div>
+</div>
