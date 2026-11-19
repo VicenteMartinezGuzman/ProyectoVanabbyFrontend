@@ -1,0 +1,127 @@
+
+<!-- Detalles del envío -->
+<section
+    id="vista-detalle"
+    class="vista-envios"
+    aria-labelledby="titulo-detalle"
+    hidden
+>
+
+    <header class="encabezado-pagina">
+
+        <button
+            type="button"
+            class="boton-volver"
+            data-ir="listado"
+        >
+            ← Volver a envíos
+        </button>
+
+        <h1 id="titulo-detalle">
+            Detalles del envío
+        </h1>
+
+        <p>
+            Información general de la entrega registrada.
+        </p>
+
+    </header>
+
+    <article class="tarjeta-detalle">
+
+        <header class="encabezado-tarjeta">
+
+            <h2 id="detalle-envio">
+                Envío
+            </h2>
+
+        </header>
+
+        <dl class="datos-detalle">
+
+            <!-- Identificación -->
+            <div>
+                <dt>ID del envío</dt>
+                <dd id="detalle-id"></dd>
+            </div>
+
+            <div>
+                <dt>Pedido</dt>
+                <dd id="detalle-pedido"></dd>
+            </div>
+
+            <!-- Cliente -->
+            <div>
+                <dt>Cliente</dt>
+                <dd id="detalle-cliente"></dd>
+            </div>
+
+            <div>
+                <dt>Teléfono</dt>
+                <dd id="detalle-telefono"></dd>
+            </div>
+
+            <!-- Dirección -->
+            <div>
+                <dt>Dirección de entrega</dt>
+                <dd id="detalle-direccion"></dd>
+            </div>
+
+            <!-- Empleado -->
+            <div>
+                <dt>Empleado responsable</dt>
+                <dd id="detalle-empleado"></dd>
+            </div>
+
+            <!-- Costo -->
+            <div>
+                <dt>Costo de envío (MXN)</dt>
+                <dd id="detalle-costo-envio"></dd>
+            </div>
+
+            <!-- Fechas -->
+            <div>
+                <dt>Fecha de salida</dt>
+                <dd>
+                    <time id="detalle-fecha-salida"></time>
+                </dd>
+            </div>
+
+            <div>
+                <dt>Fecha de entrega real</dt>
+                <dd>
+                    <time id="detalle-fecha-entrega-real"></time>
+                </dd>
+            </div>
+
+            <!-- Notas -->
+            <div class="detalle-observaciones">
+                <dt>Notas del envío</dt>
+                <dd id="detalle-notas"></dd>
+            </div>
+
+        </dl>
+
+        <footer class="pie-tarjeta">
+
+            <button
+                type="button"
+                class="boton-secundario"
+                data-ir="listado"
+            >
+                Volver
+            </button>
+
+            <button
+                type="button"
+                class="boton-principal"
+                data-ir="editar"
+            >
+                Editar envío
+            </button>
+
+        </footer>
+
+    </article>
+
+</section>

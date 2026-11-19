@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Envíos | Repostería Vanabby</title>
+
+    <link rel="stylesheet" href="../../css/compartido/estructura.css">
+    <link rel="stylesheet" href="../../css/envios/envios.css">
+    <link rel="stylesheet" href="../../css/envios/modales.css">
+</head>
+
+<body class="pagina-sistema">
+
+    <!-- Navegación lateral -->
+    <aside class="barra-lateral" aria-label="Barra lateral">
+
+        <a href="../inicio/inicio.html" class="marca">
+            <strong>VANABBY</strong>
+            <small>Repostería</small>
+        </a>
+
+        <nav class="navegacion-principal" aria-label="Navegación principal">
+
+            <a href="../inicio/inicio.html" class="enlace-inicio">
+                <span class="icono-navegacion" aria-hidden="true">⌂</span>
+                <span>Inicio</span>
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <div class="estructura-principal">
+
+        <!-- Encabezado -->
+        <header class="barra-superior">
+
+            <section class="perfil-usuario" aria-label="Sesión actual">
+
+                <span class="icono-perfil" aria-hidden="true">◉</span>
+
+                <p class="datos-usuario">
+                    <strong id="nombre-usuario-actual">Usuario</strong>
+                    <small id="rol-usuario-actual">Sin identificar</small>
+                </p>
+
+            </section>
+
+            <time id="fecha-actual" class="fecha-actual"></time>
+
+            <button
+                type="button"
+                id="cerrar-sesion"
+                class="cerrar-sesion"
+                aria-label="Cerrar sesión"
+            >
+                <span aria-hidden="true">⇥</span>
+            </button>
+
+        </header>
+
+        <!-- Vistas independientes de Envíos -->
+        <main
+            class="contenido-principal"
+            id="contenedor-vistas"
+        ></main>
+
+        <footer class="pie-pagina">
+            <small>Repostería Vanabby - Sistema de Gestión</small>
+        </footer>
+
+    </div>
+
+    <!-- Plantilla reutilizable para la tabla de envíos -->
+    <template id="plantilla-envio">
+
+        <tr class="fila-envio">
+
+            <td class="celda-envio"></td>
+
+            <td class="celda-pedido"></td>
+
+            <td class="celda-cliente"></td>
+
+            <td class="celda-direccion"></td>
+
+            <td class="celda-empleado"></td>
+
+            <td class="celda-costo"></td>
+
+            <td class="celda-salida"></td>
+
+            <td class="celda-entrega"></td>
+
+            <td class="acciones-envio">
+
+                <button
+                    type="button"
+                    data-ir="detalle"
+                    aria-label="Ver detalles del envío"
+                >
+                    Ver
+                </button>
+
+                <button
+                    type="button"
+                    data-ir="editar"
+                    aria-label="Editar envío"
+                >
+                    Editar
+                </button>
+
+            </td>
+
+        </tr>
+
+    </template>
+
+    <!-- Modales independientes -->
+    <div id="contenedor-modales"></div>
+
+    <script
+        src="../../js/compartido/estructura.js"
+        defer
+    ></script>
+
+    <script
+        src="../../js/envios/envios.js"
+        defer
+    ></script>
+
+</body>
+
+</html>
+

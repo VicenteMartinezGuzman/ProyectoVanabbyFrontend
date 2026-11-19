@@ -1,0 +1,101 @@
+
+<dialog
+    id="actualizar-estado"
+    class="modal-envio"
+    aria-labelledby="titulo-actualizar-estado"
+>
+    <form id="formulario-estado">
+
+        <header class="encabezado-modal">
+            <h2 id="titulo-actualizar-estado">
+                Actualizar estado del envío
+            </h2>
+
+            <button
+                type="button"
+                class="boton-cerrar-modal"
+                data-cerrar-modal="actualizar-estado"
+                aria-label="Cerrar ventana"
+            >
+                &times;
+            </button>
+        </header>
+
+        <section class="contenido-modal">
+
+            <dl class="resumen-envio">
+                <div>
+                    <dt>Pedido</dt>
+                    <dd id="estado-pedido">—</dd>
+                </div>
+
+                <div>
+                    <dt>Cliente</dt>
+                    <dd id="estado-cliente">—</dd>
+                </div>
+
+                <div>
+                    <dt>Estado actual</dt>
+                    <dd>
+                        <span id="estado-actual" class="etiqueta-estado">
+                            —
+                        </span>
+                    </dd>
+                </div>
+            </dl>
+
+            <label for="nuevo-estado">Nuevo estado</label>
+
+            <select
+                id="nuevo-estado"
+                name="estado"
+                required
+            >
+                <option value="">Selecciona un estado</option>
+                <option value="Pendiente">Pendiente</option>
+                <option value="En camino">En camino</option>
+                <option value="Entregado">Entregado</option>
+            </select>
+
+            <label for="notas-estado">
+                Notas finales (opcional)
+            </label>
+
+            <textarea
+                id="notas-estado"
+                name="notas"
+                rows="3"
+                placeholder="Observaciones sobre la entrega"
+            ></textarea>
+
+            <p
+                id="mensaje-estado"
+                class="mensaje-operacion"
+                role="status"
+                hidden
+            ></p>
+
+        </section>
+
+        <footer class="pie-modal">
+
+            <button
+                type="button"
+                class="boton-secundario"
+                data-cerrar-modal="actualizar-estado"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="submit"
+                id="guardar-estado"
+                class="boton-principal"
+            >
+                Guardar estado
+            </button>
+
+        </footer>
+
+    </form>
+</dialog>

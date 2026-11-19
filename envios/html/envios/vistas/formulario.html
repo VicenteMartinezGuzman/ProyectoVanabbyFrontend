@@ -1,0 +1,193 @@
+<!-- Registro y edición de envíos -->
+<section
+    id="vista-formulario"
+    class="vista-envios"
+    aria-labelledby="titulo-formulario"
+    hidden
+>
+
+    <header class="encabezado-pagina">
+
+        <button
+            type="button"
+            class="boton-volver"
+            data-ir="listado"
+        >
+            ← Volver a envíos
+        </button>
+
+        <h1 id="titulo-formulario">
+            Registrar envío
+        </h1>
+
+        <p id="descripcion-formulario">
+            Registrar una entrega a partir de un pedido existente.
+        </p>
+
+    </header>
+
+    <form
+        id="formulario-envio"
+        class="tarjeta-formulario"
+    >
+
+        <!-- Identificador para edición -->
+        <input
+            type="hidden"
+            id="envio-id"
+            name="envio_id"
+        >
+
+        <header class="encabezado-tarjeta">
+
+            <h2 id="titulo-datos-envio">
+                Información del envío
+            </h2>
+
+        </header>
+
+        <fieldset class="campos-envio">
+
+            <legend class="titulo-oculto">
+                Datos de la entrega
+            </legend>
+
+            <!-- Pedido -->
+            <label for="envio-pedido">
+                Pedido
+
+                <select
+                    id="envio-pedido"
+                    name="pedido_id"
+                    required
+                >
+                    <option value="">
+                        Selecciona un pedido
+                    </option>
+                </select>
+            </label>
+
+            <!-- Información del cliente -->
+            <label for="envio-cliente">
+                Cliente
+
+                <input
+                    type="text"
+                    id="envio-cliente"
+                    readonly
+                >
+            </label>
+
+            <label for="envio-telefono">
+                Teléfono del cliente
+
+                <input
+                    type="tel"
+                    id="envio-telefono"
+                    readonly
+                >
+            </label>
+
+            <!-- Dirección -->
+            <label for="envio-direccion">
+                Dirección de entrega
+
+                <select
+                    id="envio-direccion"
+                    name="direccion_id"
+                    required
+                >
+                    <option value="">
+                        Selecciona una dirección
+                    </option>
+                </select>
+            </label>
+
+            <!-- Empleado responsable -->
+            <label for="envio-repartidor">
+                Empleado responsable
+
+                <select
+                    id="envio-repartidor"
+                    name="empleado_id"
+                >
+                    <option value="">
+                        Sin asignar
+                    </option>
+                </select>
+            </label>
+
+            <!-- Costo -->
+            <label for="envio-costo">
+                Costo de envío (MXN)
+
+                <input
+                    type="number"
+                    id="envio-costo"
+                    name="costo_envio"
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00"
+                >
+            </label>
+
+            <!-- Fecha de salida -->
+            <label for="envio-fecha-salida">
+                Fecha y hora de salida
+
+                <input
+                    type="datetime-local"
+                    id="envio-fecha-salida"
+                    name="fecha_salida"
+                >
+            </label>
+
+            <!-- Fecha de entrega real -->
+            <label for="envio-fecha-entrega-real">
+                Fecha y hora de entrega real
+
+                <input
+                    type="datetime-local"
+                    id="envio-fecha-entrega-real"
+                    name="fecha_entrega_real"
+                >
+            </label>
+
+            <!-- Notas -->
+            <label for="envio-observaciones">
+                Notas del envío
+
+                <textarea
+                    id="envio-observaciones"
+                    name="notas"
+                    rows="3"
+                    placeholder="Indicaciones u observaciones de la entrega"
+                ></textarea>
+            </label>
+
+        </fieldset>
+
+        <footer class="pie-tarjeta">
+
+            <button
+                type="button"
+                class="boton-secundario"
+                data-ir="listado"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="submit"
+                id="guardar-formulario"
+                class="boton-principal"
+            >
+                Registrar envío
+            </button>
+
+        </footer>
+
+    </form>
+
+</section>
+

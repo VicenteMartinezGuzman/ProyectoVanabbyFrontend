@@ -1,0 +1,146 @@
+<!-- Listado de envíos -->
+<section
+    id="vista-listado"
+    class="vista-envios"
+    aria-labelledby="titulo-envios"
+>
+
+    <header class="encabezado-pagina">
+
+        <h1 id="titulo-envios">
+            Envíos
+        </h1>
+
+        <p>
+            Gestión de entregas, direcciones y empleados responsables.
+        </p>
+
+    </header>
+
+    <!-- Indicadores -->
+    <section
+        class="indicadores-envios"
+        aria-label="Resumen de envíos"
+    >
+
+        <article class="tarjeta-indicador">
+
+            <span class="icono-indicador" aria-hidden="true">
+                □
+            </span>
+
+            <h2>Total de envíos</h2>
+
+            <strong id="total-envios">0</strong>
+
+        </article>
+
+        <article class="tarjeta-indicador">
+
+            <span class="icono-indicador" aria-hidden="true">
+                ↗
+            </span>
+
+            <h2>Con fecha de salida</h2>
+
+            <strong id="total-con-salida">0</strong>
+
+        </article>
+
+        <article class="tarjeta-indicador">
+
+            <span class="icono-indicador" aria-hidden="true">
+                ✓
+            </span>
+
+            <h2>Con entrega registrada</h2>
+
+            <strong id="total-con-entrega">0</strong>
+
+        </article>
+
+    </section>
+
+    <!-- Listado -->
+    <section
+        class="seccion-listado"
+        aria-labelledby="titulo-listado"
+    >
+
+        <header class="encabezado-listado">
+
+            <h2 id="titulo-listado">
+                Listado de envíos
+            </h2>
+
+            <label
+                for="buscar-envio"
+                class="titulo-oculto"
+            >
+                Buscar envío
+            </label>
+
+            <input
+                type="search"
+                id="buscar-envio"
+                class="campo-busqueda"
+                placeholder="Buscar por envío, pedido o cliente..."
+            >
+
+            <button
+                type="button"
+                class="boton-principal"
+                data-ir="registrar"
+            >
+                + Registrar envío
+            </button>
+
+        </header>
+
+        <!-- Tabla de envíos -->
+        <section
+            class="contenedor-tabla"
+            aria-label="Tabla de envíos"
+        >
+
+            <table class="tabla-envios">
+
+                <thead>
+                    <tr>
+                        <th scope="col">ID envío</th>
+                        <th scope="col">Pedido</th>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Dirección</th>
+                        <th scope="col">Empleado</th>
+                        <th scope="col">Costo de envío</th>
+                        <th scope="col">Fecha de salida</th>
+                        <th scope="col">Entrega real</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tabla-envios"></tbody>
+
+            </table>
+
+            <p
+                id="sin-envios"
+                class="estado-vacio"
+            >
+                No hay envíos para mostrar.
+            </p>
+
+        </section>
+
+        <footer class="pie-listado">
+
+            <small id="contador-envios">
+                0 envíos
+            </small>
+
+        </footer>
+
+    </section>
+
+</section>
+
