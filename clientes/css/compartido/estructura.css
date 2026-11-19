@@ -1,0 +1,263 @@
+
+/* Estructura general */
+
+.pagina-sistema {
+    min-height: 100vh;
+    min-height: 100svh;
+    margin: 0;
+    background-color: #faf9f6;
+    color: #242424;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Barra lateral */
+
+.barra-lateral {
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    width: 110px;
+    height: 100vh;
+    height: 100svh;
+    background-color: #f1f1f9;
+    border-right: 1px solid #e4e4ea;
+}
+
+.marca {
+    display: flex;
+    min-height: 100px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #777777;
+    text-decoration: none;
+}
+
+.marca strong {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.marca small {
+    font-size: 10px;
+}
+
+.navegacion-principal {
+    padding: 16px 12px;
+}
+
+.enlace-inicio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 18px 8px;
+    border-radius: 12px;
+    background-color: #e9eaf4;
+    color: #242424;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.enlace-inicio:hover,
+.enlace-inicio:focus-visible {
+    background-color: #e3ddf4;
+}
+
+.icono-navegacion {
+    font-size: 28px;
+    line-height: 1;
+}
+
+/* Contenedor principal */
+
+.estructura-principal {
+    display: flex;
+    min-height: 100vh;
+    min-height: 100svh;
+    flex-direction: column;
+    margin-left: 110px;
+}
+
+.contenido-principal {
+    box-sizing: border-box;
+    flex: 1;
+    width: 100%;
+}
+
+/* Barra superior */
+
+.barra-superior {
+    box-sizing: border-box;
+    display: flex;
+    min-height: 78px;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 20px;
+    padding: 12px 28px;
+    border-bottom: 1px solid #ededed;
+    background-color: #ffffff;
+}
+
+.perfil-usuario {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 10px;
+}
+
+.icono-perfil {
+    font-size: 36px;
+    line-height: 1;
+}
+
+.datos-usuario {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.datos-usuario strong {
+    overflow: hidden;
+    font-size: 14px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.datos-usuario small {
+    color: #909090;
+    font-size: 12px;
+}
+
+.fecha-actual {
+    padding-left: 18px;
+    border-left: 1px solid #e9e9e9;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.cerrar-sesion {
+    padding: 0 0 0 18px;
+    border: none;
+    border-left: 1px solid #e9e9e9;
+    background-color: transparent;
+    color: #333333;
+    font-family: inherit;
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.cerrar-sesion:hover {
+    color: #6750a4;
+}
+
+.cerrar-sesion:focus-visible {
+    outline: 2px solid #6750a4;
+    outline-offset: 4px;
+}
+
+/* Pie de página */
+
+.pie-pagina {
+    padding: 16px 20px;
+    color: #888888;
+    font-size: 13px;
+    text-align: center;
+}
+
+/* Elementos accesibles */
+
+.titulo-oculto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+/* Pantallas medianas */
+
+@media (max-width: 900px) {
+
+    .barra-superior {
+        gap: 15px;
+        padding: 12px 20px;
+    }
+
+}
+
+/* Pantallas pequeñas */
+
+@media (max-width: 620px) {
+
+    .barra-lateral {
+        width: 65px;
+    }
+
+    .estructura-principal {
+        margin-left: 65px;
+    }
+
+    .marca strong {
+        font-size: 10px;
+    }
+
+    .marca small {
+        font-size: 8px;
+    }
+
+    .navegacion-principal {
+        padding: 10px 6px;
+    }
+
+    .enlace-inicio {
+        gap: 6px;
+        padding: 14px 4px;
+        font-size: 11px;
+    }
+
+    .icono-navegacion {
+        font-size: 23px;
+    }
+
+    .barra-superior {
+        min-height: 66px;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .icono-perfil {
+        font-size: 27px;
+    }
+
+    .datos-usuario strong {
+        font-size: 11px;
+    }
+
+    .datos-usuario small {
+        font-size: 10px;
+    }
+
+    .fecha-actual {
+        display: none;
+    }
+
+    .cerrar-sesion {
+        padding-left: 10px;
+        font-size: 21px;
+    }
+
+    .pie-pagina {
+        padding: 12px;
+        font-size: 11px;
+    }
+
+}

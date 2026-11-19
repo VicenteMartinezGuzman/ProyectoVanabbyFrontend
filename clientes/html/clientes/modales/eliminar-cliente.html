@@ -1,0 +1,108 @@
+
+<dialog
+    id="eliminar-cliente"
+    class="modal-cliente modal-confirmacion"
+    aria-labelledby="titulo-eliminar-cliente"
+    aria-describedby="descripcion-eliminar-cliente"
+>
+    <article class="contenido-confirmacion">
+
+        <header class="encabezado-modal">
+
+            <h2 id="titulo-eliminar-cliente">
+                Confirmar eliminación
+            </h2>
+
+            <button
+                type="button"
+                class="boton-cerrar-modal"
+                data-cerrar-modal="eliminar-cliente"
+                aria-label="Cerrar ventana"
+            >
+                &times;
+            </button>
+
+        </header>
+
+        <section class="contenido-modal">
+
+            <span
+                class="icono-advertencia"
+                aria-hidden="true"
+            >
+                &#9888;
+            </span>
+
+            <h3 class="pregunta-confirmacion">
+                ¿Eliminar a
+                «<span id="eliminar-nombre"></span>»?
+            </h3>
+
+            <p id="descripcion-eliminar-cliente">
+                Confirma que deseas eliminar el registro
+                de este cliente de Repostería Vanabby.
+            </p>
+
+            <!-- Información del cliente seleccionado -->
+            <section
+                class="resumen-eliminacion"
+                aria-labelledby="titulo-cliente-seleccionado"
+            >
+
+                <h4 id="titulo-cliente-seleccionado">
+                    Cliente seleccionado
+                </h4>
+
+                <dl class="datos-cliente">
+
+                    <dt>Identificador:</dt>
+                    <dd id="eliminar-id"></dd>
+
+                    <dt>Teléfono:</dt>
+                    <dd id="eliminar-telefono"></dd>
+
+                    <dt>Correo electrónico:</dt>
+                    <dd id="eliminar-correo"></dd>
+
+                </dl>
+
+            </section>
+
+            <p class="aviso-eliminacion">
+                La eliminación del cliente puede estar
+                restringida si existen pedidos, ventas
+                u otros registros relacionados.
+            </p>
+
+            <p
+                id="mensaje-eliminar-cliente"
+                class="mensaje-operacion"
+                role="status"
+                aria-live="polite"
+                hidden
+            ></p>
+
+        </section>
+
+        <footer class="pie-modal">
+
+            <button
+                type="button"
+                class="boton-cancelar"
+                data-cerrar-modal="eliminar-cliente"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                id="confirmar-eliminar-cliente"
+                class="boton-confirmar-eliminacion"
+            >
+                Eliminar cliente
+            </button>
+
+        </footer>
+
+    </article>
+</dialog>

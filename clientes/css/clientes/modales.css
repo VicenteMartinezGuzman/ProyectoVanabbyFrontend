@@ -1,0 +1,390 @@
+
+/* Ventanas modales */
+
+.modal-cliente {
+    box-sizing: border-box;
+    width: min(880px, calc(100% - 32px));
+    max-width: none;
+    max-height: 90vh;
+    margin: auto;
+    padding: 0;
+    overflow-y: auto;
+    border: none;
+    border-radius: 18px;
+    background-color: #ffffff;
+    color: #302b38;
+    box-shadow: 0 15px 50px rgba(35, 25, 50, 0.2);
+}
+
+.modal-cliente::backdrop {
+    background-color: rgba(25, 20, 35, 0.55);
+}
+
+.modal-cliente[open] {
+    animation: aparecer-modal 0.2s ease-out;
+}
+
+@keyframes aparecer-modal {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estructura */
+
+.formulario-cliente,
+.contenido-confirmacion {
+    display: flex;
+    flex-direction: column;
+}
+
+.encabezado-modal {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px 28px;
+    border-bottom: 1px solid #eeebf2;
+}
+
+.encabezado-modal h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.titulo-modal p {
+    margin: 7px 0 0;
+    color: #77717e;
+    font-size: 13px;
+}
+
+.boton-cerrar-modal {
+    display: grid;
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    padding: 0;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #77717e;
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.boton-cerrar-modal:hover {
+    background-color: #f2edf9;
+    color: #673ab7;
+}
+
+.contenido-modal {
+    padding: 26px 28px;
+}
+
+.pie-modal {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 18px 28px;
+    border-top: 1px solid #eeebf2;
+    background-color: #fcfbfa;
+}
+
+/* Secciones y formularios */
+
+.seccion-formulario {
+    margin-bottom: 24px;
+    padding: 20px;
+    border: 1px solid #eeebf2;
+    border-radius: 12px;
+}
+
+.seccion-formulario:last-of-type {
+    margin-bottom: 0;
+}
+
+.seccion-formulario h3 {
+    margin: 0 0 18px;
+    color: #50445d;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.grupo-formulario {
+    min-width: 0;
+    margin: 0 0 22px;
+    padding: 0;
+    border: none;
+}
+
+.grupo-formulario:last-child {
+    margin-bottom: 0;
+}
+
+.grupo-formulario[hidden] {
+    display: none;
+}
+
+.grupo-formulario legend {
+    margin-bottom: 14px;
+    color: #50445d;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Campos */
+
+.campos-formulario {
+    display: grid;
+    grid-template-columns: minmax(150px, 210px) minmax(0, 1fr);
+    align-items: center;
+    gap: 14px 18px;
+}
+
+.campos-formulario label {
+    color: #50445d;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.campo-formulario {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    padding: 10px 12px;
+    border: 1px solid #dedbe3;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #302b38;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.campo-formulario:focus {
+    outline: none;
+    border-color: #673ab7;
+    box-shadow: 0 0 0 3px rgba(103, 58, 183, 0.12);
+}
+
+.campo-formulario::placeholder {
+    color: #99939e;
+}
+
+/* Datos informativos */
+
+.datos-cliente {
+    display: grid;
+    grid-template-columns: minmax(130px, 180px) minmax(0, 1fr);
+    gap: 12px 18px;
+    margin: 0;
+}
+
+.datos-cliente dt {
+    color: #77717e;
+    font-size: 13px;
+}
+
+.datos-cliente dd {
+    min-width: 0;
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+/* Botones de los modales */
+
+.boton-cancelar,
+.boton-limpiar,
+.boton-confirmar-eliminacion {
+    min-height: 40px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.boton-cancelar {
+    border: 1px solid #dedbe3;
+    background-color: #ffffff;
+    color: #50445d;
+}
+
+.boton-cancelar:hover {
+    background-color: #f2edf9;
+}
+
+.boton-limpiar {
+    margin-right: auto;
+    border: none;
+    background: transparent;
+    color: #77717e;
+}
+
+.boton-limpiar:hover {
+    color: #673ab7;
+}
+
+.boton-confirmar-eliminacion {
+    border: 1px solid #c83f3f;
+    background-color: #c83f3f;
+    color: #ffffff;
+}
+
+.boton-confirmar-eliminacion:hover {
+    background-color: #a92c2c;
+}
+
+.modal-cliente button:focus-visible {
+    outline: 2px solid #673ab7;
+    outline-offset: 3px;
+}
+
+/* Confirmación de eliminación */
+
+.modal-confirmacion {
+    width: min(470px, calc(100% - 32px));
+}
+
+.modal-confirmacion .contenido-modal {
+    text-align: center;
+}
+
+.icono-advertencia {
+    display: grid;
+    width: 65px;
+    height: 65px;
+    margin: 0 auto 20px;
+    place-items: center;
+    border-radius: 15px;
+    background-color: #fde7e7;
+    color: #c83f3f;
+    font-size: 30px;
+}
+
+.pregunta-confirmacion {
+    margin: 0 0 15px;
+    font-size: 19px;
+    overflow-wrap: anywhere;
+}
+
+.modal-confirmacion .contenido-modal > p {
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.resumen-eliminacion {
+    margin-top: 20px;
+    padding: 18px;
+    border: 1px solid #eeebf2;
+    border-radius: 10px;
+    background-color: #faf9fb;
+    text-align: left;
+}
+
+.resumen-eliminacion h4 {
+    margin: 0 0 16px;
+    font-size: 14px;
+}
+
+.resumen-eliminacion .datos-cliente {
+    grid-template-columns: 110px minmax(0, 1fr);
+}
+
+.aviso-eliminacion {
+    margin: 18px 0 0;
+    padding: 14px;
+    border-radius: 9px;
+    background-color: #fff0c8;
+    color: #805e20;
+    text-align: left;
+}
+
+.mensaje-operacion {
+    margin: 16px 0 0;
+    padding: 12px;
+    border-radius: 8px;
+    background-color: #f1ecf8;
+    color: #50445d;
+    font-size: 13px;
+}
+
+.modal-cliente [hidden] {
+    display: none !important;
+}
+
+/* Pantallas pequeñas */
+
+@media (max-width: 620px) {
+
+    .modal-cliente {
+        width: calc(100% - 20px);
+        max-height: 95vh;
+        border-radius: 12px;
+    }
+
+    .encabezado-modal,
+    .pie-modal {
+        padding: 16px;
+    }
+
+    .encabezado-modal h2 {
+        font-size: 18px;
+    }
+
+    .contenido-modal {
+        padding: 18px 16px;
+    }
+
+    .seccion-formulario {
+        padding: 16px;
+    }
+
+    .campos-formulario,
+    .datos-cliente {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .campos-formulario label:not(:first-child) {
+        margin-top: 8px;
+    }
+
+    .datos-cliente dd {
+        margin-bottom: 10px;
+    }
+
+    .pie-modal > button {
+        flex-grow: 1;
+    }
+
+    .boton-limpiar {
+        flex-basis: 100%;
+    }
+
+    .resumen-eliminacion .datos-cliente {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .modal-cliente[open] {
+        animation: none;
+    }
+
+}

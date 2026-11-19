@@ -1,0 +1,303 @@
+
+<dialog
+    id="registrar-cliente"
+    class="modal-cliente"
+    aria-labelledby="titulo-registrar-cliente"
+>
+    <form
+        id="formulario-registrar-cliente"
+        class="formulario-cliente"
+        method="post"
+    >
+
+        <header class="encabezado-modal">
+
+            <section class="titulo-modal">
+                <h2 id="titulo-registrar-cliente">
+                    Registrar cliente
+                </h2>
+
+                <p>
+                    Datos generales, información de contacto y dirección.
+                </p>
+            </section>
+
+            <button
+                type="button"
+                class="boton-cerrar-modal"
+                data-cerrar-modal="registrar-cliente"
+                aria-label="Cerrar ventana"
+            >
+                &times;
+            </button>
+
+        </header>
+
+        <section
+            class="contenido-modal"
+            aria-label="Datos del nuevo cliente"
+        >
+
+            <!-- Información del cliente -->
+            <section
+                class="seccion-formulario"
+                aria-labelledby="titulo-datos-cliente"
+            >
+
+                <h3 id="titulo-datos-cliente">
+                    Datos del cliente
+                </h3>
+
+                <fieldset class="grupo-formulario">
+
+                    <legend>Información personal</legend>
+
+                    <section class="campos-formulario">
+
+                        <label for="registrar-nombre">
+                            Nombre
+                        </label>
+
+                        <input
+                            type="text"
+                            id="registrar-nombre"
+                            name="nombre"
+                            class="campo-formulario"
+                            maxlength="80"
+                            required
+                        >
+
+                        <label for="registrar-apellido-paterno">
+                            Apellido paterno
+                        </label>
+
+                        <input
+                            type="text"
+                            id="registrar-apellido-paterno"
+                            name="ap_paterno"
+                            class="campo-formulario"
+                            maxlength="60"
+                        >
+
+                        <label for="registrar-apellido-materno">
+                            Apellido materno
+                        </label>
+
+                        <input
+                            type="text"
+                            id="registrar-apellido-materno"
+                            name="ap_materno"
+                            class="campo-formulario"
+                            maxlength="60"
+                        >
+
+                    </section>
+
+                </fieldset>
+
+                <!-- Información de contacto -->
+                <fieldset class="grupo-formulario">
+
+                    <legend>Información de contacto</legend>
+
+                    <section class="campos-formulario">
+
+                        <label for="registrar-telefono">
+                            Teléfono
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="registrar-telefono"
+                            name="telefono"
+                            class="campo-formulario"
+                            maxlength="20"
+                            autocomplete="tel"
+                        >
+
+                        <label for="registrar-correo">
+                            Correo electrónico
+                        </label>
+
+                        <input
+                            type="email"
+                            id="registrar-correo"
+                            name="correo"
+                            class="campo-formulario"
+                            maxlength="120"
+                            autocomplete="email"
+                        >
+
+                    </section>
+
+                </fieldset>
+
+            </section>
+
+            <!-- Dirección del cliente -->
+            <section
+                class="seccion-formulario"
+                aria-labelledby="titulo-direccion-cliente"
+            >
+
+                <h3 id="titulo-direccion-cliente">
+                    Dirección del cliente
+                </h3>
+
+                <fieldset class="grupo-formulario">
+
+                    <legend>Información de dirección (opcional)</legend>
+
+                    <section class="campos-formulario">
+
+                        <label for="registrar-alias">
+                            Alias de dirección
+                        </label>
+
+                        <input
+                            type="text"
+                            id="registrar-alias"
+                            name="alias"
+                            class="campo-formulario"
+                            maxlength="40"
+                            placeholder="Casa, trabajo, otra"
+                        >
+
+                        <label for="registrar-calle">
+                            Calle
+                        </label>
+
+                        <input
+                            type="text"
+                            id="registrar-calle"
+                            name="calle"
+                            class="campo-formulario"
+                            maxlength="150"
+                        >
+
+                        <label for="registrar-numero">
+                            Número
+                        </label>
+
+                        <input
+                            type="text"
+                            id="registrar-numero"
+                            name="numero"
+                            class="campo-formulario"
+                            maxlength="20"
+                        >
+
+                        <label for="registrar-colonia">
+                            Colonia
+                        </label>
+
+                        <input
+                            type="text"
+                            id="registrar-colonia"
+                            name="colonia"
+                            class="campo-formulario"
+                            maxlength="100"
+                        >
+
+                        <label for="registrar-ciudad">
+                            Ciudad
+                        </label>
+
+                        <input
+                            type="text"
+                            id="registrar-ciudad"
+                            name="ciudad"
+                            class="campo-formulario"
+                            maxlength="80"
+                        >
+
+                        <label for="registrar-estado-geo">
+                            Estado
+                        </label>
+
+                        <input
+                            type="text"
+                            id="registrar-estado-geo"
+                            name="estado_geo"
+                            class="campo-formulario"
+                            maxlength="80"
+                        >
+
+                        <label for="registrar-cp">
+                            Código postal
+                        </label>
+
+                        <input
+                            type="text"
+                            id="registrar-cp"
+                            name="cp"
+                            class="campo-formulario"
+                            maxlength="10"
+                            inputmode="numeric"
+                        >
+
+                        <label for="registrar-es-principal">
+                            Dirección principal
+                        </label>
+
+                        <select
+                            id="registrar-es-principal"
+                            name="es_principal"
+                            class="campo-formulario"
+                        >
+                            <option value="">
+                                Sin especificar
+                            </option>
+                            <option value="1">
+                                Sí
+                            </option>
+                            <option value="0">
+                                No
+                            </option>
+                        </select>
+
+                    </section>
+
+                </fieldset>
+
+            </section>
+
+            <!-- Mensajes de operación -->
+            <p
+                id="mensaje-registrar-cliente"
+                class="mensaje-operacion"
+                role="status"
+                aria-live="polite"
+                hidden
+            ></p>
+
+        </section>
+
+        <footer class="pie-modal">
+
+            <button
+                type="reset"
+                class="boton-limpiar"
+            >
+                Limpiar formulario
+            </button>
+
+            <button
+                type="button"
+                class="boton-cancelar"
+                data-cerrar-modal="registrar-cliente"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="submit"
+                class="boton-principal"
+            >
+                Guardar cliente
+            </button>
+
+        </footer>
+
+    </form>
+</dialog>

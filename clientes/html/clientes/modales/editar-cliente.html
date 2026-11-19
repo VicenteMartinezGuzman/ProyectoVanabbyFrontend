@@ -1,0 +1,339 @@
+
+<dialog
+    id="editar-cliente"
+    class="modal-cliente"
+    aria-labelledby="titulo-editar-cliente"
+>
+    <form
+        id="formulario-editar-cliente"
+        class="formulario-cliente"
+        method="post"
+    >
+
+        <!-- Identificadores -->
+        <input
+            type="hidden"
+            id="editar-id"
+            name="cliente_id"
+        >
+
+        <input
+            type="hidden"
+            id="editar-direccion-id"
+            name="direccion_id"
+        >
+
+        <header class="encabezado-modal">
+
+            <section class="titulo-modal">
+
+                <h2 id="titulo-editar-cliente">
+                    Editar cliente
+                </h2>
+
+                <p>
+                    Modificación de datos generales,
+                    información de contacto y dirección.
+                </p>
+
+            </section>
+
+            <button
+                type="button"
+                class="boton-cerrar-modal"
+                data-cerrar-modal="editar-cliente"
+                aria-label="Cerrar ventana"
+            >
+                &times;
+            </button>
+
+        </header>
+
+        <section
+            class="contenido-modal"
+            aria-label="Datos del cliente"
+        >
+
+            <!-- Identificación -->
+            <section
+                class="seccion-formulario"
+                aria-labelledby="titulo-identificacion-cliente"
+            >
+
+                <h3 id="titulo-identificacion-cliente">
+                    Identificación del cliente
+                </h3>
+
+                <dl class="datos-cliente">
+
+                    <dt>ID:</dt>
+                    <dd id="editar-identificador"></dd>
+
+                    <dt>Fecha de registro:</dt>
+                    <dd>
+                        <time id="editar-fecha-registro"></time>
+                    </dd>
+
+                </dl>
+
+            </section>
+
+            <!-- Información general -->
+            <section
+                class="seccion-formulario"
+                aria-labelledby="titulo-informacion-cliente"
+            >
+
+                <h3 id="titulo-informacion-cliente">
+                    Información general
+                </h3>
+
+                <fieldset class="grupo-formulario">
+
+                    <legend>Información personal</legend>
+
+                    <section class="campos-formulario">
+
+                        <label for="editar-nombre">
+                            Nombre
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editar-nombre"
+                            name="nombre"
+                            class="campo-formulario"
+                            maxlength="80"
+                            required
+                        >
+
+                        <label for="editar-apellido-paterno">
+                            Apellido paterno
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editar-apellido-paterno"
+                            name="ap_paterno"
+                            class="campo-formulario"
+                            maxlength="60"
+                        >
+
+                        <label for="editar-apellido-materno">
+                            Apellido materno
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editar-apellido-materno"
+                            name="ap_materno"
+                            class="campo-formulario"
+                            maxlength="60"
+                        >
+
+                    </section>
+
+                </fieldset>
+
+                <!-- Información de contacto -->
+                <fieldset class="grupo-formulario">
+
+                    <legend>Información de contacto</legend>
+
+                    <section class="campos-formulario">
+
+                        <label for="editar-telefono">
+                            Teléfono
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="editar-telefono"
+                            name="telefono"
+                            class="campo-formulario"
+                            maxlength="20"
+                            autocomplete="tel"
+                        >
+
+                        <label for="editar-correo">
+                            Correo electrónico
+                        </label>
+
+                        <input
+                            type="email"
+                            id="editar-correo"
+                            name="correo"
+                            class="campo-formulario"
+                            maxlength="120"
+                            autocomplete="email"
+                        >
+
+                    </section>
+
+                </fieldset>
+
+            </section>
+
+            <!-- Dirección -->
+            <section
+                class="seccion-formulario"
+                aria-labelledby="titulo-domicilio-cliente"
+            >
+
+                <h3 id="titulo-domicilio-cliente">
+                    Dirección del cliente
+                </h3>
+
+                <fieldset class="grupo-formulario">
+
+                    <legend>
+                        Información de dirección (opcional)
+                    </legend>
+
+                    <section class="campos-formulario">
+
+                        <label for="editar-alias">
+                            Alias de dirección
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editar-alias"
+                            name="alias"
+                            class="campo-formulario"
+                            maxlength="40"
+                            placeholder="Casa, trabajo, otra"
+                        >
+
+                        <label for="editar-calle">
+                            Calle
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editar-calle"
+                            name="calle"
+                            class="campo-formulario"
+                            maxlength="150"
+                        >
+
+                        <label for="editar-numero">
+                            Número
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editar-numero"
+                            name="numero"
+                            class="campo-formulario"
+                            maxlength="20"
+                        >
+
+                        <label for="editar-colonia">
+                            Colonia
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editar-colonia"
+                            name="colonia"
+                            class="campo-formulario"
+                            maxlength="100"
+                        >
+
+                        <label for="editar-ciudad">
+                            Ciudad
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editar-ciudad"
+                            name="ciudad"
+                            class="campo-formulario"
+                            maxlength="80"
+                        >
+
+                        <label for="editar-estado-geo">
+                            Estado
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editar-estado-geo"
+                            name="estado_geo"
+                            class="campo-formulario"
+                            maxlength="80"
+                        >
+
+                        <label for="editar-cp">
+                            Código postal
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editar-cp"
+                            name="cp"
+                            class="campo-formulario"
+                            maxlength="10"
+                            inputmode="numeric"
+                        >
+
+                        <label for="editar-es-principal">
+                            Dirección principal
+                        </label>
+
+                        <select
+                            id="editar-es-principal"
+                            name="es_principal"
+                            class="campo-formulario"
+                        >
+                            <option value="">
+                                Sin especificar
+                            </option>
+                            <option value="1">
+                                Sí
+                            </option>
+                            <option value="0">
+                                No
+                            </option>
+                        </select>
+
+                    </section>
+
+                </fieldset>
+
+            </section>
+
+            <!-- Mensajes de operación -->
+            <p
+                id="mensaje-editar-cliente"
+                class="mensaje-operacion"
+                role="status"
+                aria-live="polite"
+                hidden
+            ></p>
+
+        </section>
+
+        <footer class="pie-modal">
+
+            <button
+                type="button"
+                class="boton-cancelar"
+                data-cerrar-modal="editar-cliente"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="submit"
+                id="guardar-cambios-cliente"
+                class="boton-principal"
+            >
+                Guardar cambios
+            </button>
+
+        </footer>
+
+    </form>
+</dialog>

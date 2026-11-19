@@ -1,0 +1,346 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gestión de Clientes | Repostería Vanabby</title>
+
+    <link rel="stylesheet" href="../../css/compartido/estructura.css">
+    <link rel="stylesheet" href="../../css/clientes/clientes.css">
+    <link rel="stylesheet" href="../../css/clientes/modales.css">
+</head>
+
+<body class="pagina-sistema">
+
+    <!-- Navegación lateral -->
+    <aside class="barra-lateral" aria-label="Barra lateral">
+
+        <a href="../inicio/inicio.html" class="marca">
+            <strong>VANABBY</strong>
+            <small>Repostería</small>
+        </a>
+
+        <nav class="navegacion-principal" aria-label="Navegación principal">
+
+            <a href="../inicio/inicio.html" class="enlace-inicio">
+                <span class="icono-navegacion" aria-hidden="true">⌂</span>
+                <span>Inicio</span>
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <div class="estructura-principal">
+
+        <!-- Barra superior -->
+        <header class="barra-superior">
+
+            <section class="perfil-usuario" aria-label="Sesión actual">
+
+                <span class="icono-perfil" aria-hidden="true">◉</span>
+
+                <p class="datos-usuario">
+                    <strong id="nombre-usuario-actual">Usuario</strong>
+                    <small id="rol-usuario-actual">Sin identificar</small>
+                </p>
+
+            </section>
+
+            <time id="fecha-actual" class="fecha-actual"></time>
+
+            <button
+                type="button"
+                id="cerrar-sesion"
+                class="cerrar-sesion"
+                aria-label="Cerrar sesión"
+                title="Cerrar sesión"
+            >
+                <span aria-hidden="true">⇥</span>
+            </button>
+
+        </header>
+
+        <main class="contenido-principal">
+
+            <!-- Presentación del módulo -->
+            <section
+                class="bienvenida"
+                aria-labelledby="titulo-bienvenida"
+            >
+
+                <h1 id="titulo-bienvenida">
+                    Gestión de Clientes
+                </h1>
+
+                <p>
+                    Administración de datos generales,
+                    información de contacto y direcciones
+                    de los clientes de Repostería Vanabby.
+                </p>
+
+            </section>
+
+            <!-- Encabezado y registro -->
+            <section
+                class="seccion-clientes"
+                aria-labelledby="titulo-clientes"
+            >
+
+                <header class="encabezado-clientes">
+
+                    <section
+                        class="informacion-modulo"
+                        aria-labelledby="titulo-clientes"
+                    >
+
+                        <h2 id="titulo-clientes">
+                            Cartera de Clientes
+                        </h2>
+
+                        <p>
+                            Consulta, registro y administración
+                            de clientes.
+                        </p>
+
+                    </section>
+
+                    <button
+                        type="button"
+                        id="nuevo-cliente"
+                        class="boton-principal"
+                        data-modal="registrar-cliente"
+                    >
+                        + Nuevo cliente
+                    </button>
+
+                </header>
+
+                <!-- Indicadores -->
+                <section
+                    class="resumen-clientes"
+                    aria-label="Resumen de clientes"
+                >
+
+                    <article class="tarjeta-indicador">
+
+                        <header>
+                            <h3>Total de clientes</h3>
+                            <small>Registros existentes</small>
+                        </header>
+
+                        <strong id="total-clientes">0</strong>
+
+                    </article>
+
+                    <article class="tarjeta-indicador">
+
+                        <header>
+                            <h3>Con teléfono</h3>
+                            <small>Clientes con teléfono registrado</small>
+                        </header>
+
+                        <strong id="total-con-telefono">0</strong>
+
+                    </article>
+
+                    <article class="tarjeta-indicador">
+
+                        <header>
+                            <h3>Con correo</h3>
+                            <small>Clientes con correo registrado</small>
+                        </header>
+
+                        <strong id="total-con-correo">0</strong>
+
+                    </article>
+
+                </section>
+
+                <!-- Búsqueda -->
+                <section
+                    class="seccion-filtros"
+                    aria-label="Búsqueda de clientes"
+                >
+
+                    <form
+                        id="formulario-filtros-clientes"
+                        class="formulario-filtros"
+                        role="search"
+                    >
+
+                        <label
+                            for="buscar-cliente"
+                            class="titulo-oculto"
+                        >
+                            Buscar cliente
+                        </label>
+
+                        <input
+                            type="search"
+                            id="buscar-cliente"
+                            name="busqueda"
+                            class="campo-busqueda"
+                            placeholder="Buscar por nombre, apellidos, teléfono, correo o dirección..."
+                        >
+
+                    </form>
+
+                </section>
+
+                <!-- Tabla de clientes -->
+                <section
+                    class="panel-cartera"
+                    aria-labelledby="titulo-cartera"
+                >
+
+                    <header class="encabezado-cartera">
+
+                        <h3 id="titulo-cartera">
+                            Clientes registrados
+                        </h3>
+
+                        <p
+                            id="contador-clientes"
+                            aria-live="polite"
+                        >
+                            Mostrando 0 clientes
+                        </p>
+
+                    </header>
+
+                    <section
+                        class="contenedor-tabla"
+                        aria-label="Listado de clientes"
+                    >
+
+                        <table class="tabla-clientes">
+
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Nombre completo</th>
+                                    <th scope="col">Teléfono</th>
+                                    <th scope="col">Correo</th>
+                                    <th scope="col">Dirección</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tabla-clientes"></tbody>
+
+                        </table>
+
+                    </section>
+
+                    <p
+                        id="estado-clientes"
+                        class="estado-clientes"
+                        role="status"
+                    >
+                        No hay clientes para mostrar.
+                    </p>
+
+                    <footer class="pie-cartera">
+
+                        <p>
+                            Datos de contacto y direcciones
+                            vinculadas a los clientes registrados.
+                        </p>
+
+                        <nav
+                            class="paginacion"
+                            aria-label="Paginación de clientes"
+                        >
+
+                            <button
+                                type="button"
+                                id="pagina-anterior"
+                                class="boton-paginacion"
+                                disabled
+                            >
+                                Anterior
+                            </button>
+
+                            <span id="pagina-actual">1</span>
+
+                            <button
+                                type="button"
+                                id="pagina-siguiente"
+                                class="boton-paginacion"
+                                disabled
+                            >
+                                Siguiente
+                            </button>
+
+                        </nav>
+
+                    </footer>
+
+                </section>
+
+            </section>
+
+        </main>
+
+        <footer class="pie-pagina">
+            <small>Repostería Vanabby - Sistema de Gestión</small>
+        </footer>
+
+    </div>
+
+    <!-- Plantilla reutilizable de clientes -->
+    <template id="plantilla-cliente">
+
+        <tr class="fila-cliente">
+
+            <td class="celda-id"></td>
+
+            <td class="celda-nombre"></td>
+
+            <td class="celda-telefono"></td>
+
+            <td class="celda-correo"></td>
+
+            <td class="celda-direccion">
+                <span class="domicilio-cliente"></span>
+            </td>
+
+            <td class="celda-acciones">
+
+                <button
+                    type="button"
+                    class="boton-editar"
+                    data-accion="editar"
+                    aria-label="Editar cliente"
+                >
+                    Editar
+                </button>
+
+                <button
+                    type="button"
+                    class="boton-eliminar"
+                    data-accion="eliminar"
+                    aria-label="Eliminar cliente"
+                >
+                    Eliminar
+                </button>
+
+            </td>
+
+        </tr>
+
+    </template>
+
+    <!-- Modales independientes -->
+    <div id="contenedor-modales"></div>
+
+    <script src="../../js/compartido/estructura.js" defer></script>
+    <script src="../../js/clientes/clientes.js" defer></script>
+
+</body>
+
+</html>
