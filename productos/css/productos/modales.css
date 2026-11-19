@@ -1,0 +1,470 @@
+
+/* Ventanas modales */
+
+.modal-producto {
+    box-sizing: border-box;
+    width: min(860px, calc(100% - 32px));
+    max-width: none;
+    max-height: 90vh;
+    margin: auto;
+    padding: 0;
+    overflow-y: auto;
+    border: none;
+    border-radius: 18px;
+    background-color: #ffffff;
+    color: #292633;
+    box-shadow: 0 15px 50px rgba(35, 25, 50, 0.2);
+}
+
+.modal-producto::backdrop {
+    background-color: rgba(25, 20, 35, 0.55);
+}
+
+.modal-producto[open] {
+    animation: aparecer-modal 0.2s ease-out;
+}
+
+@keyframes aparecer-modal {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estructura compartida */
+
+.formulario-producto,
+.contenido-detalle,
+.contenido-confirmacion {
+    display: flex;
+    flex-direction: column;
+}
+
+.encabezado-modal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 22px 28px;
+    border-bottom: 1px solid #eeeced;
+}
+
+.encabezado-modal h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.boton-cerrar-modal {
+    display: grid;
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    padding: 0;
+    border: none;
+    border-radius: 8px;
+    background-color: transparent;
+    color: #77717e;
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.boton-cerrar-modal:hover {
+    background-color: #f1ecf8;
+    color: #673ab7;
+}
+
+.contenido-modal {
+    padding: 26px 28px;
+}
+
+.pie-modal {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 18px 28px;
+    border-top: 1px solid #eeeced;
+    background-color: #fcfbfa;
+}
+
+/* Formularios */
+
+.grupo-formulario {
+    min-width: 0;
+    margin: 0 0 24px;
+    padding: 0;
+    border: none;
+}
+
+.grupo-formulario:last-child {
+    margin-bottom: 0;
+}
+
+.grupo-formulario legend {
+    width: 100%;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eeeced;
+    color: #4b4355;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.campos-formulario {
+    display: grid;
+    grid-template-columns: minmax(140px, 210px) minmax(0, 1fr);
+    align-items: center;
+    gap: 14px 18px;
+}
+
+.campos-formulario label,
+.grupo-formulario > label {
+    color: #4b4355;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.campo-formulario {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    padding: 10px 12px;
+    border: 1px solid #dedbe3;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #292633;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.campo-formulario:focus {
+    outline: none;
+    border-color: #673ab7;
+    box-shadow: 0 0 0 3px rgba(103, 58, 183, 0.12);
+}
+
+.campo-formulario::placeholder {
+    color: #99939e;
+}
+
+.campo-formulario[type="file"] {
+    margin-top: 10px;
+    padding: 8px;
+}
+
+.campo-formulario[type="file"]::file-selector-button {
+    margin-right: 12px;
+    padding: 7px 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: #eee7f9;
+    color: #673ab7;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Fotografía durante la edición */
+
+.figura-edicion {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 0 0 20px;
+}
+
+.imagen-editar {
+    width: 100px;
+    height: 85px;
+    border-radius: 9px;
+    background-color: #f1eef6;
+    object-fit: cover;
+}
+
+.figura-edicion figcaption,
+.ayuda-formulario {
+    color: #77717e;
+    font-size: 12px;
+}
+
+.ayuda-formulario {
+    display: block;
+    margin-top: 8px;
+}
+
+/* Información del producto */
+
+.resumen-producto {
+    padding-bottom: 22px;
+    border-bottom: 1px solid #eeeced;
+}
+
+.figura-producto {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: 0;
+}
+
+.imagen-detalle {
+    width: 180px;
+    height: 145px;
+    border-radius: 12px;
+    background-color: #f1eef6;
+    object-fit: cover;
+}
+
+.figura-producto figcaption {
+    min-width: 0;
+}
+
+.figura-producto h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+}
+
+.figura-producto figcaption span {
+    color: #77717e;
+    font-size: 14px;
+}
+
+/* Secciones de detalle */
+
+.seccion-detalle {
+    padding: 22px 0;
+    border-bottom: 1px solid #eeeced;
+}
+
+.seccion-detalle:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.seccion-detalle h3 {
+    margin: 0 0 18px;
+    color: #4b4355;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.lista-detalles {
+    display: grid;
+    grid-template-columns: minmax(130px, 200px) minmax(0, 1fr);
+    gap: 12px 18px;
+    margin: 0;
+}
+
+.lista-detalles dt {
+    color: #77717e;
+    font-size: 13px;
+}
+
+.lista-detalles dd {
+    min-width: 0;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.precio-destacado {
+    color: #673ab7;
+    font-size: 23px !important;
+    font-weight: 700;
+}
+
+/* Botones de modales */
+
+.boton-cancelar,
+.boton-limpiar,
+.boton-confirmar-eliminacion {
+    box-sizing: border-box;
+    min-height: 40px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.boton-cancelar {
+    border: 1px solid #dedbe3;
+    background-color: #ffffff;
+    color: #4b4355;
+}
+
+.boton-cancelar:hover {
+    background-color: #f1ecf8;
+}
+
+.boton-limpiar {
+    margin-right: auto;
+    border: none;
+    background-color: transparent;
+    color: #77717e;
+}
+
+.boton-limpiar:hover {
+    color: #673ab7;
+}
+
+.pie-modal > .boton-eliminar {
+    flex: initial;
+    margin-right: auto;
+    padding: 10px 16px;
+}
+
+.boton-confirmar-eliminacion {
+    border: 1px solid #c83f3f;
+    background-color: #c83f3f;
+    color: #ffffff;
+}
+
+.boton-confirmar-eliminacion:hover {
+    background-color: #a92c2c;
+}
+
+.boton-cerrar-modal:focus-visible,
+.boton-cancelar:focus-visible,
+.boton-limpiar:focus-visible,
+.boton-confirmar-eliminacion:focus-visible {
+    outline: 2px solid #673ab7;
+    outline-offset: 3px;
+}
+
+/* Confirmación de eliminación */
+
+.modal-confirmacion {
+    width: min(450px, calc(100% - 32px));
+}
+
+.modal-confirmacion .contenido-modal {
+    text-align: center;
+}
+
+.icono-eliminar {
+    display: grid;
+    width: 65px;
+    height: 65px;
+    margin: 0 auto 20px;
+    place-items: center;
+    border-radius: 15px;
+    background-color: #fde7e7;
+    color: #c83f3f;
+    font-size: 30px;
+}
+
+.pregunta-confirmacion {
+    margin: 0 0 15px;
+    font-size: 19px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.modal-confirmacion .contenido-modal > p {
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.aviso-eliminacion {
+    margin: 20px 0 0;
+    padding: 15px;
+    border-radius: 9px;
+    background-color: #fff0c8;
+    color: #805e20;
+    text-align: left;
+}
+
+.mensaje-operacion {
+    margin: 16px 0 0;
+    padding: 12px;
+    border-radius: 8px;
+    background-color: #f1ecf8;
+    color: #4b4355;
+}
+
+.modal-producto [hidden] {
+    display: none !important;
+}
+
+/* Adaptación a pantallas pequeñas */
+
+@media (max-width: 620px) {
+
+    .modal-producto {
+        width: calc(100% - 20px);
+        max-height: 95vh;
+        border-radius: 12px;
+    }
+
+    .encabezado-modal {
+        padding: 16px;
+    }
+
+    .encabezado-modal h2 {
+        font-size: 18px;
+    }
+
+    .contenido-modal {
+        padding: 20px 16px;
+    }
+
+    .pie-modal {
+        padding: 16px;
+    }
+
+    .campos-formulario {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .campos-formulario label:not(:first-child) {
+        margin-top: 8px;
+    }
+
+    .figura-producto {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .imagen-detalle {
+        width: 100%;
+        height: 170px;
+    }
+
+    .lista-detalles {
+        grid-template-columns: 1fr;
+        gap: 5px;
+    }
+
+    .lista-detalles dd {
+        margin-bottom: 12px;
+    }
+
+    .pie-modal > button {
+        flex-grow: 1;
+    }
+
+    .modal-confirmacion {
+        width: calc(100% - 20px);
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .modal-producto[open] {
+        animation: none;
+    }
+
+}

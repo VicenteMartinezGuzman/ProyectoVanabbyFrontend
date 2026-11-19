@@ -1,0 +1,345 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gestión de Productos | Repostería Vanabby</title>
+
+    <link rel="stylesheet" href="../../css/compartido/estructura.css">
+    <link rel="stylesheet" href="../../css/productos/productos.css">
+    <link rel="stylesheet" href="../../css/productos/modales.css">
+</head>
+
+<body class="pagina-sistema">
+
+    <!-- Navegación lateral -->
+    <aside class="barra-lateral" aria-label="Barra lateral">
+
+        <a href="../inicio/inicio.html" class="marca">
+            <strong>VANABBY</strong>
+            <small>Repostería</small>
+        </a>
+
+        <nav class="navegacion-principal" aria-label="Navegación principal">
+
+            <a href="../inicio/inicio.html" class="enlace-inicio">
+                <span class="icono-navegacion" aria-hidden="true">⌂</span>
+                <span>Inicio</span>
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <div class="estructura-principal">
+
+        <!-- Encabezado compartido -->
+        <header class="barra-superior">
+
+            <section class="perfil-usuario" aria-label="Sesión actual">
+
+                <span class="icono-perfil" aria-hidden="true">◉</span>
+
+                <p class="datos-usuario">
+                    <strong id="nombre-usuario-actual">Usuario</strong>
+                    <small id="rol-usuario-actual">Sin identificar</small>
+                </p>
+
+            </section>
+
+            <time id="fecha-actual" class="fecha-actual"></time>
+
+            <button
+                type="button"
+                id="cerrar-sesion"
+                class="cerrar-sesion"
+                aria-label="Cerrar sesión"
+                title="Cerrar sesión"
+            >
+                <span aria-hidden="true">⇥</span>
+            </button>
+
+        </header>
+
+        <main class="contenido-principal">
+
+            <!-- Bienvenida -->
+            <section
+                class="bienvenida"
+                aria-labelledby="titulo-bienvenida"
+            >
+
+                <h1 id="titulo-bienvenida">
+                    Panel de Control
+                </h1>
+
+                <p>
+                    Administración del catálogo de productos
+                </p>
+
+            </section>
+
+            <!-- Gestión de productos -->
+            <section
+                class="seccion-productos"
+                aria-labelledby="titulo-productos"
+            >
+
+                <header class="encabezado-productos">
+
+                    <section
+                        class="informacion-modulo"
+                        aria-labelledby="titulo-productos"
+                    >
+
+                        <h2 id="titulo-productos">
+                            Gestión de Productos
+                        </h2>
+
+                        <p>
+                            Administración de productos, categorías,
+                            precios y existencias.
+                        </p>
+
+                    </section>
+
+                    <button
+                        type="button"
+                        id="nuevo-producto"
+                        class="boton-principal"
+                        data-modal="registrar-producto"
+                    >
+                        + Nuevo Producto
+                    </button>
+
+                </header>
+
+                <!-- Catálogo -->
+                <section
+                    class="seccion-catalogo"
+                    aria-labelledby="titulo-catalogo"
+                >
+
+                    <header class="encabezado-catalogo">
+
+                        <h3 id="titulo-catalogo">
+                            Catálogo de Productos
+                        </h3>
+
+                        <form
+                            id="formulario-filtros"
+                            class="formulario-filtros"
+                            role="search"
+                        >
+
+                            <label
+                                for="filtro-categoria"
+                                class="titulo-oculto"
+                            >
+                                Filtrar por categoría
+                            </label>
+
+                            <select
+                                id="filtro-categoria"
+                                name="categoria_id"
+                                class="campo-filtro"
+                            >
+                                <option value="">
+                                    Todas las categorías
+                                </option>
+                            </select>
+
+                            <label
+                                for="buscar-producto"
+                                class="titulo-oculto"
+                            >
+                                Buscar producto
+                            </label>
+
+                            <input
+                                type="search"
+                                id="buscar-producto"
+                                name="busqueda"
+                                class="campo-busqueda"
+                                placeholder="Buscar por SKU, nombre o descripción..."
+                            >
+
+                            <button
+                                type="reset"
+                                class="boton-secundario"
+                            >
+                                Limpiar
+                            </button>
+
+                        </form>
+
+                    </header>
+
+                    <!-- Productos obtenidos del sistema -->
+                    <ul
+                        id="lista-productos"
+                        class="lista-productos"
+                        aria-label="Productos registrados"
+                    ></ul>
+
+                    <p
+                        id="estado-productos"
+                        class="estado-productos"
+                        role="status"
+                    >
+                        No hay productos para mostrar.
+                    </p>
+
+                    <footer class="pie-catalogo">
+
+                        <p
+                            id="contador-productos"
+                            aria-live="polite"
+                        >
+                            Mostrando 0 productos
+                        </p>
+
+                        <nav
+                            class="paginacion"
+                            aria-label="Paginación de productos"
+                        >
+
+                            <button
+                                type="button"
+                                id="pagina-anterior"
+                                class="boton-paginacion"
+                                disabled
+                            >
+                                Anterior
+                            </button>
+
+                            <span id="pagina-actual">1</span>
+
+                            <button
+                                type="button"
+                                id="pagina-siguiente"
+                                class="boton-paginacion"
+                                disabled
+                            >
+                                Siguiente
+                            </button>
+
+                        </nav>
+
+                    </footer>
+
+                </section>
+
+            </section>
+
+        </main>
+
+        <footer class="pie-pagina">
+            <small>Repostería Vanabby - Sistema de Gestión</small>
+        </footer>
+
+    </div>
+
+    <!-- Plantilla para generar tarjetas -->
+    <template id="plantilla-producto">
+
+        <li class="producto">
+
+            <article class="tarjeta-producto">
+
+                <header class="encabezado-tarjeta">
+
+                    <span class="categoria-producto"></span>
+
+                    <small class="sku-producto"></small>
+
+                </header>
+
+                <img
+                    class="foto-producto"
+                    alt=""
+                    loading="lazy"
+                >
+
+                <section class="informacion-producto">
+
+                    <h4 class="nombre-producto"></h4>
+
+                    <p class="descripcion-producto"></p>
+
+                    <dl class="datos-comerciales">
+
+                        <div class="dato-precio">
+
+                            <dt>Precio</dt>
+
+                            <dd class="precio-producto"></dd>
+
+                        </div>
+
+                        <div class="dato-stock">
+
+                            <dt>Stock disponible</dt>
+
+                            <dd class="stock-producto"></dd>
+
+                        </div>
+
+                        <div class="dato-stock-minimo">
+
+                            <dt>Stock mínimo</dt>
+
+                            <dd class="stock-minimo-producto"></dd>
+
+                        </div>
+
+                    </dl>
+
+                </section>
+
+                <footer class="acciones-producto">
+
+                    <button
+                        type="button"
+                        class="boton-detalle"
+                        data-accion="detalle"
+                    >
+                        Detalle
+                    </button>
+
+                    <button
+                        type="button"
+                        class="boton-eliminar"
+                        data-accion="eliminar"
+                    >
+                        Eliminar
+                    </button>
+
+                </footer>
+
+            </article>
+
+        </li>
+
+    </template>
+
+    <!-- Modales independientes -->
+    <div id="contenedor-modales"></div>
+
+    <script
+        src="../../js/compartido/estructura.js"
+        defer
+    ></script>
+
+    <script
+        src="../../js/productos/productos.js"
+        defer
+    ></script>
+
+</body>
+
+</html>
+

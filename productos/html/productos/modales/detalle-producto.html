@@ -1,0 +1,160 @@
+
+<dialog
+    id="detalle-producto"
+    class="modal-producto"
+    aria-labelledby="titulo-detalle-producto"
+>
+    <article class="contenido-detalle">
+
+        <header class="encabezado-modal">
+
+            <h2 id="titulo-detalle-producto">
+                Detalle del Producto
+            </h2>
+
+            <button
+                type="button"
+                class="boton-cerrar-modal"
+                data-cerrar-modal="detalle-producto"
+                aria-label="Cerrar ventana"
+            >
+                &times;
+            </button>
+
+        </header>
+
+        <section class="contenido-modal">
+
+            <!-- Identificación del producto -->
+            <section
+                class="resumen-producto"
+                aria-labelledby="detalle-nombre"
+            >
+
+                <figure class="figura-producto">
+
+                    <img
+                        id="detalle-imagen"
+                        class="imagen-detalle"
+                        alt="Imagen del producto"
+                    >
+
+                    <figcaption>
+
+                        <h3 id="detalle-nombre"></h3>
+
+                        <span id="detalle-categoria"></span>
+
+                    </figcaption>
+
+                </figure>
+
+            </section>
+
+            <!-- Información general -->
+            <section
+                class="seccion-detalle"
+                aria-labelledby="titulo-informacion-general"
+            >
+
+                <h3 id="titulo-informacion-general">
+                    Información general
+                </h3>
+
+                <dl class="lista-detalles">
+
+                    <dt>ID del producto:</dt>
+                    <dd id="detalle-id"></dd>
+
+                    <dt>SKU:</dt>
+                    <dd id="detalle-sku"></dd>
+
+                    <dt>Descripción:</dt>
+                    <dd id="detalle-descripcion"></dd>
+
+                    <dt>Tiempo de preparación:</dt>
+                    <dd id="detalle-preparacion"></dd>
+
+                    <dt>Fecha de registro:</dt>
+                    <dd>
+                        <time id="detalle-creado-en"></time>
+                    </dd>
+
+                </dl>
+
+            </section>
+
+            <!-- Información comercial -->
+            <section
+                class="seccion-detalle"
+                aria-labelledby="titulo-informacion-comercial"
+            >
+
+                <h3 id="titulo-informacion-comercial">
+                    Información comercial
+                </h3>
+
+                <dl class="lista-detalles">
+
+                    <dt>Precio (MXN):</dt>
+                    <dd
+                        id="detalle-precio"
+                        class="precio-destacado"
+                    ></dd>
+
+                </dl>
+
+            </section>
+
+            <!-- Inventario -->
+            <section
+                class="seccion-detalle"
+                aria-labelledby="titulo-inventario-producto"
+            >
+
+                <h3 id="titulo-inventario-producto">
+                    Inventario del producto
+                </h3>
+
+                <dl class="lista-detalles">
+
+                    <dt>Stock disponible:</dt>
+                    <dd id="detalle-stock"></dd>
+
+                    <dt>Stock mínimo:</dt>
+                    <dd id="detalle-stock-minimo"></dd>
+
+                    <dt>Última actualización:</dt>
+                    <dd>
+                        <time id="detalle-actualizado-en"></time>
+                    </dd>
+
+                </dl>
+
+            </section>
+
+        </section>
+
+        <footer class="pie-modal">
+
+            <button
+                type="button"
+                class="boton-cancelar"
+                data-cerrar-modal="detalle-producto"
+            >
+                Cerrar
+            </button>
+
+            <button
+                type="button"
+                id="detalle-editar-producto"
+                class="boton-secundario"
+                data-modal="editar-producto"
+            >
+                Editar producto
+            </button>
+
+        </footer>
+
+    </article>
+</dialog>

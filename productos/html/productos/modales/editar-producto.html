@@ -1,0 +1,248 @@
+
+<dialog
+    id="editar-producto"
+    class="modal-producto"
+    aria-labelledby="titulo-editar-producto"
+>
+    <form
+        id="formulario-editar-producto"
+        class="formulario-producto"
+        method="post"
+        enctype="multipart/form-data"
+    >
+
+        <!-- Identificadores -->
+        <input
+            type="hidden"
+            id="editar-id"
+            name="producto_id"
+        >
+
+        <input
+            type="hidden"
+            id="editar-inventario-id"
+            name="inv_producto_id"
+        >
+
+        <header class="encabezado-modal">
+
+            <h2 id="titulo-editar-producto">
+                Editar Producto
+            </h2>
+
+            <button
+                type="button"
+                class="boton-cerrar-modal"
+                data-cerrar-modal="editar-producto"
+                aria-label="Cerrar ventana"
+            >
+                &times;
+            </button>
+
+        </header>
+
+        <section
+            class="contenido-modal"
+            aria-label="Datos del producto"
+        >
+
+            <!-- Información general -->
+            <fieldset class="grupo-formulario">
+
+                <legend>Información general</legend>
+
+                <section class="campos-formulario">
+
+                    <label for="editar-sku">
+                        SKU
+                    </label>
+
+                    <input
+                        type="text"
+                        id="editar-sku"
+                        name="sku"
+                        class="campo-formulario"
+                        maxlength="30"
+                        required
+                    >
+
+                    <label for="editar-nombre">
+                        Nombre del producto
+                    </label>
+
+                    <input
+                        type="text"
+                        id="editar-nombre"
+                        name="nombre"
+                        class="campo-formulario"
+                        maxlength="150"
+                        required
+                    >
+
+                    <label for="editar-descripcion">
+                        Descripción
+                    </label>
+
+                    <textarea
+                        id="editar-descripcion"
+                        name="descripcion"
+                        class="campo-formulario"
+                        rows="4"
+                    ></textarea>
+
+                    <label for="editar-categoria">
+                        Categoría
+                    </label>
+
+                    <select
+                        id="editar-categoria"
+                        name="categoria_id"
+                        class="campo-formulario"
+                    >
+                        <option value="">
+                            Sin categoría
+                        </option>
+                    </select>
+
+                    <label for="editar-precio">
+                        Precio base (MXN)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="editar-precio"
+                        name="precio"
+                        class="campo-formulario"
+                        min="0"
+                        step="0.01"
+                        required
+                    >
+
+                    <label for="editar-tiempo-preparacion">
+                        Tiempo de preparación (minutos)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="editar-tiempo-preparacion"
+                        name="tiempo_preparacion_min"
+                        class="campo-formulario"
+                        min="0"
+                        step="1"
+                    >
+
+                </section>
+
+            </fieldset>
+
+            <!-- Inventario -->
+            <fieldset class="grupo-formulario">
+
+                <legend>Inventario del producto</legend>
+
+                <section class="campos-formulario">
+
+                    <label for="editar-cantidad">
+                        Stock disponible
+                    </label>
+
+                    <input
+                        type="number"
+                        id="editar-cantidad"
+                        name="stock_disponible"
+                        class="campo-formulario"
+                        min="0"
+                        step="1"
+                        required
+                    >
+
+                    <label for="editar-stock-minimo">
+                        Stock mínimo
+                    </label>
+
+                    <input
+                        type="number"
+                        id="editar-stock-minimo"
+                        name="stock_minimo"
+                        class="campo-formulario"
+                        min="0"
+                        step="1"
+                        required
+                    >
+
+                </section>
+
+            </fieldset>
+
+            <!-- Imagen del producto -->
+            <fieldset class="grupo-formulario">
+
+                <legend>Imagen del producto</legend>
+
+                <figure class="figura-edicion">
+
+                    <img
+                        id="editar-imagen"
+                        class="imagen-editar"
+                        alt="Imagen actual del producto"
+                    >
+
+                    <figcaption>
+                        Imagen actual
+                    </figcaption>
+
+                </figure>
+
+                <label for="editar-foto">
+                    Cambiar imagen
+                </label>
+
+                <input
+                    type="file"
+                    id="editar-foto"
+                    name="imagen"
+                    class="campo-formulario"
+                    accept="image/png,image/jpeg,image/webp"
+                >
+
+                <small class="ayuda-formulario">
+                    Si no seleccionas otra imagen,
+                    se conservará la actual.
+                </small>
+
+            </fieldset>
+
+        </section>
+
+        <footer class="pie-modal">
+
+            <button
+                type="button"
+                id="editar-eliminar-producto"
+                class="boton-eliminar"
+                data-modal="eliminar-producto"
+            >
+                Eliminar producto
+            </button>
+
+            <button
+                type="button"
+                class="boton-cancelar"
+                data-cerrar-modal="editar-producto"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="submit"
+                id="guardar-cambios-producto"
+                class="boton-principal"
+            >
+                Guardar cambios
+            </button>
+
+        </footer>
+
+    </form>
+</dialog>
+

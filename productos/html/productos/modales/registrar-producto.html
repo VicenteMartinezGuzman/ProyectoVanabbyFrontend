@@ -1,0 +1,216 @@
+
+<dialog
+    id="registrar-producto"
+    class="modal-producto"
+    aria-labelledby="titulo-registrar-producto"
+>
+    <form
+        id="formulario-registrar-producto"
+        class="formulario-producto"
+        method="post"
+        enctype="multipart/form-data"
+    >
+
+        <header class="encabezado-modal">
+
+            <h2 id="titulo-registrar-producto">
+                Registrar Producto
+            </h2>
+
+            <button
+                type="button"
+                class="boton-cerrar-modal"
+                data-cerrar-modal="registrar-producto"
+                aria-label="Cerrar ventana"
+            >
+                &times;
+            </button>
+
+        </header>
+
+        <section
+            class="contenido-modal"
+            aria-label="Datos del producto"
+        >
+
+            <!-- Información general -->
+            <fieldset class="grupo-formulario">
+
+                <legend>Información general</legend>
+
+                <section class="campos-formulario">
+
+                    <label for="registrar-sku">
+                        SKU
+                    </label>
+
+                    <input
+                        type="text"
+                        id="registrar-sku"
+                        name="sku"
+                        class="campo-formulario"
+                        maxlength="30"
+                        required
+                    >
+
+                    <label for="registrar-nombre">
+                        Nombre del producto
+                    </label>
+
+                    <input
+                        type="text"
+                        id="registrar-nombre"
+                        name="nombre"
+                        class="campo-formulario"
+                        maxlength="150"
+                        required
+                    >
+
+                    <label for="registrar-descripcion">
+                        Descripción
+                    </label>
+
+                    <textarea
+                        id="registrar-descripcion"
+                        name="descripcion"
+                        class="campo-formulario"
+                        rows="4"
+                    ></textarea>
+
+                    <label for="registrar-categoria">
+                        Categoría
+                    </label>
+
+                    <select
+                        id="registrar-categoria"
+                        name="categoria_id"
+                        class="campo-formulario"
+                    >
+                        <option value="">
+                            Sin categoría
+                        </option>
+                    </select>
+
+                    <label for="registrar-precio">
+                        Precio base (MXN)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="registrar-precio"
+                        name="precio"
+                        class="campo-formulario"
+                        min="0"
+                        step="0.01"
+                        placeholder="0.00"
+                        required
+                    >
+
+                    <label for="registrar-tiempo-preparacion">
+                        Tiempo de preparación (minutos)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="registrar-tiempo-preparacion"
+                        name="tiempo_preparacion_min"
+                        class="campo-formulario"
+                        min="0"
+                        step="1"
+                        placeholder="0"
+                    >
+
+                </section>
+
+            </fieldset>
+
+            <!-- Inventario del producto -->
+            <fieldset class="grupo-formulario">
+
+                <legend>Inventario inicial</legend>
+
+                <section class="campos-formulario">
+
+                    <label for="registrar-cantidad">
+                        Stock disponible
+                    </label>
+
+                    <input
+                        type="number"
+                        id="registrar-cantidad"
+                        name="stock_disponible"
+                        class="campo-formulario"
+                        min="0"
+                        step="1"
+                        value="0"
+                        required
+                    >
+
+                    <label for="registrar-stock-minimo">
+                        Stock mínimo
+                    </label>
+
+                    <input
+                        type="number"
+                        id="registrar-stock-minimo"
+                        name="stock_minimo"
+                        class="campo-formulario"
+                        min="0"
+                        step="1"
+                        value="0"
+                        required
+                    >
+
+                </section>
+
+            </fieldset>
+
+            <!-- Imagen del producto -->
+            <fieldset class="grupo-formulario">
+
+                <legend>Imagen del producto</legend>
+
+                <label for="registrar-imagen">
+                    Seleccionar imagen
+                </label>
+
+                <input
+                    type="file"
+                    id="registrar-imagen"
+                    name="imagen"
+                    class="campo-formulario"
+                    accept="image/png,image/jpeg,image/webp"
+                >
+
+            </fieldset>
+
+        </section>
+
+        <footer class="pie-modal">
+
+            <button
+                type="reset"
+                class="boton-limpiar"
+            >
+                Limpiar formulario
+            </button>
+
+            <button
+                type="button"
+                class="boton-cancelar"
+                data-cerrar-modal="registrar-producto"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="submit"
+                class="boton-principal"
+            >
+                Guardar producto
+            </button>
+
+        </footer>
+
+    </form>
+</dialog>

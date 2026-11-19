@@ -1,0 +1,80 @@
+
+<dialog
+    id="eliminar-producto"
+    class="modal-producto modal-confirmacion"
+    aria-labelledby="titulo-eliminar-producto"
+    aria-describedby="descripcion-eliminar-producto"
+>
+    <section class="contenido-confirmacion">
+
+        <header class="encabezado-modal">
+
+            <h2 id="titulo-eliminar-producto">
+                Confirmar eliminación
+            </h2>
+
+            <button
+                type="button"
+                class="boton-cerrar-modal"
+                data-cerrar-modal="eliminar-producto"
+                aria-label="Cerrar ventana"
+            >
+                &times;
+            </button>
+
+        </header>
+
+        <section class="contenido-modal">
+
+            <span class="icono-eliminar" aria-hidden="true">
+                &#9888;
+            </span>
+
+            <h3 class="pregunta-confirmacion">
+                ¿Eliminar «<span id="eliminar-nombre"></span>»?
+            </h3>
+
+            <p id="descripcion-eliminar-producto">
+                Confirma que deseas retirar este producto
+                del catálogo de Vanabby.
+            </p>
+
+            <p class="aviso-eliminacion">
+                Esta operación puede afectar la disponibilidad
+                del producto para ventas y pedidos.
+            </p>
+
+            <p
+                id="mensaje-eliminacion"
+                class="mensaje-operacion"
+                role="status"
+                aria-live="polite"
+                hidden
+            ></p>
+
+        </section>
+
+        <footer class="pie-modal">
+
+            <button
+                type="button"
+                class="boton-cancelar"
+                data-cerrar-modal="eliminar-producto"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                id="confirmar-eliminar-producto"
+                class="boton-confirmar-eliminacion"
+            >
+                Eliminar producto
+            </button>
+
+        </footer>
+
+    </section>
+
+</dialog>
+
