@@ -1,0 +1,174 @@
+
+<section
+    id="modal-exportar"
+    class="modal-pagos"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="titulo-exportar"
+    hidden
+>
+    <div class="contenido-modal">
+
+        <header class="encabezado-modal">
+            <h2 id="titulo-exportar">Exportar reporte</h2>
+
+            <button
+                type="button"
+                class="cerrar-modal"
+                data-cerrar-modal
+                aria-label="Cerrar"
+            >
+                &times;
+            </button>
+        </header>
+
+        <form id="formulario-exportar">
+
+            <div class="cuerpo-modal">
+
+                <p>
+                    Elige el periodo, formato y datos de tu reporte.
+                </p>
+
+                <fieldset class="grupo-formulario">
+                    <legend>Periodo del reporte</legend>
+
+                    <div class="campos-fecha">
+
+                        <div class="campo-formulario">
+                            <label for="exportar-desde">
+                                Desde
+                            </label>
+                            <input
+                                id="exportar-desde"
+                                name="fecha_desde"
+                                type="date"
+                                required
+                            >
+                        </div>
+
+                        <div class="campo-formulario">
+                            <label for="exportar-hasta">
+                                Hasta
+                            </label>
+                            <input
+                                id="exportar-hasta"
+                                name="fecha_hasta"
+                                type="date"
+                                required
+                            >
+                        </div>
+
+                    </div>
+                </fieldset>
+
+                <fieldset class="grupo-formulario">
+                    <legend>Formato</legend>
+
+                    <div class="opciones-formato">
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="formato-exportacion"
+                                value="pdf"
+                            >
+                            PDF
+                        </label>
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="formato-exportacion"
+                                value="xlsx"
+                                checked
+                            >
+                            Excel (XLSX)
+                        </label>
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="formato-exportacion"
+                                value="csv"
+                            >
+                            CSV
+                        </label>
+
+                    </div>
+                </fieldset>
+
+                <fieldset class="grupo-formulario">
+                    <legend>Datos a incluir</legend>
+
+                    <div class="opciones-exportacion">
+
+                        <label>
+                            <input type="checkbox" name="datos" value="cliente" checked>
+                            Información del cliente
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="datos" value="estado_venta">
+                            Estado de la venta
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="datos" value="pedido" checked>
+                            Detalles del pedido
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="datos" value="monto" checked>
+                            Monto de transacción
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="datos" value="fecha" checked>
+                            Fecha y hora
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="datos" value="indicadores">
+                            Resumen de indicadores
+                        </label>
+
+                        <label>
+                            <input type="checkbox" name="datos" value="metodo_pago" checked>
+                            Método de pago
+                        </label>
+
+                    </div>
+                </fieldset>
+
+                <p
+                    id="mensaje-exportacion"
+                    class="mensaje-operacion"
+                    role="status"
+                    hidden
+                ></p>
+
+            </div>
+
+            <footer class="pie-modal">
+                <button
+                    type="button"
+                    class="boton-secundario"
+                    data-cerrar-modal
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    id="confirmar-exportar"
+                    type="submit"
+                    class="boton-principal"
+                >
+                    Exportar
+                </button>
+            </footer>
+
+        </form>
+
+    </div>
+</section>
