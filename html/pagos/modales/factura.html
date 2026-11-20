@@ -1,0 +1,106 @@
+kk
+<section
+    id="modal-factura"
+    class="modal-pagos"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="titulo-factura"
+    aria-describedby="descripcion-factura"
+    hidden
+>
+    <article class="contenido-modal">
+
+        <header class="encabezado-modal">
+            <h2 id="titulo-factura">Descargar Factura CFDI</h2>
+
+            <button
+                type="button"
+                class="cerrar-modal"
+                data-cerrar-modal
+                aria-label="Cerrar"
+            >
+                &times;
+            </button>
+        </header>
+
+        <div class="cuerpo-modal">
+
+            <p id="descripcion-factura">
+                Consulta la información de facturación y descarga
+                los documentos disponibles.
+            </p>
+
+            <section class="informacion-factura" aria-label="Datos fiscales">
+                <dl class="detalle-factura">
+                    <div>
+                        <dt>RFC</dt>
+                        <dd id="rfc-modal">—</dd>
+                    </div>
+
+                    <div>
+                        <dt>Nombre o razón social</dt>
+                        <dd id="razon-social-modal">—</dd>
+                    </div>
+
+                    <div>
+                        <dt>Folio fiscal (UUID)</dt>
+                        <dd id="uuid-modal">—</dd>
+                    </div>
+                </dl>
+            </section>
+
+            <section class="descargas-factura" aria-label="Documentos">
+
+                <button
+                    id="descargar-factura-pdf"
+                    type="button"
+                    class="tarjeta-descarga"
+                    disabled
+                >
+                    <strong>Descargar PDF</strong>
+                    <small>Documento de factura</small>
+                </button>
+
+                <button
+                    id="descargar-factura-xml"
+                    type="button"
+                    class="tarjeta-descarga"
+                    disabled
+                >
+                    <strong>Descargar XML</strong>
+                    <small>Comprobante fiscal</small>
+                </button>
+
+            </section>
+
+            <p
+                id="mensaje-factura"
+                class="mensaje-operacion"
+                role="status"
+            >
+                No hay documentos fiscales disponibles.
+            </p>
+
+        </div>
+
+        <footer class="pie-modal">
+            <button
+                type="button"
+                class="boton-secundario"
+                data-cerrar-modal
+            >
+                Cerrar
+            </button>
+
+            <button
+                type="button"
+                class="boton-principal"
+                data-cerrar-modal
+            >
+                Hecho
+            </button>
+        </footer>
+
+    </article>
+</section>
+

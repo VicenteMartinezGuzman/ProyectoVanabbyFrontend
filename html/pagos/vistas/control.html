@@ -1,0 +1,87 @@
+kk
+<section id="vista-control" class="vista-pagos" aria-labelledby="titulo-control">
+
+    <header class="encabezado-vista">
+        <h1 id="titulo-control">Control de Pagos</h1>
+
+        <nav class="acciones-vista" aria-label="Acciones de pagos">
+            <button type="button" class="boton-principal" data-ir="nuevo">
+                Nuevo Pago
+            </button>
+
+            <button type="button" class="boton-secundario" data-ir="corte">
+                Corte de Caja
+            </button>
+
+            <button type="button" class="boton-secundario" data-modal="exportar">
+                Exportar
+            </button>
+        </nav>
+    </header>
+
+    <section class="resumen-pagos" aria-label="Resumen de pagos">
+        <article class="tarjeta-panel tarjeta-resumen">
+            <h2>Total recibido (hoy)</h2>
+            <strong id="total-recibido">$0.00 MXN</strong>
+        </article>
+
+        <article class="tarjeta-panel tarjeta-resumen">
+            <h2>Saldo pendiente de cobro</h2>
+            <strong id="total-pendiente">$0.00 MXN</strong>
+            <small id="ventas-pendientes">0 ventas pendientes</small>
+        </article>
+    </section>
+
+    <section class="historial-pagos" aria-labelledby="titulo-historial">
+
+        <header class="encabezado-historial">
+            <h2 id="titulo-historial">Historial de Pagos</h2>
+
+            <form class="filtros-pagos" role="search" onsubmit="return false;">
+                <label for="buscar-pago">Buscar pago</label>
+                <input
+                    id="buscar-pago"
+                    type="search"
+                    placeholder="Buscar venta o cliente..."
+                >
+
+                <label for="filtro-pagos">Método de pago</label>
+                <select id="filtro-pagos">
+                    <option value="todos">Todos los métodos</option>
+                </select>
+            </form>
+        </header>
+
+        <article class="tarjeta-panel">
+            <div class="contenedor-tabla">
+                <table class="tabla-pagos">
+                    <thead>
+                        <tr>
+                            <th scope="col">Venta</th>
+                            <th scope="col">Cliente</th>
+                            <th scope="col">Fecha / Hora</th>
+                            <th scope="col">Método</th>
+                            <th scope="col">Monto</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tabla-pagos">
+                    </tbody>
+                </table>
+            </div>
+
+            <p id="sin-pagos" class="mensaje-vacio">
+                No hay pagos registrados.
+            </p>
+
+            <footer class="pie-tabla">
+                <output id="contador-pagos">
+                    Mostrando 0 transacciones
+                </output>
+            </footer>
+        </article>
+
+    </section>
+</section>
+

@@ -1,0 +1,162 @@
+kkk
+<section
+    id="modal-reporte"
+    class="modal-pagos"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="titulo-reporte"
+    hidden
+>
+    <article class="contenido-modal">
+
+        <header class="encabezado-modal">
+            <h2 id="titulo-reporte">Reporte Z — Corte de Caja</h2>
+
+            <button
+                type="button"
+                class="cerrar-modal"
+                data-cerrar-modal
+                aria-label="Cerrar"
+            >
+                &times;
+            </button>
+        </header>
+
+        <div class="cuerpo-modal">
+
+            <div class="fondo-ticket">
+
+                <article
+                    id="reporte-z-imprimible"
+                    class="ticket ticket-reporte"
+                    aria-label="Reporte de corte de caja"
+                >
+
+                    <header class="encabezado-ticket">
+                        <h3>VANABBY</h3>
+                        <p>Repostería</p>
+
+                        <strong>REPORTE Z — CORTE DE CAJA</strong>
+                    </header>
+
+                    <hr>
+
+                    <!-- Datos del turno -->
+                    <dl class="datos-ticket">
+                        <div>
+                            <dt>Fecha</dt>
+                            <dd id="fecha-reporte">—</dd>
+                        </div>
+
+                        <div>
+                            <dt>Hora</dt>
+                            <dd id="hora-reporte">—</dd>
+                        </div>
+
+                        <div>
+                            <dt>Cajero</dt>
+                            <dd id="cajero-reporte">—</dd>
+                        </div>
+
+                        <div>
+                            <dt>Turno</dt>
+                            <dd id="turno-reporte">—</dd>
+                        </div>
+                    </dl>
+
+                    <hr>
+
+                    <!-- Fondo de caja -->
+                    <section
+                        class="seccion-ticket"
+                        aria-labelledby="titulo-fondo-reporte"
+                    >
+                        <h4 id="titulo-fondo-reporte">
+                            === FONDO DE CAJA ===
+                        </h4>
+
+                        <p id="fondo-reporte" class="importe-ticket">
+                            —
+                        </p>
+                    </section>
+
+                    <hr>
+
+                    <!-- Resumen de pagos -->
+                    <section
+                        class="seccion-ticket"
+                        aria-labelledby="titulo-ventas-reporte"
+                    >
+                        <h4 id="titulo-ventas-reporte">
+                            === RESUMEN DE VENTAS ===
+                        </h4>
+
+                        <dl
+                            id="metodos-reporte"
+                            class="lista-resumen"
+                        >
+                            <!-- Importes agrupados por método de pago -->
+                        </dl>
+                    </section>
+
+                    <hr>
+
+                    <!-- Totales -->
+                    <dl class="lista-resumen resumen-ticket">
+                        <div class="total-ticket">
+                            <dt>Total recibido</dt>
+                            <dd id="total-reporte">—</dd>
+                        </div>
+
+                        <div>
+                            <dt>Efectivo esperado</dt>
+                            <dd id="esperado-reporte">—</dd>
+                        </div>
+
+                        <div>
+                            <dt>Efectivo contado</dt>
+                            <dd id="contado-reporte">—</dd>
+                        </div>
+
+                        <div>
+                            <dt>Diferencia</dt>
+                            <dd id="diferencia-reporte">—</dd>
+                        </div>
+                    </dl>
+
+                </article>
+
+            </div>
+
+            <p
+                id="mensaje-reporte"
+                class="mensaje-operacion"
+                role="status"
+                hidden
+            ></p>
+
+        </div>
+
+        <footer class="pie-modal">
+
+            <button
+                type="button"
+                class="boton-secundario"
+                data-cerrar-modal
+            >
+                Cerrar
+            </button>
+
+            <button
+                id="imprimir-ticket-z"
+                type="button"
+                class="boton-principal"
+            >
+                Imprimir ticket Z
+            </button>
+
+        </footer>
+
+    </article>
+</section>
+
